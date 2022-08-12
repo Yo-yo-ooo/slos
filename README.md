@@ -9,9 +9,11 @@
 3.ls
 4.cat
 5.echo
-6.C语言标准库
+6.C语言标准库(plibc库)
 7.文件操作
 
+目前的版本：
+    PxttpOS -> Skyline-System V0.7c
 ````
 
 # 如何编译？
