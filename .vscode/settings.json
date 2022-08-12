@@ -1,0 +1,23 @@
+{
+    "makefile.extensionOutputFolder": "./.vscode",
+    "C_Cpp.errorSquiggles": "Disabled",
+    "files.associations": {
+        "stdint.h": "c",
+        "limits.h": "c",
+        "math.h": "c",
+        "corecrt_math_defines.h": "c",
+        "corecrt_math.h": "c",
+        "stddef.h": "c",
+        "vcruntime.h": "c",
+        "sal.h": "c",
+        "stdarg.h": "c",
+        "stdio.h": "c",
+        "types.h": "c",
+        "cmath": "c",
+        "cstdlib": "c",
+        "_pdclib_defguard.h": "c",
+        "time.h": "c",
+        "assert.h": "c",
+        "nasmfuc.h": "c"
+    }
+}

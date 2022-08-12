@@ -1,0 +1,330 @@
+make.exe all --print-data-base --no-builtin-variables --no-builtin-rules --question
+# GNU Make 3.82.90
+# Built for i686-pc-mingw32
+# Copyright (C) 1988-2012 Free Software Foundation, Inc.
+# License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+# This is free software: you are free to change and redistribute it.
+# There is NO WARRANTY, to the extent permitted by law.
+ 
+
+# Make data base, printed on Sat Jul 30 18:49:49 2022
+
+# Variables
+
+# automatic
+<D = $(patsubst %/,%,$(patsubst %\,%,$(dir $<)))
+# automatic
+?F = $(notdir $?)
+# default
+.SHELLFLAGS := -c
+# makefile
+MAKEFLAGS = Rrqp
+# environment
+MSDEVDIR = D:\Program Files (x86)\Microsoft Visual Studio\Common\MSDev98
+# automatic
+?D = $(patsubst %/,%,$(patsubst %\,%,$(dir $?)))
+# automatic
+@D = $(patsubst %/,%,$(patsubst %\,%,$(dir $@)))
+# environment
+HOMEDRIVE = C:
+# automatic
+@F = $(notdir $@)
+# automatic
+^D = $(patsubst %/,%,$(patsubst %\,%,$(dir $^)))
+# makefile
+CURDIR := d:/ZSY/PxttpOS/SRC
+# default
+SHELL := sh.exe
+# environment
+WINDIR = C:\Windows
+# environment
+VSCODE_NLS_CONFIG = {"locale":"zh-cn","availableLanguages":{"*":"zh-cn"},"_languagePackId":"1d735750dbb1b9066c7513078396ba0f.zh-cn","_translationsConfigFile":"C:\\Users\\Administrator\\AppData\\Roaming\\Code\\clp\\1d735750dbb1b9066c7513078396ba0f.zh-cn\\tcf.json","_cacheRoot":"C:\\Users\\Administrator\\AppData\\Roaming\\Code\\clp\\1d735750dbb1b9066c7513078396ba0f.zh-cn","_resolvedLanguagePackCoreLocation":"C:\\Users\\Administrator\\AppData\\Roaming\\Code\\clp\\1d735750dbb1b9066c7513078396ba0f.zh-cn\\3b889b090b5ad5793f524b5d1d39fda662b96a2a","_corruptedFile":"C:\\Users\\Administrator\\AppData\\Roaming\\Code\\clp\\1d735750dbb1b9066c7513078396ba0f.zh-cn\\corrupted.info","_languagePackSupport":true}
+# environment
+VBOX_MSI_INSTALL_PATH = C:\Program Files\Oracle\VirtualBox\
+# environment
+ONEDRIVE = C:\Users\Administrator\OneDrive
+# environment
+PATHEXT = .COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC
+# makefile
+MAKEFILE_LIST := 
+# environment
+FPS_BROWSER_USER_PROFILE_STRING = Default
+# environment
+TMP = C:\Users\ADMINI~1\AppData\Local\Temp
+# environment
+PROGRAMW6432 = C:\Program Files
+# environment
+PROGRAMDATA = C:\ProgramData
+# environment
+VSCODE_CWD = D:\ZSY\PxttpOS\SRC\Setup
+# environment
+PATH = C:\Program Files\Eclipse Foundation\jdk-8.0.302.8-hotspot\bin;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;D:\Program Files (x86)\VMware\VMware Workstation\bin\;C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional;C:\Program Files\dotnet\;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;C:\Program Files (x86)\IncrediBuild;D:\Program Files\Java\\jdk1.8.0_321\bin;C:\Users\Administrator\AppData\Roaming\Python\Python39;D:\Program Files (x86)\Tencent\΢��web�����߹���\dll;C:\Windows\System32\;C:\Users\Administrator\AppData\Local\Programs\Python\Python37\Scripts;C:\Users\Administrator\AppData\Local\Programs\Python\Python37\;C:\Users\Administrator\AppData\Local\Programs\Python\Python37\Lib\site-packages;C:\Users\Administrator\AppData\Local\Programs\Python\Python37\Lib\site-packages\pygame;D:\Program Files (x86)\FreeBASIC-1.08.1-winlibs-gcc-9.3.0;D:\Program Files\Process Lasso\;D:\Program Files (x86)\NetSarang\Xshell 7\;D:\Program Files (x86)\NASM;D:\ZSY\Langege\ASM\CZST\BuildTools;C:\Windows;C:\Windows\System32\OpenSSH;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0;D:\Program Files (x86)\otvdm-v0.8.1;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;D:\Program Files\qemu;D:\ZSY\Langege\ASM\CZST\BuildTools\genisoimage;D:\ZSY\Langege\ASM\CZST\BuildTools\grub-2.04;D:\ZSY\Langege\ASM\CZST\BuildTools\mkfs;D:\ZSY\Langege\ASM\CZST\BuildTools\mtools;D:\MinGW\bin;C:\Users\Administrator\AppData\Local\Programs\Python\Python37\Scripts\;C:\Users\Administrator\AppData\Local\Programs\Python\Python37\;D:\Microsoft VS Code\bin;C: 
+make.exe: *** No rule to make target 'all'.  Stop.
+
+\Users\Administrator\.dotnet\tools;C:\MinGW\bin;C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.9_3.9.3056.0_x64__qbz5n2kfra8p0;C:\Users\Administrator\AppData\Local\GitHubDesktop\bin
+# environment
+COMMONPROGRAMW6432 = C:\Program Files\Common Files
+# environment
+ZES_ENABLE_SYSMAN = 1
+# environment
+PROCESSOR_ARCHITECTURE = x86
+# environment
+USERPROFILE = C:\Users\Administrator
+# environment
+ALLUSERSPROFILE = C:\ProgramData
+# environment
+NUMBER_OF_PROCESSORS = 8
+# environment
+ELECTRON_RUN_AS_NODE = 1
+# environment
+LIB = D:\Program Files (x86)\Microsoft Visual Studio\VC98\mfc\lib;D:\Program Files (x86)\Microsoft Visual Studio\VC98\lib;C:\MinGW\lib;
+# default
+.FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell archives jobserver
+# automatic
+%F = $(notdir $%)
+# environment
+CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_7296_OHIFRBKMNSSNSGAY
+# environment
+COMPUTERNAME = DESKTOP-HU6GND8
+# environment
+PROGRAMFILES = C:\Program Files (x86)
+# environment
+DRIVERDATA = C:\Windows\System32\Drivers\DriverData
+# environment
+ORIGINAL_XDG_CURRENT_DESKTOP = undefined
+# environment
+USERNAME = Administrator
+# environment
+PYTHON = C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.9_3.9.3056.0_x64__qbz5n2kfra8p0\python.exe
+# environment
+PUBLIC = C:\Users\Public
+# environment
+VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
+# environment
+VSCODE_CODE_CACHE_PATH = C:\Users\Administrator\AppData\Roaming\Code\CachedData\3b889b090b5ad5793f524b5d1d39fda662b96a2a
+# environment
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
+# environment
+COMMONPROGRAMFILES = C:\Program Files (x86)\Common Files
+# environment
+LOGONSERVER = \\DESKTOP-HU6GND8
+# environment
+ONEDRIVECONSUMER = C:\Users\Administrator\OneDrive
+# environment
+VSCODE_HANDLES_UNCAUGHT_ERRORS = true
+# environment
+USERDOMAIN = DESKTOP-HU6GND8
+# environment
+MAKELEVEL := 0
+# environment
+INTELLIJ IDEA COMMUNITY EDITION = D:\Program Files (x86)\IntelliJ IDEA Community Edition 2021.2.3\bin;
+# default
+MAKE = $(MAKE_COMMAND)
+# default
+MAKECMDGOALS := all
+# environment
+JAVA_HOME = C:\Program Files\Java
+# default
+MAKE_VERSION := 3.82.90
+# environment
+PYTHON_HOME = C:\Users\Administrator\AppData\Local\Programs\Python\Python39
+# makefile
+.DEFAULT_GOAL := 
+# environment
+INCLUDE = D:\Program Files (x86)\Microsoft Visual Studio\VC98\atl\include;D:\Program Files (x86)\Microsoft Visual Studio\VC98\mfc\include;D:\Program Files (x86)\Microsoft Visual Studio\VC98\include;C:\MinGW\include;
+# environment
+CLASSPATH = C:\Program Files\Java\jdk1.8.0_321\lib
+# environment
+PROGRAMFILES(X86) = C:\Program Files (x86)
+# automatic
+%D = $(patsubst %/,%,$(patsubst %\,%,$(dir $%)))
+# environment
+LOCALAPPDATA = C:\Users\Administrator\AppData\Local
+# environment
+PSMODULEPATH = C:\Program Files\WindowsPowerShell\Modules;C:\Windows\system32\WindowsPowerShell\v1.0\Modules
+# default
+MAKE_COMMAND := make.exe
+# environment
+PROCESSOR_ARCHITEW6432 = AMD64
+# default
+.VARIABLES := 
+# automatic
+*F = $(notdir $*)
+# environment
+PROCESSOR_IDENTIFIER = Intel64 Family 6 Model 142 Stepping 12, GenuineIntel
+# environment
+OS = Windows_NT
+# environment
+VSCODE_IPC_HOOK = \\.\pipe\9e7283c68e6159fd1e9872b65f264be5-1.69.2-main-sock
+# environment
+HOMEPATH = \Users\Administrator
+# environment
+COMMONPROGRAMFILES(X86) = C:\Program Files (x86)\Common Files
+# environment
+PROMPT = $P$G
+# environment
+MFLAGS = -Rrqp
+# automatic
+*D = $(patsubst %/,%,$(patsubst %\,%,$(dir $*)))
+# environment
+SYSTEMROOT = C:\Windows
+# environment
+NASM = C:\Program Files (x86)\nasm-2.15.05
+# automatic
++D = $(patsubst %/,%,$(patsubst %\,%,$(dir $+)))
+# automatic
++F = $(notdir $+)
+# environment
+APPDATA = C:\Users\Administrator\AppData\Roaming
+# environment
+TEMP = C:\Users\ADMINI~1\AppData\Local\Temp
+# environment
+COMSPEC = C:\Windows\system32\cmd.exe
+# default
+MAKEFILES := 
+# automatic
+<F = $(notdir $<)
+# environment
+LC_ALL = C
+# automatic
+^F = $(notdir $^)
+# default
+SUFFIXES := 
+# environment
+SYSTEMDRIVE = C:
+# environment
+SESSIONNAME = Console
+# environment
+PROCESSOR_REVISION = 8e0c
+# environment
+VS140COMNTOOLS = C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\Tools\
+# default
+.RECIPEPREFIX := 
+# environment
+LANG = C
+# environment
+PROCESSOR_LEVEL = 6
+# environment
+FPS_BROWSER_APP_PROFILE_STRING = Internet Explorer
+# environment
+VSCODE_PID = 7296
+# environment
+USERDOMAIN_ROAMINGPROFILE = DESKTOP-HU6GND8
+# variable set hash-table stats:
+# Load=98/1024=10%, Rehash=0, Collisions=12/113=11%
+
+# Pattern-specific Variable Values
+
+# No pattern-specific variable values.
+
+# Directories
+
+# C:\Windows\System32\ (key C:/Windows/System32/, mtime 1658277118): 3460 files, no impossibilities.
+# C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.9_3.9.3056.0_x64__qbz5n2kfra8p0: could not be stat'd.
+# C:\Users\Administrator\AppData\Local\Programs\Python\Python37\Lib\site-packages\pygame (key C:/Users/Administrator/AppData/Local/Programs/Python/Python37/Lib/site-packages/pygame, mtime 1648690144): 119 files, no impossibilities.
+# C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR (key C:/Program Files/NVIDIA Corporation/NVIDIA NvDLISR, mtime 1654218017): 5 files, no impossibilities.
+# D:\Program Files\Java\\jdk1.8.0_321\bin (key D:/Program Files/Java/jdk1.8.0_321/bin, mtime 1649136682): 54 files, no impossibilities.
+# D:\ZSY\Langege\ASM\CZST\BuildTools\grub-2.04: could not be stat'd.
+# D:\ZSY\Langege\ASM\CZST\BuildTools\genisoimage: could not be stat'd.
+# C:\Users\Administrator\AppData\Roaming\Python\Python39: could not be stat'd.
+# C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional (key C:/Program Files (x86)/Microsoft Visual Studio/2019/Professional, mtime 1652270397): 23 files, no impossibilities.
+# . (key d:/ZSY/PxttpOS/SRC, mtime 1659178188): 5 files, no impossibilities.
+# D:\Microsoft VS Code\bin (key D:/Microsoft VS Code/bin, mtime 1658320083): 4 files, no impossibilities.
+# D:\Program Files (x86)\NASM (key D:/Program Files (x86)/NASM, mtime 1651214189): 18 files, no impossibilities.
+# C:\MinGW\bin: could not be stat'd.
+# C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\ (key C:/Program Files/Microsoft SQL Server/Client SDK/ODBC/170/Tools/Binn/, mtime 1658015173): 7 files, no impossibilities.
+# C:\Program Files (x86)\Common Files\Oracle\Java\javapath (key C:/Program Files (x86)/Common Files/Oracle/Java/javapath, mtime 1649145900): 5 files, no impossibilities.
+# C:\Windows\System32\OpenSSH: could not be stat'd.
+# C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common (key C:/Program Files (x86)/NVIDIA Corporation/PhysX/Common, mtime 1654218891): 10 files, no impossibilities.
+# D:\MinGW\bin (key D:/MinGW/bin, mtime 1657283863): 132 files, no impossibilities.
+# D:\Program Files (x86)\NetSarang\Xshell 7\ (key D:/Program Files (x86)/NetSarang/Xshell 7/, mtime 1650942760): 39 files, no impossibilities.
+# C:\Windows (key C:/Windows, mtime 1658909299): 132 files, no impossibilities.
+# D:\ZSY\Langege\ASM\CZST\BuildTools\mkfs: could not be stat'd.
+# D:\Program Files\qemu (key D:/Program Files/qemu, mtime 1654425200): 156 files, no impossibilities.
+# C:\Program Files\Eclipse Foundation\jdk-8.0.302.8-hotspot\bin (key C:/Program Files/Eclipse Foundation/jdk-8.0.302.8-hotspot/bin, mtime 1658017076): 53 files, no impossibilities.
+# C:\Program Files\Microsoft SQL Server\130\Tools\Binn\ (key C:/Program Files/Microsoft SQL Server/130/Tools/Binn/, mtime 1658015155): 4 files, no impossibilities.
+# C:\Windows\System32\Wbem (key C:/Windows/System32/Wbem, mtime 1658276618): 155 files, no impossibilities.
+# D:\Program Files (x86)\FreeBASIC-1.08.1-winlibs-gcc-9.3.0 (key D:/Program Files (x86)/FreeBASIC-1.08.1-winlibs-gcc-9.3.0, mtime 1648605595): 12 files, no impossibilities.
+# D:\Program Files (x86)\otvdm-v0.8.1 (key D:/Program Files (x86)/otvdm-v0.8.1, mtime 1653712532): 18 files, no impossibilities.
+# C:\Program Files (x86)\IncrediBuild (key C:/Program Files (x86)/IncrediBuild, mtime 1658016025): 119 files, no impossibilities.
+# D:\Program Files (x86)\Tencent\΢��web�����߹���\dll (key D:/Program Files (x86)/Tencent/΢��web�����߹���/dll, mtime 1644903122): 9 files, no impossibilities.
+# C:\Users\Administrator\AppData\Local\Programs\Python\Python37\ (key C:/Users/Administrator/AppData/Local/Programs/Python/Python37/, mtime 1656683750): 19 files, no impossibilities.
+# C:\Users\Administrator\AppData\Local\GitHubDesktop\bin (key C:/Users/Administrator/AppData/Local/GitHubDesktop/bin, mtime 1655770704): 4 files, no impossibilities.
+# C:\Users\Administrator\AppData\Local\Programs\Python\Python37\Scripts\ (key C:/Users/Administrator/AppData/Local/Programs/Python/Python37/Scripts/, mtime 1656683751): 42 files, no impossibilities.
+# D:\ZSY\Langege\ASM\CZST\BuildTools: could not be stat'd.
+# C:\Program Files\dotnet\ (key C:/Program Files/dotnet/, mtime 1658319898): 11 files, no impossibilities.
+# C:\Users\Administrator\AppData\Local\Programs\Python\Python37\Lib\site-packages (key C:/Users/Administrator/AppData/Local/Programs/Python/Python37/Lib/site-packages, mtime 1656683751): 192 files, no impossibilities.
+# C:\Users\Administrator\AppData\Local\Programs\Python\Python37\Scripts (key C:/Users/Administrator/AppData/Local/Programs/Python/Python37/Scripts, mtime 1656683751): 42 files, no impossibilities.
+# C:\Users\Administrator\.dotnet\tools: could not be stat'd.
+# D:\Program Files\Process Lasso\ (key D:/Program Files/Process Lasso/, mtime 1654740301): 39 files, no impossibilities.
+# D:\Program Files (x86)\VMware\VMware Workstation\bin\ (key D:/Program Files (x86)/VMware/VMware Workstation/bin/, mtime 1648088525): 4 files, no impossibilities.
+# D:\ZSY\Langege\ASM\CZST\BuildTools\mtools: could not be stat'd.
+# C:\Windows\System32\WindowsPowerShell\v1.0 (key C:/Windows/System32/WindowsPowerShell/v1.0, mtime 1649240046): 33 files, no impossibilities.
+
+# 4925 files, no impossibilities in 41 directories.
+
+# Implicit Rules
+
+# No implicit rules.
+
+# Files
+
+# Not a target:
+all:
+#  Command line target.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has not been updated.
+
+# Not a target:
+.SUFFIXES:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+Makefile:
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+
+# Not a target:
+makefile:
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+
+# Not a target:
+.DEFAULT:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+GNUmakefile:
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+
+# files hash-table stats:
+# Load=6/1024=1%, Rehash=0, Collisions=0/15=0%
+# VPATH Search Paths
+
+# No 'vpath' search paths.
+
+# No general ('VPATH' variable) search path.
+
+# strcache buffers: 9 (8) / strings = 4753 / storage = 72896 B / avg = 15 B
+# current buf: size = 8174 B / used = 7562 B / count = 456 / avg = 16 B
+# other used: total = 64722 B / count = 4297 / avg = 15 B
+# other free: total = 58 B / max = 11 B / min = 5 B / avg = 7 B
+
+# strcache performance: lookups = 4973 / hit rate = 4%
+# hash-table stats:
+# Load=4753/8192=58%, Rehash=0, Collisions=2610/4973=52%
+# Finished Make data base on Sat Jul 30 18:49:49 2022
+
+ 
