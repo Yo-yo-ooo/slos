@@ -13,7 +13,7 @@
 7.文件操作
 
 目前的版本：
-    PxttpOS -> Skyline-System V0.7c
+    Skyline-System V0.7c
 ````
 
 # 如何编译？
