@@ -5,5 +5,6 @@ void *malloc(size_t size);
 void free(void *addr);
 char *sbrk(int n);
 void *calloc(unsigned n, unsigned size);
+void *realloc(void *ptr, size_t size);
 
 #endif

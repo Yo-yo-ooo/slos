@@ -159,3 +159,11 @@ void *calloc(unsigned n, unsigned size){
 
 	return q;
 }
+
+void *realloc(void *ptr, size_t size)
+{
+	void *ptr1 = malloc(size);
+	memcpy(ptr1, ptr, size);
+	free(ptr);
+	return ptr1;
+}
