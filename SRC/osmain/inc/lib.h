@@ -58,7 +58,11 @@ enum _flags{
 	_ERR   = 020
 };
 
-
+struct arr {
+	int num;
+	struct arr* next;
+};
+typedef struct arr arr;
 
 int _fillbuf(FILE *fp);
 int _flushbuf(int x, FILE *fp);
@@ -148,6 +152,8 @@ int	open(const char *path, int mode);
 int	ftruncate(int fd, off_t size);
 int	remove(const char *path);
 int	sync(void);
+arr* lbcreat(int n);
+arr* lbdel(arr* head, int m);
 
 // pageref.c
 int	pageref(void *addr);

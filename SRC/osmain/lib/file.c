@@ -274,3 +274,34 @@ int  fclose(FILE *fp){
 
 	return rc;
 }
+
+//链表相关
+
+arr* lbcreat(int n) {
+	arr* s;
+	arr* p;
+	arr* head = (arr*)malloc(sizeof(arr));//头结点
+	p = head;
+	for (int i = 0; i < n; ++i) {
+		s = (arr*)malloc(sizeof(arr));
+		s->num = i + 1;
+		s->next = p->next;
+		p->next = s;
+		p = p->next;
+		if (i == n - 1) {
+			p->next = NULL;
+		}
+	}
+	return head;
+}
+arr* lbdel(arr* head, int m) {//删除
+	arr* p = head;
+	arr* temp;
+	for (int i = 0; i < m - 1; ++i) {
+		p = p->next;
+	}
+	temp = p->next;
+	p->next = temp->next;
+	free(temp);
+	return head;
+}
