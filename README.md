@@ -13,3 +13,17 @@
 7.文件操作
 
 ````
+
+# 如何编译？
+
+````
+运行DOC文件夹中的sh文件(qemu配置好像有问题，请自行下载)
+到SRC/osmain文件夹里,运行命令:
+
+make clean && make #清理并制作
+
+OR:
+
+make clean && make qemu #清理并运行
+
+````
