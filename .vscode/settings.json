@@ -18,6 +18,7 @@
         "_pdclib_defguard.h": "c",
         "time.h": "c",
         "assert.h": "c",
-        "nasmfuc.h": "c"
+        "nasmfuc.h": "c",
+        "fd.h": "c"
     }
 }
