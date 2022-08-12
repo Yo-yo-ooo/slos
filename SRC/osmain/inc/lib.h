@@ -30,6 +30,7 @@
 #include <inc/float.h>
 #include <inc/ctype.h>
 #include <inc/nasmfuc.h>
+#include <inc/stdint.h>
 
 //FILE
 
