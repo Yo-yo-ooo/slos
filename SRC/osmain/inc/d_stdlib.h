@@ -8,6 +8,7 @@
 */
 int rand(void);
 void srand(unsigned int seed);
-
+double atof(const char *str);
+int atoi(const char* s);
 
 #endif
