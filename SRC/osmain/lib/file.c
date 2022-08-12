@@ -261,7 +261,7 @@ int fflush(FILE *fp){
 	return rc;
 }
 
-int  fclose(FILE *fp){
+int fclose(FILE *fp){
 	int rc;
 
 	if((rc = fflush(fp)) != EOF){
