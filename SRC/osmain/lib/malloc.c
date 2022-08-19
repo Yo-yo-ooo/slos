@@ -21,7 +21,10 @@ enum
 };
 
 #define PTE_CONTINUED 0x200
+#define ALLOCSIZE	  10000
 
+static char allocbuf[ALLOCSIZE];
+static char *allocp = allocbuf;
 static uint8_t *mbegin = (uint8_t*) 0x08000000;
 static uint8_t *mend   = (uint8_t*) 0x10000000;
 static uint8_t *mptr;
@@ -166,4 +169,18 @@ void *realloc(void *ptr, size_t size)
 	memcpy(ptr1, ptr, size);
 	free(ptr);
 	return ptr1;
+}
+
+char *alloc(int n){
+	if(allocbuf + ALLOCSIZE - allocp >= n){
+		allocp += n;
+		return allocp - n;
+	}else{
+		return 0;
+	}
+}
+
+void afree(char *p){
+	if(p >= allocbuf && p < allocbuf + ALLOCSIZE)
+		allocp = p;
 }
