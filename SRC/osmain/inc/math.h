@@ -24,5 +24,10 @@ double tanh(double x);
 int    abs(int x);
 long labs(long n);
 int fac(int n);
+double Factorial(int x);
+double Bernoulli(int x);
+float intpower(float a, int n);
+float ln(float x);
+int fact(int n);
 
 #endif

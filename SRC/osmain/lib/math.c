@@ -537,3 +537,96 @@ int fac(int n)
 	for(i=1;i<=n;i++) f=f*i;
 	return f;
 }
+
+double Factorial(int x)
+{
+    if (x == 1 || x == 0)
+        return 1;
+    else
+        return 1.0 * x * Factorial(x - 1);
+}
+
+double Bernoulli(int x)
+{
+    int k = x;
+    double B = 0;
+    if (x == 0)
+        return 1;
+    else if (x > 1 && x % 2 == 1)
+    {
+        return 0;
+    }
+    else
+    {
+        while (k)
+        {
+            k--;
+            B += -1.0 * (Factorial(x) * Bernoulli(k)) / (Factorial(x - k) * Factorial(k) * (x - k + 1));
+        }
+        return B;
+    }
+}
+
+float intpower(float a, int n)
+{ //非负整数次方
+    if (n == 0)
+    {
+        return 1;
+    }
+    else
+    {
+        int i;
+        float s = 1;
+        for (i = 0; i < n; i++)
+        {
+            s = s * a;
+        }
+        return s;
+    }
+}
+float ln(float x)
+{ //自然对数
+    float s = 0;
+    int E = 50; //精度
+    if (x < 1)
+    {
+        int i, sygn = 1;
+        for (i = 1; i < E + 1; i++)
+        {
+
+            s = s + sygn * intpower(x - 1, i) / i;
+            sygn = -sygn;
+        }
+    }
+    else
+    {
+        x = 1 / x;
+        int i, sygn = 1;
+        for (i = 1; i < E + 1; i++)
+        {
+
+            s = s + sygn * intpower(x - 1, i) / i;
+            sygn = -sygn;
+        }
+        s = -s;
+    }
+
+    return s;
+}
+int fact(int n)
+{
+    int s = 1;
+    if (n == 0)
+    {
+        return 1;
+    }
+    else
+    {
+        int i;
+        for (i = 1; i <= n; i++)
+        {
+            s = s * i;
+        }
+        return s;
+    }
+}

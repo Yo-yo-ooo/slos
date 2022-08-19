@@ -11,8 +11,6 @@
 /* Maximum disk size we can handle (3GB) */
 #define DISKSIZE	0xC0000000
 
-
-
 /* ide.c */
 bool	ide_probe_disk1(void);
 void	ide_set_disk(int diskno);
