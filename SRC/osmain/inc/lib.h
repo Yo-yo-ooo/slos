@@ -139,6 +139,7 @@ envid_t	sfork(void);	// Challenge!
 
 // fd.c
 int	close(int fd);
+int creat(const char *file,int auth);
 ssize_t	read(int fd, void *buf, size_t nbytes);
 ssize_t	write(int fd, const void *buf, size_t nbytes);
 int	seek(int fd, off_t offset);
@@ -205,5 +206,12 @@ void	wait(envid_t env);
 #define	O_TRUNC		0x0200		/* truncate to zero length */
 #define	O_EXCL		0x0400		/* error if already exists */
 #define O_MKDIR		0x0800		/* create directory, not regular file */
+
+/*File creat modes*/
+
+#define S_IRUSR		0x0000
+#define S_IWUSR 	0x0001
+#define S_IXUSR 	0x0002
+#define S_IRWXR 	0x0003
 
 #endif	// !JOS_INC_LIB_H

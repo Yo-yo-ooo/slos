@@ -319,3 +319,6 @@ stat(const char *path, struct Stat *stat)
 	return r;
 }
 
+int creat(const char *file,int auth){
+	open(file, (O_CREAT|O_WRONLY|O_TRUNC|auth));   
+}
