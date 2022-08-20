@@ -209,9 +209,9 @@ void	wait(envid_t env);
 
 /*File creat modes*/
 
-#define S_IRUSR		0x0000
-#define S_IWUSR 	0x0001
-#define S_IXUSR 	0x0002
+#define S_IRUSR		0x0000		/* open for reading only */
+#define S_IWUSR 	0x0001      /* open for writing only */
+#define S_IXUSR 	0x0002		
 #define S_IRWXR 	0x0003
 
 #endif	// !JOS_INC_LIB_H

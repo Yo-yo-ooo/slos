@@ -320,5 +320,14 @@ stat(const char *path, struct Stat *stat)
 }
 
 int creat(const char *file,int auth){
-	open(file, (O_CREAT|O_WRONLY|O_TRUNC|auth));   
+	if(auth == 0x0003){
+		open(file, (O_CREAT|O_WRONLY|O_TRUNC));   
+	}else if(auth == 0x0002){
+		open(file,O_TRUNC);
+	}else if(auth == 0x0001){
+		open(file,O_WRONLY);
+	}else if (auth == 0x0000){
+		open(file,O_RDONLY);
+	}
+	
 }

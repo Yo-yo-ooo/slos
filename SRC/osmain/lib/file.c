@@ -305,3 +305,19 @@ arr* lbdel(arr* head, int m) {//删除
 	free(temp);
 	return head;
 }
+
+/*File Stream*/
+
+int getc(FILE *stream){
+	return (--stream->cnt >= 0 ? (unsigned char) *stream->ptr++
+	: _fillbuf(stream));
+}
+
+int putc(int c,FILE *stream){
+	return (--stream->cnt >= 0
+	? *stream->ptr++ = c : _flushbuf(c,stream));
+}
+
+int putchar(int c){
+	putc(c, stdout);
+}
