@@ -11,5 +11,6 @@ void srand(unsigned int seed);
 double atof(const char *str);
 int atoi(const char* s);
 void qsort(void const* base, int len, int size,int(*Cmp_qsort)(void const *p1,void const *p2));
+void QPrint(int* a, int n);
 
 #endif
