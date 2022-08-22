@@ -140,7 +140,7 @@ int Cmp_qsort(void const* p1, void const* p2)//用户输入，
 }
  
 //交换数据
-void Swap(char* base1, char* base2, int size)
+void QSwap(char* base1, char* base2, int size)
 {
 	for (int i = 0; i < size; ++i)//按字节转换
 	{
@@ -172,10 +172,10 @@ void _Quick_qsort(void const* base, int left, int right, int size, int(*Cmp_qsor
  
 		while (begin < end && (Cmp_qsort((char*)base+ key*size, (char*)base + begin * size) >= 0))
 			++begin;
-		Swap((char*)base +begin * size, (char*)base+end*size, size);
+		QSwap((char*)base +begin * size, (char*)base+end*size, size);
  
 	}
-	Swap((char*)base + begin * size, (char*)base + key * size, size);
+	QSwap((char*)base + begin * size, (char*)base + key * size, size);
  
 	_Quick_qsort(base, left, begin - 1, size, Cmp_qsort);
 	_Quick_qsort(base, begin + 1, right, size, Cmp_qsort);
