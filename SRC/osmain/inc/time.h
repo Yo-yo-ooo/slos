@@ -37,10 +37,12 @@ struct	stat
 	time_t	st_ctime;
 };
 
+time_t time(time_t *timer);
 size_t mktime(struct tm tm_now);
 void gmtime(struct tm *tm_time, size_t timestamp);
 scomp(register a,register b,register char s);
 sunday(register struct tm *t,register int d);
+struct tm *l_gmtime(long *tim);
 struct tm *localtime(long *tim);
 
 #endif

@@ -35,6 +35,7 @@ LIB_SRCFILES :=		$(LIB_SRCFILES) \
 			lib/ctype.c \
 			lib/nasmfuc.asm \
 			lib/d_stdlib.c \
+			lib/time.S \
 			lib/wait.c
 
 LIB_OBJFILES := $(patsubst lib/%.c, $(OBJDIR)/lib/%.o, $(LIB_SRCFILES))
