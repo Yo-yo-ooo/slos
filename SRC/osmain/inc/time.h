@@ -4,6 +4,11 @@
 #include <inc/types.h>
 #include <inc/nasmfuc.h>
 
+typedef	long long time_t;		/* <time> type */
+typedef unsigned short u_short;
+typedef u_short dev_t;
+typedef u_short ino_t;
+
 struct tm 
 {
     int tm_sec;         /* 秒 – 取值区间为[0,59] */
@@ -17,9 +22,25 @@ struct tm
     int tm_isdst;       /* 夏令时标识符，夏令时tm_isdst为正；不实行夏令时tm_isdst为0 */    
 };
 
-typedef	long long time_t;		/* <time> type */
+struct	stat
+{
+	dev_t	st_dev;
+	ino_t	st_ino;
+	unsigned short st_mode;
+	short	st_nlink;
+	short	st_uid;
+	short	st_gid;
+	dev_t	st_rdev;
+	off_t	st_size;
+	time_t	st_atime;
+	time_t	st_mtime;
+	time_t	st_ctime;
+};
 
 size_t mktime(struct tm tm_now);
 void gmtime(struct tm *tm_time, size_t timestamp);
+scomp(register a,register b,register char s);
+sunday(register struct tm *t,register int d);
+struct tm *localtime(long *tim);
 
 #endif

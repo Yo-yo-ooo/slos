@@ -1,4 +1,9 @@
 #include <inc/time.h>
+#include <inc/lib.h>
+
+long timez = 0;
+int daylite = 1;
+#define dysize(xyear) ((xyear&03) ? 365 : 366)
 
 size_t mktime(struct tm tm_now){
     const unsigned int year0 = tm_now.tm_year+1900;
@@ -98,4 +103,127 @@ void gmtime(struct tm *tm_time, size_t timestamp){
     }
 
     tm_time->tm_mday = (int)(timestamp);
+}
+
+scomp(register a,register b,register char s){
+	if(s == '+')
+		return(a > b);
+	if(s == '-')
+		return(a < (b * -1));
+	return(a == b);
+}
+
+void tzset(){
+    register char *p;
+    register int n;
+    int sign;
+    if((p = getenv("TZ")) && *p){
+        p += 3;
+        if (sign = *p == '-')
+			p++;
+		n = 0;
+		while (*p >= '0' && *p <= '9')
+			n = (n * 10) + *p++ - '0';
+		if (sign)
+			n = -n;
+		timez = ((long) (n * 60)) * 60;
+		if (*p) daylite = 1;
+		else daylite = 0;
+    }
+}
+
+sunday(register struct tm *t,register int d){
+    if ((d >= 58) && ((t->tm_year & 03) == 0)){ 
+        d+=1; /* leap year */
+    }
+	return(d - (d - t->tm_yday + t->tm_wday + 700) % 7);
+}
+
+struct tm *l_gmtime(long *tim){
+    char dmsize[12] = {
+        31,
+        28,
+        31,
+        30,
+        31,
+        30,
+        31,
+        31,
+        30,
+        31,
+        30,
+        31
+    };
+    /* Keywords: time-processing */
+	register int d0, d1;
+	int day;
+	long hms;
+	static struct tm xtime;
+
+	/*
+	 * break initial number into days
+	 */
+	day = *tim / 86400;
+	hms = *tim - (day*86400);
+
+	/*
+	 * generate hours:minutes:seconds
+	 */
+	d1 = hms/60;
+	xtime.tm_sec = hms - (((long)d1)*60L);
+	xtime.tm_min = d1%60;
+	d1 /= 60;
+	xtime.tm_hour = d1;
+
+	/*
+	 * day is the day number.
+	 * generate day of the week.
+	 * The addend is 4 mod 7 (1/1/1970 was Thursday)
+	 */
+
+	xtime.tm_wday = (day+4)%7;
+
+	/*
+	 * year number
+	 */
+	for(d1=70; day >= dysize(d1); d1++)
+		day -= dysize(d1);
+	xtime.tm_year = d1;
+	xtime.tm_yday = d0 = day;
+
+	/*
+	 * generate month
+	 */
+
+	if ((d1&03) == 0)dmsize[1] = 29;
+	else dmsize[1] = 28;
+	for(d1=0; d0 >= dmsize[d1]; d1++)
+		d0 -= dmsize[d1];
+	xtime.tm_mday= d0+1;
+	xtime.tm_mon = d1;
+	return(&xtime);
+}
+
+struct tm *localtime(long *tim){
+    register int dayno;
+    register struct tm *ct;
+    register daylbegin, daylend;
+    long copyt;
+
+    if(timez == 0) tzset();
+
+	copyt = *tim - timez;
+	ct = l_gmtime(&copyt);
+	if (!daylite) return(ct);
+	dayno = ct->tm_yday;
+	daylbegin  = 119;	/* last Sun in Apr */
+	daylend  = 303;		/* Last Sun in Oct */
+	daylbegin = sunday(ct, daylbegin);
+	daylend = sunday(ct, daylend);
+	if ((dayno>daylbegin || (dayno==daylbegin && ct->tm_hour>=2)) &&
+	    (dayno<daylend || (dayno==daylend && ct->tm_hour<1))) {
+		copyt += 1*60*60;
+		ct = l_gmtime(&copyt);
+	}
+	return(ct);
 }
