@@ -1,6 +1,12 @@
 #include <inc/d_stdlib.h>
 #include <inc/lib.h>
 
+/*
+* 文件: d_stdlib.c
+* 介绍: 增加lib.h里的函数
+*   
+*/
+
 unsigned long int next = 1;
 
 int rand(void){
@@ -123,3 +129,72 @@ int atoi(const char* s)
 		return (int)n;
 	}                        
 }
+
+/*Qsort Function*/
+
+
+int Cmp_qsort(void const* p1, void const* p2)//用户输入，
+{
+	int size1 = (*(int*)p1 - *(int*)p2);
+	return size1;
+}
+ 
+//交换数据
+void Swap(char* base1, char* base2, int size)
+{
+	for (int i = 0; i < size; ++i)//按字节转换
+	{
+		char tmp = *base1;
+		*base1 = *base2;
+		*base2 = tmp;
+		++base1;
+		++base2;	
+	}
+}
+ 
+//模拟实现
+void _Quick_qsort(void const* base, int left, int right, int size, int(*Cmp_qsort)(void const* p1, void const* p2))
+{
+	if (left >= right)
+	{
+		return;
+	}
+ 
+	int begin = left;
+	int end = right;
+	int key = begin;//记录坑位的下标、
+ 
+	while (begin < end)
+	{
+ 
+		while (begin < end && (Cmp_qsort((char*)base+ key*size, (char*)base + end * size) <= 0))
+			--end;
+ 
+		while (begin < end && (Cmp_qsort((char*)base+ key*size, (char*)base + begin * size) >= 0))
+			++begin;
+		Swap((char*)base +begin * size, (char*)base+end*size, size);
+ 
+	}
+	Swap((char*)base + begin * size, (char*)base + key * size, size);
+ 
+	_Quick_qsort(base, left, begin - 1, size, Cmp_qsort);
+	_Quick_qsort(base, begin + 1, right, size, Cmp_qsort);
+ 
+}
+ 
+ 
+//过渡一下
+void qsort(void const* base, int len, int size,int(*Cmp_qsort)(void const *p1,void const *p2))
+{
+	_Quick_qsort(base, 0, len - 1, size, Cmp_qsort);//左右区间写入参数，
+}
+ 
+//打印
+void QPrint(int* a, int n)
+{
+	for (int i = 0; i < n; ++i)
+	{
+		printf("%d ", a[i]);
+	}
+}
+

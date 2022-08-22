@@ -31,6 +31,7 @@
 #include <inc/ctype.h>
 #include <inc/nasmfuc.h>
 #include <inc/stdint.h>
+#include <inc/d_stdlib.h>
 
 //FILE
 
