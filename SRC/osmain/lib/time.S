@@ -1,7 +1,6 @@
-# C LIBRARY -- TIME函数
-# tvec = time(tvec)
-
-	time = 13
+#include <inc/time.h>
+.text
+time = 13
 .globl	_time
 
 _time:

@@ -31,12 +31,14 @@ LIB_SRCFILES :=		$(LIB_SRCFILES) \
 LIB_SRCFILES :=		$(LIB_SRCFILES) \
 			lib/pipe.c \
 			lib/math.c \
-			lib/time.c \
 			lib/ctype.c \
 			lib/nasmfuc.asm \
 			lib/d_stdlib.c \
-			lib/time.S \
 			lib/wait.c
+LIB_SRCFILES :=		$(LIB_SRCFILES) \
+			lib/time.S \
+			lib/time.c 
+
 
 LIB_OBJFILES := $(patsubst lib/%.c, $(OBJDIR)/lib/%.o, $(LIB_SRCFILES))
 LIB_OBJFILES := $(patsubst lib/%.S, $(OBJDIR)/lib/%.o, $(LIB_OBJFILES))
