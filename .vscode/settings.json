@@ -19,6 +19,7 @@
         "time.h": "c",
         "assert.h": "c",
         "nasmfuc.h": "c",
-        "fd.h": "c"
+        "fd.h": "c",
+        "lib.h": "c"
     }
 }

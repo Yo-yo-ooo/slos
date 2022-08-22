@@ -14,6 +14,7 @@ int _io_in16(int port);
 int _io_in32(int port);
 int _io_load_eflags(void);
 void _io_store_eflags(int eflags);
+void _sleep(int time);
 
 #ifdef __cplusplus
 }

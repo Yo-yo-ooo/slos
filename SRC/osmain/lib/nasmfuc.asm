@@ -79,3 +79,12 @@ _io_store_eflags:	; void io_store_eflags(int eflags);
 		POPFD		; POP EFLAGS 
 		RET
 
+_sleep:
+	push	eax
+	push	ebx
+	mov	eax,0x06
+	mov	edx,[esp+12]
+	int	36h
+	pop	ebx
+	pop	eax
+	ret
