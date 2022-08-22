@@ -40,6 +40,7 @@ OBJDIRS += lib
 # 			lib/time.c 
 LIB_SRCFILES = $(wildcard lib/*.c)
 LIB_SRCFILES += $(wildcard lib/*.S)
+LIB_SRCFILES += $(wildcard lib/*.s)
 LIB_SRCFILES += $(wildcard lib/*.asm)
 
 LIB_OBJFILES := $(patsubst lib/%.c, $(OBJDIR)/lib/%.o, $(LIB_SRCFILES))
@@ -52,6 +53,11 @@ $(OBJDIR)/lib/%.o: lib/%.c $(OBJDIR)/.vars.USER_CFLAGS
 	$(V)$(CC) -nostdinc $(USER_CFLAGS) -c $< -o $@ 
 
 $(OBJDIR)/lib/%.o: lib/%.S $(OBJDIR)/.vars.USER_CFLAGS
+	@echo + as[USER] $<
+	@mkdir -p $(@D)
+	$(V)$(CC) -nostdinc $(USER_CFLAGS) -c $< -o $@ 
+
+$(OBJDIR)/lib/%.o: lib/%.s $(OBJDIR)/.vars.USER_CFLAGS
 	@echo + as[USER] $<
 	@mkdir -p $(@D)
 	$(V)$(CC) -nostdinc $(USER_CFLAGS) -c $< -o $@ 

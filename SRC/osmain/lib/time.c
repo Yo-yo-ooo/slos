@@ -5,6 +5,14 @@ long timez = 0;
 int daylite = 1;
 #define dysize(xyear) ((xyear&03) ? 365 : 366)
 
+time_t time(time_t tt){
+    if(tt != NULL){
+        localtime(tt);
+    }else{
+        return (time_t)-1;
+    }
+}
+
 size_t mktime(struct tm tm_now){
     const unsigned int year0 = tm_now.tm_year+1900;
     const unsigned int mon0 = tm_now.tm_mon+1;
