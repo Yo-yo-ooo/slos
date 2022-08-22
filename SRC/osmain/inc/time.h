@@ -37,7 +37,9 @@ struct	stat
 	time_t	st_ctime;
 };
 
-time_t time(time_t *timer);
+#ifndef __ASSEMBLER__
+    extern long time(long*);
+#endif
 size_t mktime(struct tm tm_now);
 void gmtime(struct tm *tm_time, size_t timestamp);
 scomp(register a,register b,register char s);
