@@ -18,7 +18,7 @@ getchar(void)
 	unsigned char c;
 	int r;
 
-	// JOS does, however, support standard _input_ redirection,
+	// OS does, however, support standard _input_ redirection,
 	// allowing the user to redirect script files to the shell and such.
 	// getchar() reads a character from file descriptor 0.
 	r = read(0, &c, 1);
