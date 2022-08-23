@@ -3,7 +3,7 @@
 
 #include <inc/string.h>
 
-namespace sstd{
+namespace std{
 
 class String
 {

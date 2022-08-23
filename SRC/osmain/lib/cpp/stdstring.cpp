@@ -1,6 +1,6 @@
 #include <inc/String>
 
-using namespace sstd;
+using namespace std;
 
 inline String::String(){
     size_ = 0;
