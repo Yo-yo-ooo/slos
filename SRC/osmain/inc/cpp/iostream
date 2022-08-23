@@ -5,7 +5,7 @@
 
 namespace std{
 
-outstream cout;
+ostream cout;
     
 }
 

@@ -3,7 +3,7 @@
 
 #include <inc/lib.h>
 
-class outstream{
+class ostream{
 public:
     void operator << (char *msg)const;
     void operator << (int value)const;
