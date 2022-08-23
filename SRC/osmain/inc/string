@@ -5,45 +5,45 @@
 
 namespace sstd{
 
-class string
+class String
 {
 private:
     /* data */
     size_t size_;
     char* buffer_;
 public:
-    string();
-	string(const string& str);
-	string(const string& str, size_t pos, size_t len = npos);
-	string(const char* s);
-	string(const char* s, size_t n);
-	string(size_t n, char c);
-	~string();
+    String();
+	String(const String& str);
+	String(const String& str, size_t pos, size_t len = npos);
+	String(const char* s);
+	String(const char* s, size_t n);
+	String(size_t n, char c);
+	~String();
     const char* c_str() const; 
 	size_t length() const;
 	size_t size() const;
 	
 	char& operator [] (size_t pos);
 	const char& operator [] (size_t pos) const;
-	string& operator = (const string& str);
-	string& operator = (const char* s);
-	string& operator = (char c);
-	string& operator += (const string& str);
-	string& operator += (const char* s);
-	string& operator += (char c);
+	String& operator = (const String& str);
+	String& operator = (const char* s);
+	String& operator = (char c);
+	String& operator += (const String& str);
+	String& operator += (const char* s);
+	String& operator += (char c);
  
-	string& append(const string& str);
-	string& append(const char* s);
+	String& append(const String& str);
+	String& append(const char* s);
  
-	string& assign(const string& str);
-	string& assign(const char* s);
+	String& assign(const String& str);
+	String& assign(const char* s);
  
 	char& at(size_t pos);
 	const char& at(size_t pos) const;
  
 	void clear();
  
-	int compare(const string& str) const;
+	int compare(const String& str) const;
 	int compare(const char* s) const;
  
 	const char* data() const;

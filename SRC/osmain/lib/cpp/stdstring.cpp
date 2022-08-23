@@ -1,19 +1,19 @@
-#include <inc/string>
+#include <inc/String>
 
 using namespace sstd;
 
-inline string::string(){
+inline String::String(){
     size_ = 0;
     buffer_ = new char[1];
     buffer_[0] = '\0';
 }
 
-inline string::string(const string& str){
+inline String::String(const String& str){
     size_ = str.size_;
     buffer_ = new char[size_ + 1];
     strcpy(buffer_, str.buffer_);
 }
-inline string::string(const string& str, size_t pos, size_t len)
+inline String::String(const String& str, size_t pos, size_t len)
 {
 	if (pos > str.size_) {
 		size_ = 0;
@@ -35,14 +35,14 @@ inline string::string(const string& str, size_t pos, size_t len)
 	}
 }
  
-inline string::string(const char* s)
+inline String::String(const char* s)
 {
 	size_ = strlen(s);
 	buffer_ = new char[size_+1];
 	strcpy(buffer_, s);
 }
  
-inline string::string(const char* s, size_t n)
+inline String::String(const char* s, size_t n)
 {
 	if (strlen(s) <= n) {
 		size_ = strlen(s);
@@ -55,41 +55,41 @@ inline string::string(const char* s, size_t n)
 	}
 }
  
-inline string::string(size_t n, char c)
+inline String::String(size_t n, char c)
 {
 	size_ = n;
 	buffer_ = new char[size_+1];
 	memset(buffer_, c, n);
 }
  
-inline string::~string()
+inline String::~String()
 {
 	if (buffer_)
 		delete [] buffer_;
 	size_ = 0;
 }
  
-inline const char* string::c_str() const
+inline const char* String::c_str() const
 {
 	return buffer_;
 }
  
-inline size_t string::length() const
+inline size_t String::length() const
 {
 	return size_;
 }
  
-inline size_t string::size() const
+inline size_t String::size() const
 {
 	return size_;
 }
 	
-inline char& string::operator [] (size_t pos)
+inline char& String::operator [] (size_t pos)
 {
 	return buffer_[pos];	
 }
 	
-inline const char& string::operator [] (size_t pos) const
+inline const char& String::operator [] (size_t pos) const
 {
 	if (pos >= size_)
 		return '\0';
@@ -98,7 +98,7 @@ inline const char& string::operator [] (size_t pos) const
 }
  
  
-inline string& string::operator = (const string& str)
+inline String& String::operator = (const String& str)
 {
 	if (this->size_ != 0)
 		delete [] buffer_;
@@ -109,7 +109,7 @@ inline string& string::operator = (const string& str)
 	return *this;
 }
  
-inline string& string::operator = (const char* s)
+inline String& String::operator = (const char* s)
 {
 	if (this->size_ != 0)
 		delete [] buffer_;
@@ -120,7 +120,7 @@ inline string& string::operator = (const char* s)
 	return *this;
 }
  
-inline string& string::operator = (char c)
+inline String& String::operator = (char c)
 {
 	if (this->size_ != 1)
 		delete [] buffer_;
@@ -132,7 +132,7 @@ inline string& string::operator = (char c)
 	return *this;
 }
 	
-inline string& string::operator += (const string& str)
+inline String& String::operator += (const String& str)
 {
 	size_ += str.size_;
 	char* data = new char[size_+1];
@@ -144,7 +144,7 @@ inline string& string::operator += (const string& str)
 	return *this;
 }
  
-inline string& string::operator += (const char* s)
+inline String& String::operator += (const char* s)
 {
 	size_ += strlen(s);
 	char* data = new char[size_+1];
@@ -156,7 +156,7 @@ inline string& string::operator += (const char* s)
 	return *this;
 }
  
-inline string& string::operator += (char c)
+inline String& String::operator += (char c)
 {
 	size_ += 1;
 	char* data = new char[size_+1];
@@ -168,41 +168,41 @@ inline string& string::operator += (char c)
 	return *this;
 }
  
-inline string& string::append(const string& str)
+inline String& String::append(const String& str)
 {
 	*this += str;
 	return *this;
 }
  
-inline string& string::append(const char* s)
+inline String& String::append(const char* s)
 {
 	*this += s;
 	return *this;
 }
  
-inline string& string::assign(const string& str)
+inline String& String::assign(const String& str)
 {
 	*this = str;
 	return *this;
 }
 	
-inline string& string::assign(const char* s)
+inline String& String::assign(const char* s)
 {
 	*this = s;
 	return *this;
 }
  
-inline char& string::at(size_t pos)
+inline char& String::at(size_t pos)
 {
 	return buffer_[pos];
 }
 	
-inline const char& string::at(size_t pos) const
+inline const char& String::at(size_t pos) const
 {
 	return buffer_[pos];
 }
  
-inline void string::clear()
+inline void String::clear()
 {
 	delete [] buffer_;
 	size_ = 0;
@@ -210,147 +210,147 @@ inline void string::clear()
 	buffer_[0] = '\0';
 }
 	
-inline int string::compare(const string& str) const
+inline int String::compare(const String& str) const
 {
 	return strcmp(buffer_, str.buffer_);
 }
  
-inline int string::compare(const char* s) const
+inline int String::compare(const char* s) const
 {
 	return strcmp(buffer_, s);
 }
  
-inline const char* string::data() const
+inline const char* String::data() const
 {
 	return buffer_;
 }
 	
-inline bool string::empty() const
+inline bool String::empty() const
 {
 	return (size_ == 0);
 }
  
-static inline string operator + (const string& lhs, const string& rhs)
+static inline String operator + (const String& lhs, const String& rhs)
 {
-	string str(lhs);
+	String str(lhs);
 	str += rhs;
 	return str;
 }
  
-static inline string operator + (const string& lhs, const char* rhs)
+static inline String operator + (const String& lhs, const char* rhs)
 {
-	string str(lhs);
+	String str(lhs);
 	str += rhs;
 	return str;
 }
  
-static inline string operator + (const char* lhs, const string& rhs)
+static inline String operator + (const char* lhs, const String& rhs)
 {
-	string str(lhs);
+	String str(lhs);
 	str += rhs;
 	return str;
 }
  
-static inline string operator + (const string& lhs, char rhs)
+static inline String operator + (const String& lhs, char rhs)
 {
-	string str(lhs);
+	String str(lhs);
 	str += rhs;
 	return str;
 }
  
-static inline string operator + (char lhs, const string& rhs)
+static inline String operator + (char lhs, const String& rhs)
 {
-	string str(&lhs);
+	String str(&lhs);
 	str += rhs;
 	return str;
 }
  
-static inline bool operator == (const string& lhs, const string& rhs)
+static inline bool operator == (const String& lhs, const String& rhs)
 {
 	return (lhs.compare(rhs) == 0);
 }
  
-static inline bool operator == (const char* lhs, const string& rhs)
+static inline bool operator == (const char* lhs, const String& rhs)
 {
 	return (rhs.compare(lhs) == 0);
 }
  
-static inline bool operator == (const string& lhs, const char* rhs)
+static inline bool operator == (const String& lhs, const char* rhs)
 {
 	return (lhs.compare(rhs) == 0);
 }
  
-static inline bool operator != (const string& lhs, const string& rhs)
+static inline bool operator != (const String& lhs, const String& rhs)
 {
 	return (lhs.compare(rhs) != 0);
 }
  
-static inline bool operator != (const char* lhs, const string& rhs)
+static inline bool operator != (const char* lhs, const String& rhs)
 {
 	return (rhs.compare(lhs) != 0);
 }
  
-static inline bool operator != (const string& lhs, const char* rhs)
+static inline bool operator != (const String& lhs, const char* rhs)
 {
 	return (lhs.compare(rhs) != 0);
 }
  
-static inline bool operator < (const string& lhs, const string& rhs)
+static inline bool operator < (const String& lhs, const String& rhs)
 {
 	return (lhs.compare(rhs) < 0);
 }
  
-static inline bool operator < (const char* lhs, const string& rhs)
+static inline bool operator < (const char* lhs, const String& rhs)
 {
 	return (rhs.compare(lhs) >= 0);
 }
  
-static inline bool operator < (const string& lhs, const char* rhs)
+static inline bool operator < (const String& lhs, const char* rhs)
 {
 	return (lhs.compare(rhs) < 0);
 }
  
-static inline bool operator <= (const string& lhs, const string& rhs)
+static inline bool operator <= (const String& lhs, const String& rhs)
 {
 	return (lhs.compare(rhs) <= 0);
 }
  
-static inline bool operator <= (const char* lhs, const string& rhs)
+static inline bool operator <= (const char* lhs, const String& rhs)
 {
 	return (rhs.compare(lhs) > 0);
 }
  
-static inline bool operator <= (const string& lhs, const char* rhs)
+static inline bool operator <= (const String& lhs, const char* rhs)
 {
 	return (lhs.compare(rhs) <= 0);
 }
  
-static inline bool operator > (const string& lhs, const string& rhs)
+static inline bool operator > (const String& lhs, const String& rhs)
 {
 	return (lhs.compare(rhs) > 0);
 }
  
-static inline bool operator > (const char* lhs, const string& rhs)
+static inline bool operator > (const char* lhs, const String& rhs)
 {
 	return (rhs.compare(lhs) <= 0);
 }
  
-static inline bool operator > (const string& lhs, const char* rhs)
+static inline bool operator > (const String& lhs, const char* rhs)
 {
 	return (lhs.compare(rhs) > 0);
 }
  
-static inline bool operator >= (const string& lhs, const string& rhs)
+static inline bool operator >= (const String& lhs, const String& rhs)
 {
 	return (lhs.compare(rhs) >= 0);
 }
  
-static inline bool operator >= (const char* lhs, const string& rhs)
+static inline bool operator >= (const char* lhs, const String& rhs)
 {
 	return (rhs.compare(lhs) < 0);
 }
  
-static inline bool operator >= (const string& lhs, const char* rhs)
+static inline bool operator >= (const String& lhs, const char* rhs)
 {
 	return (lhs.compare(rhs) >= 0);
 }
