@@ -22,6 +22,7 @@
         "fd.h": "c",
         "lib.h": "c",
         "syscall.h": "c",
-        "string": "cpp"
+        "string": "cpp",
+        "iosfwd": "cpp"
     }
 }
