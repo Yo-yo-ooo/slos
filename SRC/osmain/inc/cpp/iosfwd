@@ -1,7 +1,6 @@
 #ifndef IOSFWD
 #define IOSFWD
 
-#include <inc/lib.h>
 #include <inc/cpp/string>
 
 using namespace std;
