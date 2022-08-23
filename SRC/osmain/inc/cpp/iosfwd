@@ -2,6 +2,10 @@
 #define IOSFWD
 
 #include <inc/lib.h>
+#include <inc/cpp/string>
+
+using namespace std;
+
 
 class ostream{
 public:
@@ -11,6 +15,14 @@ public:
     void operator << (double d)const;
 };
 
+class istream
+{
+public:
+    void operator << (char *a)const;
+    void operator << (String str)const;
+    void operator >> (char *a)const;
+    void operator >> (String str)const;
+}
 
 
 #endif

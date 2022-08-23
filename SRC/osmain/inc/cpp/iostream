@@ -5,7 +5,9 @@
 
 namespace std{
 
-ostream cout;
+extern ostream cout;
+extern ostream cerr;
+extern ostream clog;
     
 }
 

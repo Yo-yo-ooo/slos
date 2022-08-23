@@ -19,3 +19,5 @@ void ostream::operator << (double d)const{
     printf("%f",d);
     return* this;
 }
+
+void istream::operator<<()
