@@ -1,9 +1,15 @@
 #ifndef IOSFWD
 #define IOSFWD
 
+#include <inc/lib.h>
+
+
+
 class ostream{
 public:
     void operator << (char *msg);
 };
+
+
 
 #endif

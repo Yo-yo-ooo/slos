@@ -4,7 +4,10 @@
 #include <inc/cpp/iosfwd>
 
 namespace std{
-    ostream cout;
+
+ostream cout;
+ostream cin;
+    
 }
 
 #endif
