@@ -1,0 +1,10 @@
+#ifndef IOSTREAM
+#define IOSTREAM
+
+#include <inc/cpp/iosfwd>
+
+namespace std{
+    ostream cout;
+}
+
+#endif
