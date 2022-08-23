@@ -22,7 +22,7 @@ public:
     void operator << (String str)const;
     void operator >> (char *a)const;
     void operator >> (String str)const;
-}
+};
 
 
 #endif
