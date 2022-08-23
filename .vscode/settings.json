@@ -21,6 +21,7 @@
         "nasmfuc.h": "c",
         "fd.h": "c",
         "lib.h": "c",
-        "syscall.h": "c"
+        "syscall.h": "c",
+        "string": "cpp"
     }
 }
