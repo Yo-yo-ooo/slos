@@ -3,11 +3,12 @@
 
 #include <inc/lib.h>
 
-
-
-class ostream{
+class outstream{
 public:
-    void operator << (char *msg);
+    void operator << (char *msg)const;
+    void operator << (int value)const;
+    void operator << (float d)const;
+    void operator << (double d)const;
 };
 
 
