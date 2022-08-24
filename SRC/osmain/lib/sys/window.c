@@ -1,4 +1,5 @@
 #include <inc/lib.h>
+#include <inc/sys/window.h>
 
 extern unsigned int memsize;
 char *font;
