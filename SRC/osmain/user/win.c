@@ -13,9 +13,7 @@ umain(int argc, char **argv){
 	}
 
 	for (;;) {
-		asm("
-        HLT\n\t
-        ")
+		__asm__ __volatile__("hlt");
 	}
 
 }
