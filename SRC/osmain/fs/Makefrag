@@ -36,6 +36,9 @@ USERAPPS :=		$(USERAPPS) \
 			$(OBJDIR)/user/hello \
 			$(OBJDIR)/user/faultio \
 
+USERNASMFUC := \
+	user/nasmfuc \
+
 FSIMGTXTFILES :=	$(FSIMGTXTFILES) \
 			fs/lorem \
 			fs/script \
@@ -43,7 +46,7 @@ FSIMGTXTFILES :=	$(FSIMGTXTFILES) \
 			fs/testshell.sh
 
 
-FSIMGFILES := $(FSIMGTXTFILES) $(USERAPPS)
+FSIMGFILES := $(FSIMGTXTFILES) $(USERNASMFUC) $(USERAPPS) 
 
 $(OBJDIR)/fs/%.o: fs/%.c fs/fs.h inc/lib.h $(OBJDIR)/.vars.USER_CFLAGS
 	@echo + cc[USER] $<

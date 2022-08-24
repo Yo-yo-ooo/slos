@@ -4,15 +4,15 @@ USERLIBS += lwip
 
 USERLIBS += jos
 
+$(OBJDIR)/user/nasmfuc.o: user/nasmfuc.asm $(OBJDIR)/.vars.USER_CFLAGS
+	@echo + nasm[USER] $<
+	@mkdir -p $(@D)
+	nasm -f elf $< -o $@
+
 $(OBJDIR)/user/%.o: user/%.c $(OBJDIR)/.vars.USER_CFLAGS
 	@echo + cc[USER] $<
 	@mkdir -p $(@D)
 	$(V)$(CC) -nostdinc $(USER_CFLAGS) -c -o $@ $<
-
-$(OBJDIR)/user/%.o: user/%.asm $(OBJDIR)/.vars.USER_CFLAGS
-	@echo + nasm[USER] $<
-	@mkdir -p $(@D)
-	nasm -f elf $< -o $@
 
 $(OBJDIR)/user/%: $(OBJDIR)/user/%.o $(OBJDIR)/lib/entry.o $(USERLIBS:%=$(OBJDIR)/lib/lib%.a) user/user.ld
 	@echo + ld $@
