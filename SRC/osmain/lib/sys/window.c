@@ -33,7 +33,7 @@ char mouse_cur_graphic[16][16] = {
 	"*....*O*........",
 	".....*O*........",
 	"......*........."};
-
+int caps_lock = 0, shift = 0;
 void init_screen8(char *vram, int x, int y)
 {
 	memset(vram, 14, x * y);
