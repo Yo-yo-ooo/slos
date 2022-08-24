@@ -13,7 +13,9 @@ umain(int argc, char **argv){
 	}
 
 	for (;;) {
-		_io_hlt();
+		asm("
+        HLT\n\t
+        ")
 	}
 
 }
