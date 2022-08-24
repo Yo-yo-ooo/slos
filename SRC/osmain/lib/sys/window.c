@@ -39,63 +39,6 @@ void init_screen8(char *vram, int x, int y)
 {
 	memset(vram, 14, x * y);
 }
-void PUTCHINESE0(unsigned char *vram, int x, int y, char color, unsigned short CH, int xsize)
-{
-	extern char *hzkfont;
-	int i, j, k, offset;
-	int flag;
-	unsigned char buffer[32];
-	unsigned char word[2] = {CH & 0xff, (CH & 0xff00) >> 8}; // 将字符转换为两个字节
-	unsigned char key[8] = {0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01};
-	unsigned char *p = hzkfont;
-	offset = (94 * (unsigned int)(word[0] - 0xa0 - 1) + (word[1] - 0xa0 - 1)) * 32;
-	p = p + offset;
-	//读取，并写入到vram中
-	for (i = 0; i < 32; i++)
-	{
-		buffer[i] = p[i];
-	}
-	for (k = 0; k < 16; k++)
-	{
-		for (j = 0; j < 2; j++)
-		{
-			for (i = 0; i < 8; i++)
-			{
-				flag = buffer[k * 2 + j] & key[i];
-				if (flag)
-				{
-					// Draw_Px(x + i + j * 8, y + k, color);
-					vram[(y + k) * xsize + (x + i + j * 8)] = color;
-				}
-			}
-		}
-	}
-}
-void init_mouse_cursor8(char *mouse, char bc)
-/* 鼠标的数据准备（16x16） */
-{
-	int x, y;
-
-	for (y = 0; y < 16; y++)
-	{
-		for (x = 0; x < 16; x++)
-		{
-			if (mouse_cur_graphic[y][x] == '*')
-			{
-				mouse[y * 16 + x] = 0x0;
-			}
-			if (mouse_cur_graphic[y][x] == 'O')
-			{
-				mouse[y * 16 + x] = 0xf;
-			}
-			if (mouse_cur_graphic[y][x] == '.')
-			{
-				mouse[y * 16 + x] = bc;
-			}
-		}
-	}
-	return;
-}
 void Sputs(unsigned char *vram, char *str, int x, int y, int col, int xsize)
 {
 	int i;

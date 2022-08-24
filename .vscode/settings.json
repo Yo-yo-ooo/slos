@@ -23,6 +23,7 @@
         "lib.h": "c",
         "syscall.h": "c",
         "string": "cpp",
-        "iosfwd": "cpp"
+        "iosfwd": "cpp",
+        "window.h": "c"
     }
 }
