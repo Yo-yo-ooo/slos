@@ -32,6 +32,7 @@ USERAPPS :=		$(USERAPPS) \
 			$(OBJDIR)/user/testpteshare \
 			$(OBJDIR)/user/testshell \
 			$(OBJDIR)/user/time \
+			$(OBJDIR)/user/win \
 			$(OBJDIR)/user/hello \
 			$(OBJDIR)/user/faultio \
 

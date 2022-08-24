@@ -13,7 +13,7 @@ umain(int argc, char **argv){
 	}
 
 	for (;;) {
-		io_hlt();
+		_io_hlt();
 	}
 
 }
