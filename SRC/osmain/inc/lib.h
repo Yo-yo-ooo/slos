@@ -29,7 +29,6 @@
 #include <inc/limits.h>
 #include <inc/float.h>
 #include <inc/ctype.h>
-#include <inc/nasmfuc.h>
 #include <inc/stdint.h>
 #include <inc/d_stdlib.h>
 
