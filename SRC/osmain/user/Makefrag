@@ -9,7 +9,7 @@ $(OBJDIR)/user/%.o: user/%.c $(OBJDIR)/.vars.USER_CFLAGS
 	@mkdir -p $(@D)
 	$(V)$(CC) -nostdinc $(USER_CFLAGS) -c -o $@ $<
 
-$(OBJDIR)/lib/%.o: lib/%.asm $(OBJDIR)/.vars.USER_CFLAGS
+$(OBJDIR)/user/%.o: user/%.asm $(OBJDIR)/.vars.USER_CFLAGS
 	@echo + nasm[USER] $<
 	@mkdir -p $(@D)
 	nasm -f elf $< -o $@
