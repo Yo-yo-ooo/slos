@@ -2,7 +2,6 @@
 #define _TIME_H
 
 #include <inc/types.h>
-#include <inc/nasmfuc.h>
 
 typedef	long long time_t;		/* <time> type */
 typedef unsigned short u_short;
