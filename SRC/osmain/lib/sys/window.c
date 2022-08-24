@@ -88,32 +88,6 @@ void SDraw_Box(unsigned char *vram, int x, int y, int x1, int y1, int color, int
 	}
 	return;
 }
-void SDraw_Char(unsigned char *vram1, int x, int y, char c, int color, int xsize)
-{
-	extern char *ascfont;
-	x *= 8;
-	y *= 16;
-	unsigned char *vram = (unsigned char *)vram1;
-	unsigned char *p;
-	unsigned char *font;
-	int i, j;
-	font = ascfont;
-	font += c * 16;
-	int char_color = color & 0x0f;
-	int bg_color = (color & 0xf0) >> 4;
-	for (i = 0; i < 16; i++)
-	{
-		for (j = 0; j < 8; j++)
-		{
-			if (font[i] & (0x80 >> j))
-			{
-				p = vram + (y + i) * xsize + x + j;
-				*p = color;
-			}
-		}
-	}
-	return;
-}
 int sc2a(int sc)
 {
 	int ch = sc;
@@ -188,62 +162,4 @@ void Draw_Cur(unsigned char *vram, int x, int y, int xsize)
 			}
 		}
 	}
-}
-void make_window8(unsigned char *buf, int xsize, int ysize, char *title)
-{
-	static char closebtn[14][16] = {
-		"OOOOOOOOOOOOOOO@",
-		"OQQQQQQQQQQQQQ$@",
-		"OQQQQQQQQQQQQQ$@",
-		"OQQQ@@QQQQ@@QQ$@",
-		"OQQQQ@@QQ@@QQQ$@",
-		"OQQQQQ@@@@QQQQ$@",
-		"OQQQQQQ@@QQQQQ$@",
-		"OQQQQQ@@@@QQQQ$@",
-		"OQQQQ@@QQ@@QQQ$@",
-		"OQQQ@@QQQQ@@QQ$@",
-		"OQQQQQQQQQQQQQ$@",
-		"OQQQQQQQQQQQQQ$@",
-		"O$$$$$$$$$$$$$$@",
-		"@@@@@@@@@@@@@@@@"};
-
-	int x, y;
-	char c;
-	boxfill8(buf, xsize, 0x7, 0, 0, xsize - 1, 0);
-	boxfill8(buf, xsize, 0xf, 1, 1, xsize - 2, 1);
-	boxfill8(buf, xsize, 0x7, 0, 0, 0, ysize - 1);
-	boxfill8(buf, xsize, 0xf, 1, 1, 1, ysize - 2);
-	boxfill8(buf, xsize, 0x8, xsize - 2, 1, xsize - 2, ysize - 2);
-	boxfill8(buf, xsize, 0x0, xsize - 1, 0, xsize - 1, ysize - 1);
-	boxfill8(buf, xsize, 0x7, 2, 2, xsize - 3, ysize - 3);
-	boxfill8(buf, xsize, 12, 3, 3, xsize - 4, 20);
-	boxfill8(buf, xsize, 0x8, 1, ysize - 2, xsize - 2, ysize - 2);
-	boxfill8(buf, xsize, 0x0, 0, ysize - 1, xsize - 1, ysize - 1);
-	putfonts8_asc(buf, xsize, 24, 4, 0xf, title);
-
-	for (y = 0; y < 14; y++)
-	{
-		for (x = 0; x < 16; x++)
-		{
-			c = closebtn[y][x];
-			if (c == '@')
-			{
-				c = 0x0;
-			}
-			else if (c == '$')
-			{
-				c = 8;
-			}
-			else if (c == 'Q')
-			{
-				c = 7;
-			}
-			else
-			{
-				c = 0xf;
-			}
-			buf[(5 + y) * xsize + (xsize - 21 + x)] = c;
-		}
-	}
-	return;
 }
