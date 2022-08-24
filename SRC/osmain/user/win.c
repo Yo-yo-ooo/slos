@@ -13,7 +13,7 @@ umain(int argc, char **argv){
 	}
 
 	for (;;) {
-		__asm__ __volatile__("hlt");
+		asm ("hlt");
 	}
 
 }
