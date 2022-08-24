@@ -39,14 +39,6 @@ void init_screen8(char *vram, int x, int y)
 {
 	memset(vram, 14, x * y);
 }
-void Sputs(unsigned char *vram, char *str, int x, int y, int col, int xsize)
-{
-	int i;
-	for (i = 0; str[i] != 0; i++)
-	{
-		SDraw_Char(vram, x + i, y, str[i], col, xsize);
-	}
-}
 void PowerMakeWindow(unsigned char *vram, int xsize, int ysize)
 {
 	// 160*52
