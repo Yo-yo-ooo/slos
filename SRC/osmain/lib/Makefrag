@@ -42,6 +42,7 @@ LIB_SRCFILES = $(wildcard lib/*.c)
 LIB_SRCFILES += $(wildcard lib/*.S)
 LIB_SRCFILES += $(wildcard lib/*.asm)
 LIB_SRCFILES += $(wildcard lib/cpp/*.cpp)
+LIB_SRCFILES += $(wildcard lib/sys/*.c)
 
 LIB_OBJFILES := $(patsubst lib/%.c, $(OBJDIR)/lib/%.o, $(LIB_SRCFILES))
 LIB_OBJFILES := $(patsubst lib/%.S, $(OBJDIR)/lib/%.o, $(LIB_OBJFILES))
