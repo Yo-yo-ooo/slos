@@ -155,6 +155,7 @@ runit:
 	//运行伪指令
 	if(strcmp((const char*)argv[0], "ACC")){
 		spawn("time", (const char**)argv);
+		exit();
 	}
 	// In the parent, close all file descriptors and wait for the
 	// spawned command to exit.
