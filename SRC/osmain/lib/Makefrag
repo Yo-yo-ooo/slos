@@ -64,7 +64,7 @@ $(OBJDIR)/lib/%.o: lib/cpp/%.cpp $(OBJDIR)/.vars.USER_CFLAGS
 	@mkdir -p $(@D)
 	$(V)$(CPP) -nostdinc $(USER_CFLAGS) -c $< -o $@ 
 
-$(OBJDIR)/lib/fuc.o: lib/%.asm $(OBJDIR)/.vars.USER_CFLAGS
+$(OBJDIR)/lib/%.o: lib/%.asm $(OBJDIR)/.vars.USER_CFLAGS
 	@echo + nasm[USER] $<
 	@mkdir -p $(@D)
 	nasm -f elf $< -o $@
