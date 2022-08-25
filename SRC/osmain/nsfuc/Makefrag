@@ -1,9 +1,0 @@
-#Nasm函数库
-
-OBJDIRS += nsfuc
-
-$(OBJDIR)/nsfuc/fuc.o: nsfuc/%.asm 
-	@echo + LINKING++++NASM++++++++++++++++++++++++++++++++
-	@echo + nasm[USER] $<
-	@mkdir -p $(@D)
-	nasm -f elf $< -o $@
