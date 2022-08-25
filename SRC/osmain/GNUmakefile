@@ -123,8 +123,8 @@ all:
 .DELETE_ON_ERROR:
 
 # make it so that no intermediate .o files are ever deleted
-.PRECIOUS: %.o $(OBJDIR)/boot/%.o $(OBJDIR)/nasmfuc/%.o $(OBJDIR)/kern/%.o \
-	   $(OBJDIR)/lib/%.o $(OBJDIR)/fs/%.o $(OBJDIR)/net/%.o \
+.PRECIOUS: %.o $(OBJDIR)/boot/%.o $(OBJDIR)/kern/%.o \
+	   $(OBJDIR)/lib/%.o $(OBJDIR)/nasmfuc/%.o $(OBJDIR)/fs/%.o $(OBJDIR)/net/%.o \
 	   $(OBJDIR)/user/%.o
 
 KERN_CFLAGS := $(CFLAGS) -DJOS_KERNEL -gstabs
