@@ -1,10 +1,12 @@
 #Nasm函数库
 
 OBJDIRS += nasmfuc
+
 NASMFUC_SRCFILES += $(wildcard nasmfuc/*.asm)
 NASMFUC_OBJFILES := $(patsubst nasmfuc/%.asm, $(OBJDIR)/nasmfuc/%.o, $(NASMFUC_SRCFILES))
 
-$(OBJDIR)/nasmfuc/nasmfuc.o: $(NASMFUC_OBJFILES)
+$(OBJDIR)/nasmfuc/nasmfuc.o: nasmfuc/%.asm $(OBJDIR)/.vars.USER_CFLAGS
+	@echo + LINKING++++NASM++++
 	@echo + nasm[USER] $<
 	@mkdir -p $(@D)
 	nasm -f elf $< -o $@
