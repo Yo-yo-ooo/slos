@@ -52,7 +52,7 @@ DIR *opendir(char *dirname){
     struct Stat stbuf;
     DIR *dp;
 
-    if((fd == open(dirname, O_RDONLY, 0)) == -1
+    if((fd == open(dirname, O_RDONLY)) == -1
     || fstat(fd, &stbuf) == -1
     || (dp = (DIR *) malloc(sizeof(DIR))) == NULL){
         return NULL;
