@@ -152,7 +152,10 @@ runit:
 	// Spawn the command!
 	if ((r = spawn(argv[0], (const char**) argv)) < 0)
 		cprintf("spawn %s: %e\n", argv[0], r);
-
+	//运行伪指令
+	if(strcmp((const char*)argv[0], "ACC")){
+		spawn("time", (const char**)argv);
+	}
 	// In the parent, close all file descriptors and wait for the
 	// spawned command to exit.
 	close_all();
