@@ -5,7 +5,7 @@ OBJDIRS += nasmfuc
 NASMFUC_SRCFILES += $(wildcard nasmfuc/*.asm)
 NASMFUC_OBJFILES := $(patsubst nasmfuc/%.asm, $(OBJDIR)/nasmfuc/%.o, $(NASMFUC_SRCFILES))
 
-$(OBJDIR)/nasmfuc/nasmfuc.o: nasmfuc/%.asm $(OBJDIR)/.vars.USER_CFLAGS
+$(OBJDIR)/nasmfuc/nasmfuc.o: nasmfuc/function.asm 
 	@echo + LINKING++++NASM++++
 	@echo + nasm[USER] $<
 	@mkdir -p $(@D)
