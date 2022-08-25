@@ -1,3 +1,5 @@
+//这是DIR操作:
+//open & walk & read & close
 #include <inc/sys/dir.h>
 #include <inc/lib.h>
 
