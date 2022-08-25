@@ -124,7 +124,7 @@ all:
 
 # make it so that no intermediate .o files are ever deleted
 .PRECIOUS: %.o $(OBJDIR)/boot/%.o $(OBJDIR)/kern/%.o \
-	   $(OBJDIR)/lib/%.o $(OBJDIR)/nasmfuc/%.o $(OBJDIR)/fs/%.o $(OBJDIR)/net/%.o \
+	   $(OBJDIR)/lib/%.o $(OBJDIR)/nsfuc/%.o $(OBJDIR)/fs/%.o $(OBJDIR)/net/%.o \
 	   $(OBJDIR)/user/%.o
 
 KERN_CFLAGS := $(CFLAGS) -DJOS_KERNEL -gstabs
@@ -145,7 +145,7 @@ $(OBJDIR)/.vars.%: FORCE
 include boot/Makefrag
 include kern/Makefrag
 include lib/Makefrag
-include nasmfuc/Makefrag
+include nsfuc/Makefrag
 include user/Makefrag
 include fs/Makefrag
 include net/Makefrag
