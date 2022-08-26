@@ -156,7 +156,3 @@ void Draw_Cur(unsigned char *vram, int x, int y, int xsize)
 		}
 	}
 }
-
-void clear(){
-	clear_screen();
-}

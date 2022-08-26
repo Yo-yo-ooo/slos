@@ -4,10 +4,17 @@ USERLIBS += lwip
 
 USERLIBS += jos
 
+file = $(OBJDIR)/user/win.o
+
 $(OBJDIR)/user/%.o: user/%.c $(OBJDIR)/.vars.USER_CFLAGS
 	@echo + cc[USER] $<
 	@mkdir -p $(@D)
-	$(V)$(CC) -nostdinc $(USER_CFLAGS) -c -o $@ $<
+ifeq ($(file),$(wildcard $(file)))
+	$(V)$(CC) $(file) $(OBJDIR)/lib/function.o -o $@
+else
+	@echo "Not find obj/user/win.o->check out"
+	$(V)$(CC) -nostdinc $(USER_CFLAGS) -c $< -o $@ 
+endif
 
 $(OBJDIR)/user/%: $(OBJDIR)/user/%.o $(OBJDIR)/lib/entry.o $(USERLIBS:%=$(OBJDIR)/lib/lib%.a) user/user.ld
 	@echo + ld $@

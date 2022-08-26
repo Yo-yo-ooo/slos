@@ -1,5 +1,6 @@
 OBJDIRS += lib
 
+file = $(OBJDIR)/lib/sys/window.o
 # LIB_SRCFILES :=		lib/console.c \
 # 			lib/libmain.c \
 # 			lib/exit.c \
@@ -52,7 +53,11 @@ LIB_OBJFILES := $(patsubst lib/cpp/%.cpp, $(OBJDIR)/lib/%.o, $(LIB_OBJFILES))
 $(OBJDIR)/lib/%.o: lib/%.c $(OBJDIR)/.vars.USER_CFLAGS
 	@echo + cc[USER] $<
 	@mkdir -p $(@D)
+ifeq ($(file),$(wildcard $(file)))
+	$(V)$(CC) -nostdinc $(USER_CFLAGS) $< $(OBJDIR)/lib/function.o -o $@ 
+else
 	$(V)$(CC) -nostdinc $(USER_CFLAGS) -c $< -o $@ 
+endif
 
 $(OBJDIR)/lib/%.o: lib/%.S $(OBJDIR)/.vars.USER_CFLAGS
 	@echo + as[USER] $<

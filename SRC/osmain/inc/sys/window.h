@@ -9,6 +9,5 @@ void SDraw_Px(unsigned char *vram, int x, int y, int color, int xsize);
 void SDraw_Box(unsigned char *vram, int x, int y, int x1, int y1, int color, int xsize);
 int sc2a(int sc);
 void Draw_Cur(unsigned char *vram, int x, int y, int xsize);
-void clear();
 
 #endif
