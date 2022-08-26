@@ -155,3 +155,9 @@ void Draw_Cur(unsigned char *vram, int x, int y, int xsize)
 		}
 	}
 }
+
+void clear(){
+	__asm__(
+	"INT $0x10"
+	);
+}

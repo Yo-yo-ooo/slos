@@ -7,9 +7,7 @@ void io_hlt(void);
 void
 umain(int argc, char **argv){
 	//进入0x10显示
-	__asm__(
-	"INT $0x10"
-	);
+	clear();
 
 /*
 	int i; //i为DWORD４个字节
