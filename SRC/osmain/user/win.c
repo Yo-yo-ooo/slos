@@ -11,11 +11,11 @@ void
 umain(int argc, char **argv){
 	//进入0x10显示
 	__asm__("
-	MOV %%AL, $0x13 //VGA 
-	MOV %%AH, $0x00
-	INT $0x10	//最重要
-	MOV BYTE(VMODE), $8
-	MOV (VARM),%%eax
+	INT $0x10\n\t
+	movl $0x0ff2, $8\n\t
+	movl $0x0ff4, $320\n\t
+	movl $0x0ff6, $200\n\t
+	movl $0x0ff8, $0x000a0000\n\t
 	");
 
 	int i; /*i为DWORD４个字节*/
