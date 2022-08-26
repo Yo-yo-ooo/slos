@@ -2,13 +2,11 @@
 #include <inc/sys/io.h>
 #include <inc/function.h>
 
-void io_hlt(void);
-
 void
 umain(int argc, char **argv){
 	//进入0x10显示
-	clear_screen();
-/*
+	winit();
+
 	int i; //i为DWORD４个字节
 	char *p; //p用于byte类型地址 
 
@@ -21,6 +19,6 @@ umain(int argc, char **argv){
 	for (;;) {
 		io_hlt();
 	} 
-	*/
+	
 
 }

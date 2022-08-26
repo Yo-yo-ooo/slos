@@ -19,7 +19,7 @@ VRAM    EQU   0x0ff8      ; 图像缓冲区的起始位置
 winit:	;void winit(void);
 	; 设置屏幕模式
 	MOV   AL, 0x13          ; VGA显卡，320x200x8 bit
-	MOV   AH, 0x00
+	MOV   AH, 0
 	INT   0x10
 
 	MOV   BYTE [VMODE], 8   ; 屏幕的模式
