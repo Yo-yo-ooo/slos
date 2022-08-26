@@ -1,4 +1,5 @@
 #include <inc/lib.h>
+#include <inc/sys/window.h>
 
 #define BUFSIZ 1024		/* Find the buffer overrun bug! */
 int debug = 0;
@@ -156,9 +157,7 @@ runit:
 	//运行伪指令
 	if(strcmp((const char*)argv[0], "cls")){
 		//r = spawn((const char*)"time", (const char**)argv);
-		for(int i;i < 100;i++){
-			printf("\n");
-		}
+		clear();
 	}
 	// In the parent, close all file descriptors and wait for the
 	// spawned command to exit.
