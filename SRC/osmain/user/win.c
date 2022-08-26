@@ -3,20 +3,17 @@
 
 void io_hlt(void);
 
-typedef unsigned short WORD;
-typedef unsigned int   DWORD;
-typedef unsigned char  BYTE;
 
 void
 umain(int argc, char **argv){
 	//进入0x10显示
-	__asm__("
-	INT $0x10\n\t
-	movl $0x0ff2, $8\n\t
-	movl $0x0ff4, $320\n\t
-	movl $0x0ff6, $200\n\t
-	movl $0x0ff8, $0x000a0000\n\t
-	");
+	__asm__(
+	"INT $0x10"
+	"mov BYTE($0x0ff2), 8"
+	"mov WORD($0x0ff4), 320"
+	"mov WORD($0x0ff6), 200"
+	"mov DWORD($0x0ff8), $0x000a0000"
+	);
 
 	int i; /*i为DWORD４个字节*/
 	char *p; /* p用于byte类型地址 */
