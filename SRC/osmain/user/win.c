@@ -3,7 +3,6 @@
 
 void io_hlt(void);
 
-
 void
 umain(int argc, char **argv){
 	//进入0x10显示
