@@ -158,10 +158,7 @@ void Draw_Cur(unsigned char *vram, int x, int y, int xsize)
 
 void clear(){
 	__asm__(
-	"MOV %ah, 0x06\n\t"
-	"MOV %al, 0\n\t"
-	"MOV %cx, 0\n\t"
-	"MOV %bh, 0xffff\n\t"
-	"INT $0x10"
+	"MOV %ax, 3\n\t"
+	"INT $10"
 	);
 }

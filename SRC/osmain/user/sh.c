@@ -157,7 +157,9 @@ runit:
 	//运行伪指令
 	if(strcmp((const char*)argv[0], "cls")){
 		//r = spawn((const char*)"time", (const char**)argv);
-		clear();
+		for(int i;i < 50;i++){
+			printf("\n");
+		}
 	}
 	// In the parent, close all file descriptors and wait for the
 	// spawned command to exit.
