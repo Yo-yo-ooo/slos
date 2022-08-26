@@ -3,10 +3,20 @@
 
 void io_hlt(void);
 
+typedef unsigned short WORD;
+typedef unsigned int   DWORD;
+typedef unsigned char  BYTE;
+
 void
 umain(int argc, char **argv){
 	//进入0x10显示
-	asm("INT $0x10");
+	__asm__("
+	MOV %%AL, $0x13 //VGA 
+	MOV %%AH, $0x00
+	INT $0x10	//最重要
+	MOV BYTE(VMODE), $8
+	MOV (VARM),%%eax
+	");
 
 	int i; /*i为DWORD４个字节*/
 	char *p; /* p用于byte类型地址 */
