@@ -9,10 +9,10 @@ umain(int argc, char **argv){
 	//进入0x10显示
 	__asm__(
 	"INT $0x10"
-	"mov BYTE($0x0ff2), 8"
-	"mov WORD($0x0ff4), 320"
-	"mov WORD($0x0ff6), 200"
-	"mov DWORD($0x0ff8), $0x000a0000"
+	"mov $0x0ff2, 8"
+	"mov $0x0ff4, 320"
+	"mov $0x0ff6, 200"
+	"mov $0x0ff8, $0x000a0000"
 	);
 
 	int i; /*i为DWORD４个字节*/
