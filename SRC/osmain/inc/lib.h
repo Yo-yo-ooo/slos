@@ -199,6 +199,10 @@ void	wait(envid_t env);
 //getenv.c
 char *getenv(register char *name);
 
+//system.c
+void runcmd(char* s);
+void system(char* s);
+
 /* File open modes */
 #define	O_RDONLY	0x0000		/* open for reading only */
 #define	O_WRONLY	0x0001		/* open for writing only */
