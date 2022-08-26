@@ -10,6 +10,10 @@
 		GLOBAL	io_load_eflags, io_store_eflags
 [SECTION .text]
 
+clear_screen: ;void clear_screen(void);
+    MOV ax, 03h
+    INT 10h
+	RET
 
 io_hlt:	; void io_hlt(void);
 		HLT

@@ -1,5 +1,6 @@
 #include <inc/lib.h>
 #include <inc/sys/window.h>
+#include <inc/function.h>
 
 extern unsigned int memsize;
 char *font;
@@ -157,8 +158,5 @@ void Draw_Cur(unsigned char *vram, int x, int y, int xsize)
 }
 
 void clear(){
-	__asm__(
-	"MOV %ax, 3\n\t"
-	"INT $10"
-	);
+	clear_screen();
 }
