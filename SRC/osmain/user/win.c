@@ -7,12 +7,13 @@ void io_hlt(void);
 void
 umain(int argc, char **argv){
 	//进入0x10显示
+	/*
+	1.8
+	2.320
+	3.200
+	*/
 	__asm__(
 	"INT $0x10"
-	"mov $0x0ff2, 8"
-	"mov $0x0ff4, 320"
-	"mov $0x0ff6, 200"
-	"mov $0x0ff8, $0x000a0000"
 	);
 
 	int i; /*i为DWORD４个字节*/
