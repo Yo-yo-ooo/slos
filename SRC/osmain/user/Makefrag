@@ -10,9 +10,8 @@ $(OBJDIR)/user/%.o: user/%.c $(OBJDIR)/.vars.USER_CFLAGS
 	@echo + cc[USER] $<
 	@mkdir -p $(@D)
 ifeq ($(file),$(wildcard $(file)))
-	$(V)$(CC) $(file) $(OBJDIR)/lib/function.o -o $@
+	$(V)$(CC) -nostdinc $(file) $(OBJDIR)/lib/function.o -o $@
 else
-	@echo "Not find obj/user/win.o->check out"
 	$(V)$(CC) -nostdinc $(USER_CFLAGS) -c $< -o $@ 
 endif
 

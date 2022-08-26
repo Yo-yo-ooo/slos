@@ -4,7 +4,7 @@
 ; Creat Time:2022-8-12
 ; Compiler: GCC && nasm
 [BITS 32]						; 3制作32位模式用的机器语言
-		GLOBAL	io_hlt, io_cli, io_sti, io_stihlt
+		GLOBAL	clear_screen, io_hlt, io_cli, io_sti, io_stihlt
 		GLOBAL	io_in8,  io_in16,  io_in32
 		GLOBAL	io_out8, io_out16, io_out32
 		GLOBAL	io_load_eflags, io_store_eflags

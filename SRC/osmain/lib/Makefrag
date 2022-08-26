@@ -53,11 +53,7 @@ LIB_OBJFILES := $(patsubst lib/cpp/%.cpp, $(OBJDIR)/lib/%.o, $(LIB_OBJFILES))
 $(OBJDIR)/lib/%.o: lib/%.c $(OBJDIR)/.vars.USER_CFLAGS
 	@echo + cc[USER] $<
 	@mkdir -p $(@D)
-ifeq ($(file),$(wildcard $(file)))
-	$(V)$(CC) -nostdinc $(USER_CFLAGS) $< $(OBJDIR)/lib/function.o -o $@ 
-else
 	$(V)$(CC) -nostdinc $(USER_CFLAGS) -c $< -o $@ 
-endif
 
 $(OBJDIR)/lib/%.o: lib/%.S $(OBJDIR)/.vars.USER_CFLAGS
 	@echo + as[USER] $<
@@ -70,10 +66,10 @@ $(OBJDIR)/lib/%.o: lib/cpp/%.cpp $(OBJDIR)/.vars.USER_CFLAGS
 	$(V)$(CPP) -nostdinc $(USER_CFLAGS) -c $< -o $@ 
 
 $(OBJDIR)/lib/%.o: lib/%.asm $(OBJDIR)/.vars.USER_CFLAGS
-	@echo + nasm[USER] $<
+	@echo + nas[USER] $<
 	@mkdir -p $(@D)
 	nasm -f elf $< -o $@
 
-$(OBJDIR)/lib/libjos.a: $(LIB_OBJFILES)
+$(OBJDIR)/lib/libjos.a: $(LIB_OBJFILES) $(OBJDIR)/lib/function.o
 	@echo + ar $@
-	$(V)$(AR) r $@ $(LIB_OBJFILES)
+	$(V)$(AR) r $@ $(LIB_OBJFILES) $(OBJDIR)/lib/function.o
