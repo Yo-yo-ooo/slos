@@ -65,11 +65,6 @@ $(OBJDIR)/lib/%.o: lib/cpp/%.cpp $(OBJDIR)/.vars.USER_CFLAGS
 	@mkdir -p $(@D)
 	$(V)$(CPP) -nostdinc $(USER_CFLAGS) -c $< -o $@ 
 
-$(OBJDIR)/lib/%.o: lib/%.asm $(OBJDIR)/.vars.USER_CFLAGS
-	@echo + nas[USER] $<
-	@mkdir -p $(@D)
-	nasm -f elf $< -o $@
-
-$(OBJDIR)/lib/libjos.a: $(LIB_OBJFILES) $(OBJDIR)/lib/function.o
+$(OBJDIR)/lib/libjos.a: $(LIB_OBJFILES) 
 	@echo + ar $@
-	$(V)$(AR) r $@ $(LIB_OBJFILES) $(OBJDIR)/lib/function.o
+	$(V)$(AR) r $@ $(LIB_OBJFILES) 

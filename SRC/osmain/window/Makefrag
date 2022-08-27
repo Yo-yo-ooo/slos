@@ -1,0 +1,14 @@
+OBJDIRS += window
+
+$(OBJDIR)/window/%.o: window/%.c $(OBJDIR)/.vars.USER_CFLAGS
+	@echo + cc[USER] $<
+	@mkdir -p $(@D)
+	$(V)$(CC) -nostdinc $(USER_CFLAGS) -c $< -o $@ 
+
+$(OBJDIR)/window/%.o: window/%.asm $(OBJDIR)/.vars.USER_CFLAGS
+	@echo + nas[USER] $<
+	@mkdir -p $(@D)
+	nasm -f elf $< -o $@
+
+$(OBJDIR)/window/window.o: $(OBJDIR)/window/%.o
+	$(V)$(CC) $< -o $@
