@@ -148,17 +148,19 @@ runit:
 		cprintf("\n");
 	}
 
-	// Spawn the command!
-	if ((r = spawn(argv[0], (const char**) argv)) < 0){
-		cprintf("spawn %s: %e\n", argv[0], r);
-    }
 	//运行伪指令
-	if(strcmp(argv[0], "cls") == 0){
+	if(strcmp(argv[0], (const char *)"cls") == 0){
 		//r = spawn((const char*)"time", (const char**)argv);
 		for(int i;i < 50;i++){
 			printf("\n");
 		}
 	}
+
+	// Spawn the command!
+	if ((r = spawn(argv[0], (const char**) argv)) < 0){
+		cprintf("spawn %s: %e\n", argv[0], r);
+    }
+	
 	// In the parent, close all file descriptors and wait for the
 	// spawned command to exit.
 	close_all();
