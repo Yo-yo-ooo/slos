@@ -30,7 +30,6 @@ entry:
     movw $200,(SCRNY)
     movl $0x000a0000,(VARM)
 
-    #save addr
     movb $0xff,%al
     outb %al, $0x21
     nop
