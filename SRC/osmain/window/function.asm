@@ -10,12 +10,6 @@
 		GLOBAL	io_load_eflags, io_store_eflags
 [SECTION .text]
 
-LEDS    EQU   0x0ff1
-VMODE   EQU   0x0ff2      ; 关于颜色数目的信息，颜色的位数
-SCRNX   EQU   0x0ff4      ; 分辨率X
-SCRNY   EQU   0x0ff6      ; 分辨率Y
-VRAM    EQU   0x0ff8      ; 图像缓冲区的起始位置
-
 io_hlt:	; void io_hlt(void);
 		HLT
 		RET
