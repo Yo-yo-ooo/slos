@@ -105,10 +105,10 @@ CFLAGS += $(shell $(CC) -fno-stack-protector -E -x c /dev/null >/dev/null 2>&1 &
 # Common linker flags
 LDFLAGS := -m elf_i386
 
-# Linker flags for JOS user programs
+# Linker flags for OS USER Programs
 ULDFLAGS := -T user/user.ld
 
-# Window Linker Script
+# Linker flags for OS Window Programs
 WLDFLAGS := -T window/win.ld
 
 GCC_LIB := $(shell $(CC) $(CFLAGS) -print-libgcc-file-name)
