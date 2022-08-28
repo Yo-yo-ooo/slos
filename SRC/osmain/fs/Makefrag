@@ -42,8 +42,9 @@ FSIMGTXTFILES :=	$(FSIMGTXTFILES) \
 			fs/testshell.key \
 			fs/testshell.sh
 
+WINOBJ := 		$(OBJDIR)/window/window
 
-FSIMGFILES := $(FSIMGTXTFILES) $(USERAPPS) 
+FSIMGFILES := $(FSIMGTXTFILES) $(WINOBJ) $(USERAPPS) 
 
 $(OBJDIR)/fs/%.o: fs/%.c fs/fs.h inc/lib.h $(OBJDIR)/.vars.USER_CFLAGS
 	@echo + cc[USER] $<

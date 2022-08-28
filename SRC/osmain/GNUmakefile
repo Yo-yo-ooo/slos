@@ -108,6 +108,9 @@ LDFLAGS := -m elf_i386
 # Linker flags for JOS user programs
 ULDFLAGS := -T user/user.ld
 
+# Window Linker Script
+WLDFLAGS := -T window/win.ld
+
 GCC_LIB := $(shell $(CC) $(CFLAGS) -print-libgcc-file-name)
 
 # Lists that the */Makefrag makefile fragments will add to

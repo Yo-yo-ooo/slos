@@ -1,6 +1,5 @@
 OBJDIRS += lib
 
-file = $(OBJDIR)/lib/sys/window.o
 # LIB_SRCFILES :=		lib/console.c \
 # 			lib/libmain.c \
 # 			lib/exit.c \

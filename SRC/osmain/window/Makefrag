@@ -1,14 +1,23 @@
 OBJDIRS += window
 
+NASM_SRCFILES = $(wildcard window/*.c)
+NASM_SRCFILES += $(wildcard window/*.asm)
+
+NASM_OBJFILES := $(patsubst window/%.c, $(OBJDIR)/window/%.o, $(NASM_SRCFILES))
+NASM_OBJFILES := $(patsubst window/%.asm, $(OBJDIR)/window/%.o, $(NASM_OBJFILES))
+
+$(OBJDIR)/window/%.o: window/%.asm $(OBJDIR)/.vars.USER_CFLAGS
+	@echo + nn[WIN] $<
+	@mkdir -p $(@D)
+	nasm -f elf $< -o $@
+
 $(OBJDIR)/window/%.o: window/%.c $(OBJDIR)/.vars.USER_CFLAGS
 	@echo + cc[USER] $<
 	@mkdir -p $(@D)
 	$(V)$(CC) -nostdinc $(USER_CFLAGS) -c $< -o $@ 
 
-$(OBJDIR)/window/%.o: window/%.asm $(OBJDIR)/.vars.USER_CFLAGS
-	@echo + nas[USER] $<
-	@mkdir -p $(@D)
-	nasm -f elf $< -o $@
-
-$(OBJDIR)/window/window.o: $(OBJDIR)/window/%.o
-	$(V)$(CC) $< -o $@
+$(OBJDIR)/window/window: $(NASM_OBJFILES) 
+	$(V)$(LD) -o $@.debug $(WLDFLAGS) $(LDFLAGS) -nostdlib $(OBJDIR)/window/function.o $@.o -L$(OBJDIR)/lib $(USERLIBS:%=-l%) $(GCC_LIB)
+	$(V)$(OBJDUMP) -S $@.debug > $@.asm
+	$(V)$(NM) -n $@.debug > $@.sym
+	$(V)$(OBJCOPY) -R .stab -R .stabstr --add-gnu-debuglink=$(basename $@.debug) $@.debug $@
