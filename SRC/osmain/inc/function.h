@@ -1,7 +1,6 @@
 #ifndef _FUNCTION_H
 #define _FUNCTION_H
 
-void clear_screen(void);
 void io_hlt(void);
 int load_cr0(void);
 void store_cr0(int cr0);
@@ -15,6 +14,5 @@ void io_out16(int port, int data);
 void io_out32(int port, int data);
 int io_load_eflags(void);
 void io_store_eflags(int eflags);
-void winit(void);
 
 #endif

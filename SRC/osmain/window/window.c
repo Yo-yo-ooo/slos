@@ -5,7 +5,8 @@
 void
 umain(int argc, char **argv)
 {
-    winit();
+    
+
     for(;;){
         io_hlt();
     }

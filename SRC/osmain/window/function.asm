@@ -4,7 +4,7 @@
 ; Creat Time:2022-8-12
 ; Compiler: GCC && nasm
 [BITS 32]						; 3制作32位模式用的机器语言
-		GLOBAL	winit, clear_screen, io_hlt, io_cli, io_sti, io_stihlt
+		GLOBAL  io_hlt, io_cli, io_sti, io_stihlt
 		GLOBAL	io_in8,  io_in16,  io_in32
 		GLOBAL	io_out8, io_out16, io_out32
 		GLOBAL	io_load_eflags, io_store_eflags
@@ -15,26 +15,6 @@ VMODE   EQU   0x0ff2      ; 关于颜色数目的信息，颜色的位数
 SCRNX   EQU   0x0ff4      ; 分辨率X
 SCRNY   EQU   0x0ff6      ; 分辨率Y
 VRAM    EQU   0x0ff8      ; 图像缓冲区的起始位置
-
-winit:	;void winit(void);
-	; 设置屏幕模式
-	MOV   AL, 0x13          ; VGA显卡，320x200x8 bit
-	MOV   AH, 0
-	INT   0x10
-
-	MOV   BYTE [VMODE], 8   ; 屏幕的模式
-	MOV   WORD [SCRNX], 320
-	MOV   WORD [SCRNY], 200
-	MOV   DWORD [VRAM], 0x000a0000
-	; 用BIOS取得键盘上各种LED指示灯的状态
-	MOV   AH, 0x02
-	INT   0x16              ; 键盘BIOS
-	MOV   [LEDS], AL
-
-clear_screen: ;void clear_screen(void);
-    MOV ax, 03h
-    INT 10h
-	RET
 
 io_hlt:	; void io_hlt(void);
 		HLT
