@@ -24,7 +24,7 @@ $(OBJDIR)/window/%.o: window/%.c $(OBJDIR)/.vars.USER_CFLAGS
 	$(V)$(CC) -nostdinc $(USER_CFLAGS) -c $< -o $@ 
 
 $(OBJDIR)/window/window: $(WIN_OBJFILES) 
-	@echo + ld[WIN]
+	@echo + ld[WIN] $<
 	$(V)$(LD) -o $@.debug $(WLDFLAGS) $(LDFLAGS) -nostdlib $(WIN_OBJFILES) $(OBJDIR)/lib/entry.o -L$(OBJDIR)/lib $(USERLIBS:%=-l%) $(GCC_LIB)
 	$(V)$(OBJDUMP) -S $@.debug > $@.asm
 	$(V)$(NM) -n $@.debug > $@.sym
