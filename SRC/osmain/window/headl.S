@@ -5,12 +5,11 @@
 #define SCRNY   0x0ff6
 #define VARM    0x0ff8
 
-.globl  start
-start:
+.section .text
+.globl winit
+.type winit,@function
+winit:
     .code16
-    jmp entry
-
-entry:
     mov $0,%ax
     mov %ax,%ds
     mov %ax,%es
@@ -35,4 +34,4 @@ entry:
     nop
     out %al,$0xal
     cli
-   
+    
