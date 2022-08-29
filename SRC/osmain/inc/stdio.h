@@ -31,7 +31,6 @@ int	vfprintf(int fd, const char *fmt, va_list);
 char*	readline(const char *prompt);
 
 //lib/scanf.c
-int _doscan(register FILE *stream, const char *format, va_list ap);
 void scanf(char *fmt, ...);
 
 #endif /* !JOS_INC_STDIO_H */

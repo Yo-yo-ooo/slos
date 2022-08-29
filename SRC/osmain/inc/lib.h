@@ -50,7 +50,7 @@ typedef struct _iobuf{
 	int cnt;
 	char *ptr;
 	char *base;
-	flag_field flag;
+	int flag;
 	int fd;
 }FILE;
 
