@@ -8,7 +8,7 @@
 		GLOBAL	io_in8,  io_in16,  io_in32
 		GLOBAL	io_out8, io_out16, io_out32
 		GLOBAL	io_load_eflags, io_store_eflags
-		GLOBAL  Clear_Screen
+		GLOBAL  Clear_Screen, write_mem8
 [SECTION .text]
 
 ASM_CALL:  ;移动光标
