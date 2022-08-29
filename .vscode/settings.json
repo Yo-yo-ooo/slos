@@ -24,6 +24,9 @@
         "syscall.h": "c",
         "string": "cpp",
         "iosfwd": "cpp",
-        "window.h": "c"
+        "window.h": "c",
+        "fs.h": "c",
+        "string.h": "c",
+        "ctype.h": "c"
     }
 }

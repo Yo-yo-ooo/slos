@@ -39,12 +39,13 @@ int isspace(int c)
 int ispunct(int c){
     return isprint(c)  &&  !isalnum (c)  &&  !isspace (c);
 }
-int isupper(int c){
-  if (c>='A' && c<='Z') return 256;
-
-  return 0;
+int isupper(char c){
+    if (c>='A' && c<='Z') 
+        return 1;
+    else
+        return 0;
 }
-int my_isxdigit(int c){
+int isxdigit(int c){
     return (unsigned int)( c         - '0') < 10u  ||
            (unsigned int)((c | 0x20) - 'a') <  6u;
 }

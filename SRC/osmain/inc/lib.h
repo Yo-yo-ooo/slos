@@ -59,6 +59,16 @@ enum _flags{
 	_ERR   = 020
 };
 
+extern FILE __iob[OPEN_MAX] = {
+	{0, (char *) 0, (char *) 0, _READ, 0},
+	{0, (char *) 0, (char *) 0, _WRITE, 1},
+	{0, (char *) 0, (char *) 0, _WRITE | _UNBUF, 2}
+};
+
+#define stdin	(&__iob[0])
+#define stdout	(&__iob[1])
+#define stderr	(&__iob[2])
+
 struct arr {
 	int num;
 	struct arr* next;
@@ -72,6 +82,13 @@ int fflush(FILE *fp);
 int  fclose(FILE *fp);
 
 //END
+
+//swap
+
+#define swap(t,x,y)	{	t _z;
+						_z = y;
+						y = x;
+						x = _z;}
 
 #define USED(x)		(void)(x)
 #define OPEN_MAX 	20

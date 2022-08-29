@@ -15,15 +15,12 @@ void scanf(char *fmt, ...){
     va_start(ap,fmt);
     for(p = fmt; *p; p++){
         if(*p != '%'){
-            putchar(*p);
+            localfmt[i++] = *p;
             continue;
         }
-        i = 0;
         localfmt[i++] = '%';
         while (*(p + 1) && !isalpha(*(p + 1)))
-        {
             localfmt[i++] = *++p;
-        }
         localfmt[i++] = *(p + 1);
         localfmt[i] = '\0';
         switch (*++p)
@@ -50,8 +47,10 @@ void scanf(char *fmt, ...){
             break;
         
         default:
+            scanf(localfmt);
             break;
         }
+        i = 0;
     }
     va_end(ap);
 }
