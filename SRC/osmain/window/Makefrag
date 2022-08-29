@@ -25,8 +25,8 @@ $(OBJDIR)/window/%.o: window/%.c $(OBJDIR)/.vars.USER_CFLAGS
 
 $(OBJDIR)/window/window: $(WIN_OBJFILES) 
 	@echo + linker[WIN] $<
-	$(V)$(CC) $(WIN_OBJFILES) -o $@
-#$(V)$(LD) -o $@.debug $(WLDFLAGS) $(LDFLAGS) -nostdlib $(WIN_OBJFILES) $(OBJDIR)/lib/entry.o -L$(OBJDIR)/lib -llwip -ljos $(GCC_LIB)
-#$(V)$(OBJDUMP) -S $@.debug > $@.asm
-#$(V)$(NM) -n $@.debug > $@.sym
-#$(V)$(OBJCOPY) -R .stab -R .stabstr --add-gnu-debuglink=$(basename $@.debug) $@.debug $@
+#$(V)$(CC) $(WIN_OBJFILES) -o $@
+	$(V)$(LD) -o $@.debug $(WLDFLAGS) $(LDFLAGS) -nostdlib $(WIN_OBJFILES) $(OBJDIR)/lib/entry.o -L$(OBJDIR)/lib -llwip -ljos $(GCC_LIB)
+	$(V)$(OBJDUMP) -S $@.debug > $@.asm
+	$(V)$(NM) -n $@.debug > $@.sym
+	$(V)$(OBJCOPY) -R .stab -R .stabstr --add-gnu-debuglink=$(basename $@.debug) $@.debug $@
