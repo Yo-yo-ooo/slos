@@ -156,6 +156,9 @@ int	remove(const char *path);
 int	sync(void);
 arr* lbcreat(int n);
 arr* lbdel(arr* head, int m);
+int getc(FILE *stream);
+int putc(int c,FILE *stream);
+int putchar(int c);
 
 // pageref.c
 int	pageref(void *addr);
