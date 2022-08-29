@@ -187,9 +187,9 @@ sync(void)
 int _fillbuf(FILE *fp){
 	int bufsize;
 
-	if(fp->is_read == 0 ||
-	   fp->is_eof  == 1 ||
-	   fp->is_err  == 1)
+	if(fp->flag.is_read == 0 ||
+	   fp->flag.is_eof  == 1 ||
+	   fp->flag.is_err  == 1)
 	   return EOF;
 	bufsize = (fp->flag.isunbuf == 1) ? 1 : BUFSIZ;
 	if(fp->base == NULL){
