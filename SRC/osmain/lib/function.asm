@@ -8,6 +8,7 @@
 		GLOBAL	io_in8,  io_in16,  io_in32
 		GLOBAL	io_out8, io_out16, io_out32
 		GLOBAL	io_load_eflags, io_store_eflags
+		GLOBAL  Clear_Screen
 [SECTION .text]
 
 ASM_CALL:  ;移动光标
@@ -119,3 +120,18 @@ sleep:
 	pop	ebx
 	pop	eax
 	ret
+
+Clear_Screen:
+	mov ax,cs
+    mov ss,ax
+    mov sp,0x7c00  ;set stack and sp
+
+    mov ah,0x06
+    mov al,0
+
+    mov ch,0  ;(0,0)
+    mov cl,0
+    mov dh,24  ;(24,79)
+    mov dl,79
+    mov bh,0x07 ;黑底白字
+    int 0x10

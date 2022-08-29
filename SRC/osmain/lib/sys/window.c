@@ -4,6 +4,24 @@
 
 extern unsigned int memsize;
 char *font;
+unsigned char table_rgb[16 * 3] = {
+    0x00, 0x00, 0x00,
+    0xff, 0x00, 0x00,
+    0x00, 0xff, 0x00,
+    0xff, 0xff, 0x00,
+    0x00, 0x00, 0xff,
+    0xff, 0x00, 0xff,
+    0x00, 0xff, 0xff,
+    0xc6, 0xc6, 0xc6,
+    0x84, 0x84, 0x84,
+    0x84, 0x00, 0x00,
+    0x00, 0x84, 0x00,
+    0x84, 0x84, 0x00,
+    0x00, 0x00, 0x84,
+    0x84, 0x00, 0x84,
+    0x00, 0x84, 0x84,
+    0xFF, 0xFF, 0xFF
+};
 char keytable[0x54] = {
 	0, 0, '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', '\b', '\t',
 	'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '{', '}', 10, 0, 'A', 'S',
@@ -173,4 +191,23 @@ void clear(){
 		}
 	}
 	Move_Cursor(0,0);
+}
+
+void set_palette(int start, int end, unsigned char *rgb){
+	int i, eflags;
+	eflags = io_load_eflags();
+	io_cli();
+	io_out8(0x03c8, start);
+	for(i = start; i <= end; i++){
+		io_out8(0x03c9,rgb[0] / 4);
+		io_out8(0x03c9,rgb[1] / 4);
+		io_out8(0x03c9,rgb[2] / 4);
+	}
+	io_store_eflags(eflags);
+	return;
+}
+
+void init_palette(void){
+	set_palette(0, 15, table_rgb);
+	return;
 }

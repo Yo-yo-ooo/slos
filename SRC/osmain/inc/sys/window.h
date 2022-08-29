@@ -10,5 +10,7 @@ void SDraw_Box(unsigned char *vram, int x, int y, int x1, int y1, int color, int
 int sc2a(int sc);
 void Draw_Cur(unsigned char *vram, int x, int y, int xsize);
 void clear();
+void set_palette(int start, int end, unsigned char *rgb);
+void init_palette(void);
 
 #endif
