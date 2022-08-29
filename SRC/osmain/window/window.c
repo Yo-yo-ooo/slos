@@ -7,7 +7,7 @@ void winit(void);
 void
 umain(int argc, char **argv)
 {
-    winit();
+    
     int i;
     char *p;
     
