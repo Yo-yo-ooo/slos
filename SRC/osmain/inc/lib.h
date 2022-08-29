@@ -37,17 +37,20 @@
 #define OPEN_MAX	20
 #define EOF			(-1)
 
-typedef struct _iobuf{
-	int cnt;
-	char *ptr;
-	char *base;
-	int flag;
+typedef struct flag_field{
 	unsigned is_read	: 1;
 	unsigned is_write   : 1;
 	unsigned is_unbuf   : 1;
 	unsigned is_buf     : 1;
 	unsigned is_eof     : 1;
 	unsigned is_err     : 1;
+}flag_field;
+
+typedef struct _iobuf{
+	int cnt;
+	char *ptr;
+	char *base;
+	flag_field flag;
 	int fd;
 }FILE;
 

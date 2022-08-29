@@ -191,7 +191,7 @@ int _fillbuf(FILE *fp){
 	   fp->is_eof  == 1 ||
 	   fp->is_err  == 1)
 	   return EOF;
-	bufsize = (fp->is_unbuf == 1) ? 1 : BUFSIZ;
+	bufsize = (fp->flag.isunbuf == 1) ? 1 : BUFSIZ;
 	if(fp->base == NULL){
 		if((fp->base = (char *) malloc(bufsize)) == NULL){
 			return EOF;
