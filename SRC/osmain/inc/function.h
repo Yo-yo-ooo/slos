@@ -17,5 +17,5 @@ void io_out32(int port, int data);
 int io_load_eflags(void);
 void io_store_eflags(int eflags);
 void Clear_Screen(void);
-
+void write_mem8(int addr, int data);
 #endif
