@@ -50,7 +50,7 @@ LIB_OBJFILES := $(patsubst lib/%.asm, $(OBJDIR)/lib/%.o, $(LIB_OBJFILES))
 LIB_OBJFILES := $(patsubst lib/cpp/%.cpp, $(OBJDIR)/lib/%.o, $(LIB_OBJFILES))
 
 $(OBJDIR)/lib/%.o: lib/%.asm $(OBJDIR)/.vars.USER_CFLAGS
-	@echo + ns[WIN] $<
+	@echo + ns[USER] $<
 	@mkdir -p $(@D)
 	nasm -f elf $< -o $@
 
