@@ -5,12 +5,13 @@ orgaddr   equ   100h
 orgaddr   equ   7c00h
 %endif
 
+[SECTION .text]
+[BITS 16]
+global winit
+
+welcome db 'Welcome Jiang OS!','$'
+
 winit:
-    jmp   start
-
-    welcome db 'Welcome Jiang OS!','$'
-
-start:
 
 mov ax, cs
 add ax, orgaddr/10h
