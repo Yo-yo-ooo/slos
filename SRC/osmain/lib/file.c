@@ -201,9 +201,9 @@ int _fillbuf(FILE *fp){
 	fp->cnt = read(fp->fd, fp->ptr, bufsize);
 	if(--fp->cnt < 0){
 		if(fp->cnt == -1){
-			fp->is_eof = 1;
+			fp->flag.is_eof = 1;
 		}else{
-			fp->is_err = 1;
+			fp->flag.is_err = 1;
 		}
 		fp->cnt = 0;
 		return EOF;
