@@ -1,6 +1,7 @@
 #ifndef _FUNCTION_H
 #define _FUNCTION_H
 
+void ASM_call(int a);
 void io_hlt(void);
 int load_cr0(void);
 void store_cr0(int cr0);
