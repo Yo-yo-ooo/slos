@@ -157,6 +157,20 @@ void Draw_Cur(unsigned char *vram, int x, int y, int xsize)
 	}
 }
 
+void Move_Cursor(short x, short y)
+{
+
+	int res = y * 80 + x;
+	ASM_call(res);
+}
+
 void clear(){
-	clear_screen();
+	int i,j;
+	for(i = 0; i < 160;i+=2){
+		for(j = 0; i < 25; j++){
+			*(char *)(0xb8000 + j * 160 + i) = ' ';
+			*(char *)(0xb8000 + j * 160 + i + 1) = 0xFF;
+		}
+	}
+	Move_Cursor(0,0);
 }
