@@ -8,9 +8,9 @@ umain(int argc, char **argv){
     printf("(+, -, *,): ");
     scanf("%c", &operator);
  
-    printf("Input two number(format: a b): ");
-    scanf("%lf %lf",&firstNumber, &secondNumber);
-    
+    printf("Input two number(format: a b): \n");
+    firstNumber = atof(readline("Input first number(a): "));
+    secondNumber = atof(readline("Input second number(b): "));
  
     switch(operator)
     {

@@ -4,6 +4,7 @@
 #define MAXFLOAT	((float)3.40282346638528860e+38)
 #define HUGE	MAXFLOAT
 
+double sqrt(double x);
 double atan(double x);
 double atan2(double x,double y);
 double pow(double x, double y);

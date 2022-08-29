@@ -25,6 +25,15 @@ static double q0	 = .89678597403663861962481162e3;
 	calls the inner routine satan.
 */
 
+double sqrt(double x)
+{
+    double res;
+    __asm__("fsqrt"
+            : "=t"(res)
+            : "0"(x));
+    return res;
+}
+
 double
 atan(double x)
 {
