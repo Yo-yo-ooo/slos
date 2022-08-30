@@ -37,6 +37,9 @@
 #define OPEN_MAX	20
 #define EOF			(-1)
 
+#define _IOERR	040
+#define	_IOEOF	020
+
 typedef struct flag_field{
 	unsigned is_read	: 1;
 	unsigned is_write   : 1;
@@ -67,6 +70,9 @@ extern FILE __iob[OPEN_MAX];
 #define stdin	(&__iob[0])
 #define stdout	(&__iob[1])
 #define stderr	(&__iob[2])
+
+#define ferror(p)	(((p)->flag&_IOERR)!=0)
+#define	feof(p)		(((p)->flag&_IOEOF)!=0)
 
 struct arr {
 	int num;
