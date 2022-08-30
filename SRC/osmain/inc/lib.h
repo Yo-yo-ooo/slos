@@ -62,11 +62,7 @@ enum _flags{
 	_ERR   = 020
 };
 
-extern FILE __iob[OPEN_MAX] = {
-	{0, (char *) 0, (char *) 0, _READ, 0},
-	{0, (char *) 0, (char *) 0, _WRITE, 1},
-	{0, (char *) 0, (char *) 0, _WRITE | _UNBUF, 2}
-};
+extern FILE __iob[OPEN_MAX];
 
 #define stdin	(&__iob[0])
 #define stdout	(&__iob[1])
@@ -88,9 +84,9 @@ int  fclose(FILE *fp);
 
 //swap
 
-#define swap(t,x,y)	{	t _z;
-						_z = y;
-						y = x;
+#define swap(t,x,y)	{	t _z; \
+						_z = y; \
+						y = x; \
 						x = _z;}
 
 #define USED(x)		(void)(x)
