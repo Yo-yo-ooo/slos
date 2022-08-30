@@ -117,6 +117,34 @@ strfind(const char *s, char c)
 	return (char *) s;
 }
 
+// 字符全部转换为小写
+char* strlwr(char* src)
+{
+	while (*src != '\0')
+	{
+		if (*src > 'A' && *src <= 'Z'){
+			//*src += 0x20; 
+			*src += 32;
+		}
+		src++;
+	}
+	return src;
+}
+
+// 字符全部转换为大写
+char* strupr(char* src)
+{
+	while (*src != '\0')
+	{
+		if (*src >= 'a' && *src <= 'z')
+			//在ASCII表里大写字符的值比对应小写字符的值小32.
+			//*p -= 0x20; // 0x20的十进制就是32
+			*src -= 32;
+		src++;
+	}
+	return src;
+}
+
 #if ASM
 void *
 memset(void *v, int c, size_t n)
