@@ -270,7 +270,7 @@ FILE *fopen(char *name, char *mode){
 	else if(*mode == 'a'){
 		if((fd = open(name, (O_WRONLY|0))) == -1)
 			fd = creat(name, 3);
-		return -1;
+		return EOF;
 	}else
 		fd = open(name, (O_RDONLY | 0));
 	if(fd == -1)
