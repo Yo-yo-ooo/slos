@@ -77,7 +77,7 @@ typedef struct arr arr;
 int _fillbuf(FILE *fp);
 int _flushbuf(int x, FILE *fp);
 int fflush(FILE *fp);
-//FILE *fopen(char *name, char *mode);
+FILE *fopen(char *name, char *mode);
 int  fclose(FILE *fp);
 
 //END
