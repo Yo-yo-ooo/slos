@@ -79,7 +79,13 @@ relocated:
 
 	# now to C code
 	call	i386_init
-
+	# Setting Window Mode:
+	#save color mode in ram 0x0ff0
+	movb $10,(CYLS)
+	movb $8,(VMODE)
+	movw $320,(SCRNX)
+	movw $200,(SCRNY)
+	movl $0x000a0000,(VRAM)
 	# Should never get here, but in case we do, just spin.
 spin:	jmp	spin
 

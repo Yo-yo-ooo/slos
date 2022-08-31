@@ -37,13 +37,7 @@ start:
   #   address line 20 is tied low, so that addresses higher than
   #   1MB wrap around to zero by default.  This code undoes this.
 
-  # Setting Window Mode:
-  #save color mode in ram 0x0ff0
-  movb $10,(CYLS)
-  movb $8,(VMODE)
-  movw $320,(SCRNX)
-  movw $200,(SCRNY)
-  movl $0x000a0000,(VRAM)
+  
 
 seta20.1:
   inb     $0x64,%al               # Wait for not busy
