@@ -1,5 +1,16 @@
 #include <inc/mmu.h>
 
+# The macros:
+
+#define CYLS			0x0ff0
+#define LEDS			0x0ff1
+#define VMODE			0x0ff2
+#define SCRNX			0x0ff4
+#define SCRNY			0x0ff6
+#define VRAM			0x0ff8
+
+#entry
+
 # Start the CPU: switch to 32-bit protected mode, jump into C.
 # The BIOS loads this code from the first sector of the hard disk into
 # memory at physical address 0x7c00 and starts executing in real mode
@@ -25,6 +36,23 @@ start:
   #   For backwards compatibility with the earliest PCs, physical
   #   address line 20 is tied low, so that addresses higher than
   #   1MB wrap around to zero by default.  This code undoes this.
+
+  # Setting Window Mode:
+  mov $0x13,%al
+  mov $0x00,%ah
+  int $0x10
+
+  mov $0x02,%ah
+  int $0x16
+  mov %al,(LEDS)
+
+  #save color mode in ram 0x0ff0
+  movb $10,(CYLS)
+  movb $8,(VMODE)
+  movw $320,(SCRNX)
+  movw $200,(SCRNY)
+  movl $0x000a0000,(VRAM)
+
 seta20.1:
   inb     $0x64,%al               # Wait for not busy
   testb   $0x2,%al

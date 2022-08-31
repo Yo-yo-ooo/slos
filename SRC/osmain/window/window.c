@@ -2,16 +2,17 @@
 #include <inc/lib.h>
 #include <inc/function.h>
 
-void winit(void);
 
 void
 umain(int argc, char **argv)
 {
-    
-    int i; /* 変数宣言。iという変数は、32ビットの整数型 */
+    int i; 
+	char *p; 
 
-	for (i = 0xa0000; i <= 0xaffff; i++) {
-		write_mem8(i, i & 0x0f);
+	p = (char *) 0xa0000; 
+
+	for (i = 0; i <= 0xffff; i++) {
+		*(p + i) = i & 0x0f;
 	}
 
 	for (;;) {
