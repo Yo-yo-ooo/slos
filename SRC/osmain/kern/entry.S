@@ -75,14 +75,6 @@ entry:
 	mov	$relocated, %eax
 	jmp	*%eax
 relocated:
-	# Setting Window Mode:
-	#save color mode in ram 0x0ff0
-	movb $10,(CYLS)
-	movb $8,(VMODE)
-	movw $320,(SCRNX)
-	movw $200,(SCRNY)
-	movl $0x000a0000,(VRAM)
-
 	# Clear the frame pointer register (EBP)
 	# so that once we get into debugging C code,
 	# stack backtraces will be terminated properly.
