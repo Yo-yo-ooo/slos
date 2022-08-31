@@ -38,14 +38,6 @@ start:
   #   1MB wrap around to zero by default.  This code undoes this.
 
   # Setting Window Mode:
-  mov $0x13,%al
-  mov $0x00,%ah
-  int $0x10
-
-  mov $0x02,%ah
-  int $0x16
-  mov %al,(LEDS)
-
   #save color mode in ram 0x0ff0
   movb $10,(CYLS)
   movb $8,(VMODE)
