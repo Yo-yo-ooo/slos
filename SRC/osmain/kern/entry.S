@@ -21,7 +21,14 @@
 #define MULTIBOOT_HEADER_MAGIC (0x1BADB002)
 #define MULTIBOOT_HEADER_FLAGS (0)
 #define CHECKSUM (-(MULTIBOOT_HEADER_MAGIC + MULTIBOOT_HEADER_FLAGS))
+# The macros:
 
+#define CYLS			0x0ff0
+#define LEDS			0x0ff1
+#define VMODE			0x0ff2
+#define SCRNX			0x0ff4
+#define SCRNY			0x0ff6
+#define VRAM			0x0ff8
 ###################################################################
 # entry point
 ###################################################################
