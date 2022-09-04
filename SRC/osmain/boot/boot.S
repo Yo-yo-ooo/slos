@@ -1,7 +1,5 @@
 #include <inc/mmu.h>
 
-
-
 #entry
 
 # Start the CPU: switch to 32-bit protected mode, jump into C.

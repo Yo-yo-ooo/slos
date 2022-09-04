@@ -211,3 +211,10 @@ void init_palette(void){
 	set_palette(0, 15, table_rgb);
 	return;
 }
+
+void InitMode(int mode){
+	asm("mov %al, %0"
+		"mov %ah, $0x00"
+		"int $0x10"
+		: "=r"(mode));
+}
