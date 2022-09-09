@@ -2,6 +2,13 @@
 #include <inc/sys/window.h>
 #include <inc/function.h>
 
+#define CYLS			0x0ff0
+#define LEDS			0x0ff1
+#define VMODE			0x0ff2
+#define SCRNX			0x0ff4
+#define SCRNY			0x0ff6
+#define VRAM			0x0ff8
+
 extern unsigned int memsize;
 char *font;
 unsigned char table_rgb[16 * 3] = {
@@ -212,9 +219,3 @@ void init_palette(void){
 	return;
 }
 
-void InitMode(int mode){
-	asm("mov %al, %0"
-		"mov %ah, $0x00"
-		"int $0x10"
-		: "=r"(mode));
-}

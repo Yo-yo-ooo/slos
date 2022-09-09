@@ -11,45 +11,6 @@
 		GLOBAL  Clear_Screen, write_mem8
 [SECTION .text]
 
-ASM_CALL:  ;移动光标
-	mov dx,03d4h;03d4h是索引端口
-	mov al,0eh;内部的0eh位置存放着光标位置的高八位
-	out dx,al
-	inc dx;03d5h是数据端口用于读写数据
-	in al,dx;读取光标的高八位并且放入bh
-	mov bh,al
-	
-	dec dx;这儿开始读取光标位置的低八位放入bl
-	mov al,0fh;0fh位置存放着光标位置的低八位
-	out  dx,al
-	inc dx
-	in al,dx
-	mov bl,al	
-	
-	mov word bx,[esp+4]   ;获取参数中的光标位置
-	
-	mov  dx,03d4h;这段代码将改变后的光标位置写入端口内相应的地方以便下次访问
-	mov al,0eh;写入光标位置高八位
-	out dx,al
-	inc dx
-	mov al,bh
-	out dx,al
-	
-	dec dx
-	mov al,0fh    ;写入光标位置低八位
-	out dx,al
-	inc dx
-	mov al,bl
-	out dx,al
-	ret
-
-io_hlt:	; void io_hlt(void);
-		HLT
-		RET
-
-io_cli:	; void io_cli(void);
-		CLI
-		RET
 load_cr0:		; int load_cr0(void);
 		MOV		EAX,CR0
 		RET
@@ -57,9 +18,6 @@ load_cr0:		; int load_cr0(void);
 store_cr0:		; void store_cr0(int cr0);
 		MOV		EAX,[ESP+4]
 		MOV		CR0,EAX
-		RET
-io_sti:	; void io_sti(void);
-		STI
 		RET
 io_stihlt:	; void io_stihlt(void);
 		STI
@@ -135,9 +93,3 @@ Clear_Screen:
     mov dl,79
     mov bh,0x07 ;黑底白字
     int 0x10
-
-write_mem8:	; void write_mem8(int addr, int data);
-		MOV		ECX,[ESP+4]		; [ESP+4]にaddrが入っているのでそれをECXに読み込む
-		MOV		AL,[ESP+8]		; [ESP+8]にdataが入っているのでそれをALに読み込む
-		MOV		[ECX],AL
-		RET

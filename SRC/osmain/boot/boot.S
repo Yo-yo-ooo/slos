@@ -7,6 +7,13 @@
 # memory at physical address 0x7c00 and starts executing in real mode
 # with %cs=0 %ip=7c00.
 
+#define CYLS			0x0ff0			
+#define LEDS			0x0ff1
+#define VMODE			0x0ff2			
+#define SCRNX			0x0ff4			
+#define SCRNY			0x0ff6			
+#define VRAM			0x0ff8	
+
 .set PROT_MODE_CSEG, 0x8         # kernel code segment selector
 .set PROT_MODE_DSEG, 0x10        # kernel data segment selector
 .set CR0_PE_ON,      0x1         # protected mode enable flag
@@ -27,9 +34,18 @@ start:
   #   For backwards compatibility with the earliest PCs, physical
   #   address line 20 is tied low, so that addresses higher than
   #   1MB wrap around to zero by default.  This code undoes this.
-
-  
-
+  # using dt int 0x10
+/*
+  movb $0x13,%al
+  movb $0x00,%ah
+  int $0x10
+  # save color mode
+  movb $10,(CYLS)
+  movb $8,(VMODE)
+  movw $320,(SCRNX)
+  movw $200,(SCRNY)
+  movl $0x000a0000,(VRAM)
+*/
 seta20.1:
   inb     $0x64,%al               # Wait for not busy
   testb   $0x2,%al
