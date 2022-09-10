@@ -5,6 +5,52 @@ long timez = 0;
 int daylite = 1;
 #define dysize(xyear) ((xyear&03) ? 365 : 366)
 
+static char cbuf[26];
+
+static char *
+ct_numb(cp, n)
+register char *cp;
+{
+	cp++;
+	if (n>=10)
+		*cp++ = (n/10)%10 + '0';
+	else
+		*cp++ = ' ';
+	*cp++ = n%10 + '0';
+	return(cp);
+}
+
+char *
+asctime(struct tm *t){
+	register char *cp, *ncp;
+	register int *tp;
+
+	cp = cbuf;
+	for (ncp = "Day Mon 00 00:00:00 1900\n"; *cp++ = *ncp++;);
+	ncp = &"SunMonTueWedThuFriSat"[3*t->tm_wday];
+	cp = cbuf;
+	*cp++ = *ncp++;
+	*cp++ = *ncp++;
+	*cp++ = *ncp++;
+	cp++;
+	tp = &t->tm_mon;
+	ncp = &"JanFebMarAprMayJunJulAugSepOctNovDec"[(*tp)*3];
+	*cp++ = *ncp++;
+	*cp++ = *ncp++;
+	*cp++ = *ncp++;
+	cp = ct_numb(cp, *--tp);
+	cp = ct_numb(cp, *--tp+100);
+	cp = ct_numb(cp, *--tp+100);
+	cp = ct_numb(cp, *--tp+100);
+	if (t->tm_year>=100) {
+		cp[1] = '2';
+		cp[2] = '0';
+	}
+	cp += 2;
+	cp = ct_numb(cp, t->tm_year+100);
+	return(cbuf);
+}
+
 time_t time(time_t tt){
     if(tt != NULL){
         localtime(tt);
