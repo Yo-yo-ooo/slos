@@ -152,7 +152,7 @@ runit:
 
 	// Spawn the command!
 	if ((r = spawn(argv[0], (const char**) argv)) < 0){
-		if(strcmp((const char*)argv,"cd") == 0){
+		if(strcmp((const char*)argv,"/cd") == 0){
 			printf("cd: no dir\nformat: cd [dir]\n");
 		}else{
 			cprintf("spawn %s: %e\n", argv[0], r);
