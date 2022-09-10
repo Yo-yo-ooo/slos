@@ -35,10 +35,11 @@ struct	stat
 	time_t	st_mtime;
 	time_t	st_ctime;
 };
-
+char *asctime(struct tm *t);
 time_t time(time_t tt);
 size_t mktime(struct tm tm_now);
 void gmtime(struct tm *tm_time, size_t timestamp);
+struct tm *l_gmtime(long *tim);
 scomp(register a,register b,register char s);
 sunday(register struct tm *t,register int d);
 struct tm *l_gmtime(long *tim);
