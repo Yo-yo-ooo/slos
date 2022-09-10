@@ -149,16 +149,14 @@ runit:
 	}
 
 	//运行伪指令
-	if(strcmp(argv[0], (const char *)"cls") == 0){
-		//r = spawn((const char*)"time", (const char**)argv);
-		for(int i;i < 50;i++){
-			printf("\n");
-		}
-	}
 
 	// Spawn the command!
 	if ((r = spawn(argv[0], (const char**) argv)) < 0){
-		cprintf("spawn %s: %e\n", argv[0], r);
+		if(strcmp((const char*)argv,"cd") == 0){
+			printf("cd: no dir\nformat: cd [dir]\n");
+		}else{
+			cprintf("spawn %s: %e\n", argv[0], r);
+		}
     }
 	
 	// In the parent, close all file descriptors and wait for the
