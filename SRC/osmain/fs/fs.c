@@ -7,9 +7,6 @@
 // Super block
 // --------------------------------------------------------------
 
-struct Super *super;		// superblock
-uint32_t *bitmap;		// bitmap blocks mapped in memory
-
 // Validate the file system super-block.
 void
 check_super(void)

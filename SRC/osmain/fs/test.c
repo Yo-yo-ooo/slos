@@ -4,8 +4,6 @@
 #include "fs.h"
 
 static char *msg = "This is the NEW message of the day!\n\n";
-extern struct Super *super;		// superblock
-extern uint32_t *bitmap;		// bitmap blocks mapped in memory
 
 void
 fs_test(void)

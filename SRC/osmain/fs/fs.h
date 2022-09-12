@@ -11,6 +11,9 @@
 /* Maximum disk size we can handle (3GB) */
 #define DISKSIZE	0xC0000000
 
+static struct Super *super;		// superblock
+static uint32_t *bitmap;		// bitmap blocks mapped in memory
+
 /* ide.c */
 bool	ide_probe_disk1(void);
 void	ide_set_disk(int diskno);
