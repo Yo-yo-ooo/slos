@@ -17,63 +17,63 @@ void srand(unsigned int seed){
     next = seed;
 }
 
-double atof(const char *str){
-    const char *p = str;
-    int sign = 1;
-    while (*p == ' ')++p;//忽略前置空格
-    if (*p == '-')//考虑是否有符号位
-    {
-        sign = -1;
-        ++p;
-    }
-    else if (*p == '+')
-        ++p;
-    int hasDot = 0,hasE = 0;
-    double integerPart = 0.0,decimalPart = 0.0;
-    //遇到'e'或'.'字符则退出循环,设置hasE和hasDot。
-    for (; *p; ++p){
-        if (isdigit(*p)) //若p指向的字符为数字则计算当前整数部分的值
-            integerPart = 10 * integerPart + *p - '0';
-        else if (*p == '.'){
-            hasDot = 1;
-            p++;
-            break;
-        }
-        else if (*p == 'e' || *p == 'E'){
-            hasE = 1;
-            p++;
-            break;
-        }
-        else  //如果遇到非法字符,则截取合法字符得到的数值,返回结果。
-            return integerPart;
-    }
+double atof(char s[]) /*convert string s to floating point*//* mjm: was atof1 */
+{
+	char *s1;
+	char *s2;
+	double val,power;
+	int i,sign,esin,exp;
 
-//上一部分循环中断有三种情况,一是遍历完成,这种情况下一部分的循环会自动跳过；其次便是是遇到'.'或'e',两种hasE和hasDot只可能一个为真,若hasDot为真则计算小数部分,若hasE为真则计算指数部分。
-    int decimalDigits = 1;
-    int exponential = 0;    
-    for (; *p; p++){
-        if (hasDot && isdigit(*p))
-            decimalPart += (*p - '0') / pow(10, decimalDigits++);
-        else if (hasDot && (*p == 'e' || *p == 'E')) {
-            integerPart += decimalPart;
-            decimalPart = 0.0;
-            hasE = 1;
-            ++p;
-            break;
-        }
-        else if (hasE && isdigit(*p))
-            exponential = 10 * exponential + *p - '0';
-        else break;
-    }
-//上一部分较难理解的就是else if (hasDot && (*p == 'e' || *p == 'E')) 这一特殊情况,对于合法的浮点数,出现'.'字符后,仍然有可能是科学计数法表示,但是出现'e'之后,指数部分不能为小数(这符合<string.h>对atof()的定义)。这种情况变量IntegerPart和decimalPart都是科学计数法的基数,因此有integerPart += decimalPart(这使得IntergerPart的命名可能欠妥,BasePart可能是一种好的选择)。
-//上一部分循环结束一般情况下就能返回结果了,除非遇到前文所述的特殊情况，对于特殊情况需要继续计算指数。
-    if (hasE && hasDot)
-        for (; *p; p++)
-            if (isdigit(*p))
-                exponential = 10 * exponential + *p - '0';
-    return sign * (integerPart * pow(10, exponential) + decimalPart);
-
+	s1 = s;
+	s2 = s;
+	while(*s2 != '\0')
+		switch (*s2) {
+			case ' ' :
+			case '\015' :
+			case '\012' :
+			case '\t':
+			s2++;
+			break;
+			case 'E':
+			*s1++ = 'e';
+			s2++;
+			break;
+			default:
+			*s1++ = *s2++;
+		}
+	*s1 = '\0';
+	i=0;
+	sign = 1;
+	if(s[i] == '+' || s[i] == '-')
+		sign = (s[i++] == '+') ? 1 : -1 ;
+	for(val = 0;s[i] >= '0' && s[i] <= '9';i++)
+		val = 10 * val + s[i] - '0';
+	if(s[i] == '.')
+	{
+		i++;
+		for(power = 1;s[i] >= '0' && s[i] <= '9'; i++)
+		{
+			val = val * 10 + s[i] - '0';
+			power *= 10;
+		}
+		val /= power;
+	}
+	if(s[i] == 'e')
+	{
+		i++;
+		esin = 1;
+		if(s[i] == '+' || s[i] == '-')
+			esin = (s[i++] == '+') ? 1 : -1;
+		for(exp = 0;s[i] >= '0' && s[i] <= '9';i++)
+			exp = 10 * exp + s[i] - '0';
+		power = 1;
+		for(i=0;i<exp;i++)
+			power *= 10;
+		val = (esin == -1) ? val/power : val * power ;
+	}
+	return(sign * val);
 }
+
 
 
 enum state

@@ -30,5 +30,6 @@ double Bernoulli(int x);
 float intpower(float a, int n);
 float ln(float x);
 int fact(int n);
+double fmod(double x, double y);
 
 #endif
