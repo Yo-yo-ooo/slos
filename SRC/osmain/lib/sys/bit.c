@@ -1,5 +1,5 @@
 #include <inc/lib.h>
-#include <inc/sys/bits.h>
+#include <inc/sys/bit.h>
 
 unsigned getbits(unsigned x, int p, int n, unsigned y){
     return x & ~(~(~0 << n)) << (p + 1 - n) |
