@@ -2,17 +2,6 @@
 
 #define PERMS 0666
 
-void error(char *fmt,...){
-    va_list args;
-
-    va_start(args,fmt);
-    fprintf(stderr,"error: ");
-    vfprintf(stderr,fmt,args);
-    fprintf(stderr,"\n");
-    va_end(args);
-    exit();
-}
-
 void
 umain(int argc, char **argv)
 {
