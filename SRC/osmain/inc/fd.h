@@ -8,6 +8,12 @@
 #include <inc/types.h>
 #include <inc/fs.h>
 
+typedef	long long time_t;		/* <time> type */
+typedef time_t __time64_t;
+typedef unsigned short u_short;
+typedef u_short dev_t;
+typedef u_short ino_t;
+
 struct Fd;
 struct Stat;
 struct Dev;
@@ -47,6 +53,15 @@ struct Stat {
 	char st_name[MAXNAMELEN];
 	off_t st_size;
 	int st_isdir;
+	ino_t	st_ino;
+	unsigned short st_mode;
+	short	st_nlink;
+	short	st_uid;
+	short	st_gid;
+	dev_t	st_rdev;
+	time_t	st_atime;
+	time_t	st_mtime;
+	time_t	st_ctime;
 	struct Dev *st_dev;
 };
 

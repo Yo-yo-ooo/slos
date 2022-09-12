@@ -56,6 +56,7 @@ DIR *opendir(char *dirname){
 
     if((fd == open(dirname, O_RDONLY)) == -1
     || fstat(fd, &stbuf) == -1
+    || (stbuf.st_mode & S_IFMT) != S_IFDIR
     || (dp = (DIR *) malloc(sizeof(DIR))) == NULL){
         return NULL;
     }

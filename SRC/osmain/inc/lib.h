@@ -73,6 +73,21 @@ extern FILE __iob[OPEN_MAX];
 
 #define ferror(p)	(((p)->flag&_IOERR)!=0)
 #define	feof(p)		(((p)->flag&_IOEOF)!=0)
+#define fileno(p)	((p)->fd)
+
+int _fillbuf(FILE *fp);
+int _flushbuf(int x, FILE *fp);
+int fflush(FILE *fp);
+FILE *fopen(char *name, char *mode);
+int  fclose(FILE *fp);
+
+#define getc(p)		(--(p)->cnt >= 0 \
+			? (unsigned char) *(p)->ptr++ : _fillbuf(p))
+
+#define putc(x,p) 	(--(p)->cnt >= 0 \
+				? *(p)->ptr++ = (x) : _flushbuf((x),p))
+
+#define putchar(x)	putc((x), stdout)
 
 struct arr {
 	int num;
@@ -80,11 +95,6 @@ struct arr {
 };
 typedef struct arr arr;
 
-int _fillbuf(FILE *fp);
-int _flushbuf(int x, FILE *fp);
-int fflush(FILE *fp);
-FILE *fopen(char *name, char *mode);
-int  fclose(FILE *fp);
 
 //END
 
@@ -178,9 +188,7 @@ int	remove(const char *path);
 int	sync(void);
 arr* lbcreat(int n);
 arr* lbdel(arr* head, int m);
-int getc(FILE *stream);
-int putc(int c,FILE *stream);
-int putchar(int c);
+
 
 // pageref.c
 int	pageref(void *addr);
@@ -210,7 +218,6 @@ envid_t	spawnl(const char *program, const char *arg0, ...);
 
 // console.c
 void	cputchar(int c);
-int	getchar(void);
 int	iscons(int fd);
 int	opencons(void);
 
@@ -227,6 +234,25 @@ char *getenv(register char *name);
 //system.c
 void runcmd(char* s);
 void system(char* s);
+
+// dir
+
+#define		S_IFMT	0170000		/* type of file */
+#define		S_IFDIR	0040000	/* directory */
+#define		S_IFCHR	0020000	/* character special */
+#define		S_IFBLK	0060000	/* block special */
+#define		S_IFREG	0100000	/* regular */
+#define		S_IFLNK 0120000	/* symbolic link */
+#define		S_ISUID	0004000		/* set user id on execution */
+#define		S_ISGID	0002000		/* set group id on execution */
+#define		S_IREAD	0000400		/* read permission, owner */
+#define		S_IWRITE 0000200	/* write permission, owner */
+#define		S_IEXEC	0000100		/* execute/search permission, owner */
+#define		S_ICCTYP 0007000	/* type of concurrent access */
+#define		S_ISYNC	0001000	/* 1 writer and n readers (synchronized access) */
+#define		S_IEXCL	0003000	/* 1 writer or n readers (exclusive access) */
+#define		S_IAPPEND	0005000	/* append only */
+#define		S_IBLIND	0007000	/* blind directory */
 
 /* File open modes */
 #define	O_RDONLY	0x0000		/* open for reading only */

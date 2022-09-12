@@ -4,6 +4,7 @@
 #include <inc/types.h>
 
 typedef	long long time_t;		/* <time> type */
+typedef time_t __time64_t;
 typedef unsigned short u_short;
 typedef u_short dev_t;
 typedef u_short ino_t;
