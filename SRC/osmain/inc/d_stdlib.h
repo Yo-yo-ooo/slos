@@ -14,6 +14,11 @@ typedef struct {
     int rem;
 } div_t;
 
+typedef struct {
+    long quot;
+    long rem;
+} ldiv_t;
+
 int rand(void);
 void srand(unsigned int seed);
 double atof(const char *str);
@@ -23,5 +28,6 @@ void QPrint(int* a, int n);
 int htoi(char s[]);
 void* bsearch (const void* key, const void* base,size_t num, size_t size,int (*compar)(const void*,const void*));
 div_t div(int num, int denom);
+ldiv_t ldiv(long num, long denom);
 
 #endif

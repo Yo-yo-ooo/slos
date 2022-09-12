@@ -284,3 +284,35 @@ div_t div(int num, int denom){
 
 	return (r);
 }
+
+ldiv_t ldiv(long num, long denom){
+	ldiv_t r;
+	r.quot = num / denom;
+	r.rem = num % denom;
+
+	/*
+		在我们普通PC（Intel架构系列的CPU）上
+
+		可以正常运行。但是我们不知道其他的机器
+
+		是怎么来处理整除和取余运算的，所以还是
+
+		要写出来错误处理代码。
+
+		被除数为正，余数为负，商加1，余数减除数。
+
+		被除数为负，余数为正，商减1，余数加除数。
+	*/	
+
+	if (num >= 0 && r.rem < 0){
+		++r.quot;
+		r.rem -= denom;
+	}
+
+	else if (num < 0 && r.rem > 0){
+		--r.quot;
+		r.rem += denom;
+	}
+
+	return (r);
+}
