@@ -15,7 +15,7 @@
 // Return the file data page for file descriptor index i
 #define INDEX2DATA(i)	((char*) (FILEDATA + (i)*PGSIZE))
 
-
+#define PERMS 0666
 // --------------------------------------------------------------
 // File descriptor manipulators
 // --------------------------------------------------------------
@@ -320,7 +320,7 @@ stat(const char *path, struct Stat *stat)
 }
 
 int creat(const char *file,int auth){
-	if(auth == 0x0003){
+	if(auth == 0x0003||auth == PERMS){
 		open(file, (O_CREAT|O_WRONLY|O_TRUNC));   
 	}else if(auth == 0x0002){
 		open(file,O_TRUNC);
@@ -328,6 +328,8 @@ int creat(const char *file,int auth){
 		open(file,O_WRONLY);
 	}else if (auth == 0x0000){
 		open(file,O_RDONLY);
+	}else{
+		return -1;
 	}
 	
 }

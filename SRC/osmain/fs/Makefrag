@@ -36,6 +36,7 @@ USERAPPS :=		$(USERAPPS) \
 			$(OBJDIR)/user/calc \
 			$(OBJDIR)/user/cls \
 			$(OBJDIR)/user/hello \
+			$(OBJDIR)/user/cp \
 			$(OBJDIR)/user/faultio \
 
 FSIMGTXTFILES :=	$(FSIMGTXTFILES) \
