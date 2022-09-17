@@ -23,6 +23,7 @@ int rand(void);
 void srand(unsigned int seed);
 double atof(char s[]);
 int atoi(const char* s);
+char* itoa(int num, char* buffer, int base);
 void qsort(void const* base, int len, int size,int(*Cmp_qsort)(void const *p1,void const *p2));
 void QPrint(int* a, int n);
 int htoi(char s[]);
