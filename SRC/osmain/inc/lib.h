@@ -81,6 +81,7 @@ int fflush(FILE *fp);
 FILE *fopen(char *name, char *mode);
 int  fclose(FILE *fp);
 void seek(int fhandle, long offset, int mode);
+long lseek(int fd, long offset, int origin);
 
 #define getc(p)		(--(p)->cnt >= 0 \
 			? (unsigned char) *(p)->ptr++ : _fillbuf(p))
