@@ -296,4 +296,42 @@ int fclose(FILE *fp){
 	return rc;
 }
 
+typedef struct FILEHANDLE{
+	char *buf;
+	int pos;
+	int size;
+}FILEHANDLE;
 
+
+void seek(int fhandle, long offset, int mode){
+	FILEHANDLE *fh = (FILEHANDLE*)fhandle;
+	if(mode == 0){
+		fh->pos = offset;
+	}else if(mode == 1){
+		fh->pos += offset;
+	}else if(mode == 2){
+		fh->pos = fh->size + offset;
+	}
+
+	if (fh->pos < 0){
+		fh->pos = 0;
+	}
+	if (fh->pos > fh->size){
+		fh->pos = fh->size;
+	}
+
+	return;
+}
+
+long lseek(int fd, long offset, int origin){
+	int pos = NULL;
+	if(origin == 0){
+		return offset;
+	}else if(origin == 1){
+		return pos += offset;
+	}else if (origin == 3){
+		return pos -= offset;
+	}else{
+		return 0L;
+	}
+}
