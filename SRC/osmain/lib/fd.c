@@ -271,13 +271,15 @@ seek(int fdnum, off_t offset)
 
 long lseek(int fd, long offset, int origin){
 	struct Fd *fdd;
-	int pos;
+	long pos;
 	fdd->fd_offset = offset;
 	if(origin == 0){
-		pos = seek(offset,0);
+		pos = seek((int)offset,0);
 	}else if (origin == 1)
 	{
-		pos += (int)offset;
+		int tmp = NULL;
+		tmp += (int)offset;
+		pos = seek(tmp,0);
 	}else if (origin == 2)
 	{
 		pos = fdd->fd_dev_id + offset;
