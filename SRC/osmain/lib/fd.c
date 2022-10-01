@@ -269,6 +269,23 @@ seek(int fdnum, off_t offset)
 	return 0;
 }
 
+long lseek(int fd, long offset, int origin){
+	struct Fd *fdd;
+	int pos;
+	fdd->fd_offset = offset;
+	if(origin == 0){
+		pos = seek(offset,0);
+	}else if (origin == 1)
+	{
+		pos += (int)offset;
+	}else if (origin == 2)
+	{
+		pos = fdd->fd_dev_id + offset;
+	}
+	
+	return (long)fdd->fd_offset;
+}
+
 int
 ftruncate(int fdnum, off_t newsize)
 {

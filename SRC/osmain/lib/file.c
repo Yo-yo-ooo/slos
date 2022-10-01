@@ -296,26 +296,3 @@ int fclose(FILE *fp){
 	return rc;
 }
 
-typedef struct FILEHANDLE{
-	char *buf;
-	int pos;
-	int size;
-}FILEHANDLE;
-
-
-long lseek(int fd, long offset, int origin){
-	struct Stat sb = {0};
-	int pos = NULL;
-	if(origin == 0){
-		return offset;
-	}else if(origin == 1){
-		return (long)pos + offset;
-	}else if (origin == 3){
-		fstat(fd,&sb);
-		return (long)sb.st_size + offset;
-	}else{
-		return 0L;
-	}
-
-	return 0L;
-}
