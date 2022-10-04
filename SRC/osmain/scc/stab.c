@@ -1,5 +1,4 @@
-#include <string.h>
-#include <stdlib.h>
+#include <inc/lib.h>
 #include "c.h"
 #include "stab.h"
 

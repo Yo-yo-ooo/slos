@@ -1,5 +1,5 @@
-#include <time.h>
-#include <ctype.h>
+#include <inc/time.h>
+#include <inc/ctype.h>
 #include "c.h"
 
 #define I(f) s_##f

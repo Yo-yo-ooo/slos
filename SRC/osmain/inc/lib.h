@@ -90,6 +90,11 @@ long lseek(int fd, long offset, int origin);
 
 #define putchar(x)	putc((x), stdout)
 
+fread(char *ptr, unsigned size, unsigned count, FILE *iop);
+fwrite(char *ptr, unsigned size, unsigned count, FILE *iop);
+char *fgets(char *s, int n, FILE *iop);
+int fputs(char *s, FILE *iop);
+
 struct arr {
 	int num;
 	struct arr* next;

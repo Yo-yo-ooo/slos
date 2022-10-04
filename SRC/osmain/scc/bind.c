@@ -15,7 +15,7 @@ xx(bytecode,     bytecodeIR) \
 xx(null,         nullIR)
 
 #undef xx
-#define xx(a,b) extern Interface b;
+#define xx(a,b) static Interface b;
 yy
 /* 类型为Interface,名为x86linuxIR的结构体变量在文件x86linux.md中被定义 */
 Binding bindings[] = {

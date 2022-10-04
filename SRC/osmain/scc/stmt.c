@@ -434,7 +434,7 @@ void swcode(Swtch swp, int b[], int lb, int ub) {
 			else if (k < ub)
 				cmp(LT, swp->sym, v[l], lolab);
 			else
-				assert(lolab == hilab),
+				assert(lolab == hilab);
 				branch(lolab);
 			walk(NULL, 0, 0);
 		}

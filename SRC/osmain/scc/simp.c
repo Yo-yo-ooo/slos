@@ -1,5 +1,5 @@
 #include "c.h"
-#include <float.h>
+#include <inc/float.h>
 
 static char rcsid[] = "$Id$";
 
