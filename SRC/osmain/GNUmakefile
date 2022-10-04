@@ -111,6 +111,9 @@ ULDFLAGS := -T user/user.ld
 # Linker flags for OS Window Programs
 WLDFLAGS := -T window/win.ld
 
+# Linker flags for OS Copiler Programs
+SCCLDFLAGS := -T scc/cc.ld
+
 GCC_LIB := $(shell $(CC) $(CFLAGS) -print-libgcc-file-name)
 
 # Lists that the */Makefrag makefile fragments will add to
@@ -128,7 +131,7 @@ all:
 # make it so that no intermediate .o files are ever deleted
 .PRECIOUS: %.o $(OBJDIR)/boot/%.o $(OBJDIR)/kern/%.o \
 	   $(OBJDIR)/lib/%.o $(OBJDIR)/window/%.o $(OBJDIR)/fs/%.o $(OBJDIR)/net/%.o \
-	   $(OBJDIR)/user/%.o
+	   $(OBJDIR)/user/%.o	$(OBJDIR)/scc/%.o 
 
 KERN_CFLAGS := $(CFLAGS) -DJOS_KERNEL -gstabs
 USER_CFLAGS := $(CFLAGS) -DJOS_USER  -Os -Wall -gstabs -w 
@@ -148,6 +151,7 @@ $(OBJDIR)/.vars.%: FORCE
 include boot/Makefrag
 include kern/Makefrag
 include lib/Makefrag
+include scc/Makefrag
 include window/Makefrag
 include user/Makefrag
 include fs/Makefrag

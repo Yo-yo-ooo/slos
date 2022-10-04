@@ -1,0 +1,18 @@
+OBJDIRS += scc
+
+CC_SRCFILES = $(wildcard scc/*.c)
+
+CC_OBJFILES := $(patsubst scc/%.c, $(OBJDIR)/scc/%.o, $(CC_SRCFILES))
+
+$(OBJDIR)/scc/%.o: scc/%.c $(OBJDIR)/.vars.USER_CFLAGS
+	@echo + cc[SCC] $<
+	@mkdir -p $(@D)
+	$(V)$(CC) -nostdinc $(USER_CFLAGS) -c $< -o $@ 
+
+$(OBJDIR)/scc/scc: $(CC_OBJFILES) 
+	@echo + linker[SCC] $<
+#$(V)$(CC) $(WIN_OBJFILES) -o $@
+	$(V)$(LD) -o $@.debug $(SCCLDFLAGS) $(LDFLAGS) -nostdlib $(CC_OBJFILES) $(OBJDIR)/lib/entry.o -L$(OBJDIR)/lib -llwip -ljos $(GCC_LIB)
+	$(V)$(OBJDUMP) -S $@.debug > $@.asm
+	$(V)$(NM) -n $@.debug > $@.sym
+	$(V)$(OBJCOPY) -R .stab -R .stabstr --add-gnu-debuglink=$(basename $@.debug) $@.debug $@

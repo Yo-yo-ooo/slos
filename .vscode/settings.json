@@ -27,6 +27,7 @@
         "window.h": "c",
         "fs.h": "c",
         "string.h": "c",
-        "ctype.h": "c"
+        "ctype.h": "c",
+        "errno.h": "c"
     }
 }
