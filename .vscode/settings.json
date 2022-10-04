@@ -28,6 +28,7 @@
         "fs.h": "c",
         "string.h": "c",
         "ctype.h": "c",
-        "errno.h": "c"
+        "errno.h": "c",
+        "c.h": "c"
     }
 }

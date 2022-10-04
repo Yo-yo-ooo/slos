@@ -14,12 +14,21 @@ char *fgets(char *s, int n, FILE *iop){
     return (c == EOF && cs == s) ? NULL : s;
 }
 
+int fgetc(FILE *fp)
+{
+	return(getc(fp));
+}
+
 int fputs(char *s, FILE *iop){
     int c;
 
     while (c = *s++)
         putc(c, iop);
     return ferror(iop) ? EOF : 0;
+}
+
+int fputc(int c, FILE *fp){
+    return(putc(c,fp));
 }
 
 fread(char *ptr, unsigned size, unsigned count, FILE *iop)

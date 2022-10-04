@@ -93,7 +93,9 @@ long lseek(int fd, long offset, int origin);
 fread(char *ptr, unsigned size, unsigned count, FILE *iop);
 fwrite(char *ptr, unsigned size, unsigned count, FILE *iop);
 char *fgets(char *s, int n, FILE *iop);
+int fgetc(FILE *fp);
 int fputs(char *s, FILE *iop);
+int fputc(int c, FILE *fp);
 
 struct arr {
 	int num;
