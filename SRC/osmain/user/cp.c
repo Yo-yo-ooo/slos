@@ -9,7 +9,7 @@ umain(int argc, char **argv)
     char buf[BUFSIZ];
 
     if(argc != 3){
-        printf("Usage: cp from to\n");
+        printf("Usage: cp [from] [to]\n");
         exit();
     }
     if((f1 = open(argv[1],O_RDONLY)) == -1)

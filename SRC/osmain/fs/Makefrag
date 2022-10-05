@@ -48,7 +48,7 @@ FSIMGTXTFILES :=	$(FSIMGTXTFILES) \
 
 WINOBJ := 		$(OBJDIR)/window/window
 CCOBJ := 		$(OBJDIR)/scc/scc
-FSIMGFILES := $(FSIMGTXTFILES) $(WINOBJ) $(USERAPPS) $(CCOBJ)
+FSIMGFILES := $(FSIMGTXTFILES) $(WINOBJ) $(USERAPPS) #$(CCOBJ)
 
 $(OBJDIR)/fs/%.o: fs/%.c fs/fs.h inc/lib.h $(OBJDIR)/.vars.USER_CFLAGS
 	@echo + cc[USER] $<
