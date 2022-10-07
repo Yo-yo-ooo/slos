@@ -551,3 +551,8 @@ ocvt_flt(FILE *f, va_list *args, int flags, int width, int precision, char afmt)
 	}
 	return nout;
 }
+
+
+int vprintf(const char *fmt, va_list args){
+	return vfprintf_f(stdout, fmt, args);
+}

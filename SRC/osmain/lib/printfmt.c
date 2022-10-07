@@ -307,6 +307,3 @@ snprintf(char *buf, int n, const char *fmt, ...)
 	return rc;
 }
 
-int vprintf(const char *fmt, va_list args){
-	return vfprintf_f(stdout, fmt, args);
-}

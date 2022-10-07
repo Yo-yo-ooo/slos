@@ -73,7 +73,11 @@ enum _flags{
 	_ERR   = 020
 };
 
-extern FILE __iob[OPEN_MAX];
+FILE static __iob[OPEN_MAX] = {
+	{0, (char *) 0, (char *) 0, _READ, 0},
+	{0, (char *) 0, (char *) 0, _WRITE, 1},
+	{0, (char *) 0, (char *) 0, _WRITE | _UNBUF, 2}
+};
 
 #define stdin	(&__iob[0])
 #define stdout	(&__iob[1])

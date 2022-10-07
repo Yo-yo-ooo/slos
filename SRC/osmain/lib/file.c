@@ -7,11 +7,7 @@
 
 union Fsipc fsipcbuf __attribute__((aligned(PGSIZE)));
 
-FILE __iob[OPEN_MAX] = {
-	{0, (char *) 0, (char *) 0, _READ, 0},
-	{0, (char *) 0, (char *) 0, _WRITE, 1},
-	{0, (char *) 0, (char *) 0, _WRITE | _UNBUF, 2}
-};
+
 
 // Send an inter-environment request to the file server, and wait for
 // a reply.  The request body should be in fsipcbuf, and parts of the
