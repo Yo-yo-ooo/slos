@@ -46,6 +46,7 @@
 #define	_IOSTRG 0100
 #define	_IOLBF 0200
 #define	_IORW 0400
+#define _IO_CHMASK 0xff
 
 typedef struct flag_field{
 	unsigned is_read	: 1;
@@ -99,6 +100,7 @@ long lseek(int fd, long offset, int origin);
 
 fread(char *ptr, unsigned size, unsigned count, FILE *iop);
 fwrite(char *ptr, unsigned size, unsigned count, FILE *iop);
+int vfprintf(FILE *f, const char *s, va_list args);
 FILE *freopen(char *file, char *mode, FILE *iop);
 char *fgets(char *s, int n, FILE *iop);
 int ungetc(int c, FILE *iop);
