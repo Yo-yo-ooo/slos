@@ -71,7 +71,7 @@ fwrite(char *ptr, unsigned size, unsigned count, FILE *iop)
 
 FILE *freopen(char *file, char *mode, FILE *iop){
 	char ffile;
-	extern int errno;
+    int errno;
 	register f, rw;
 
 	rw = mode[1] == '+';
