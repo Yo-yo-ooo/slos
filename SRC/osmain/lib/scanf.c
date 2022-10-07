@@ -4,8 +4,8 @@
 
 #define LOCALFMT 100
 
-void scanf(char *fmt, ...){
-    va_list ap;
+void scanf(const char *fmt, ...){
+ /*   va_list ap;
     char *p, *sval;
     char localfmt[LOCALFMT];
     int c,i,*ival;
@@ -54,6 +54,11 @@ void scanf(char *fmt, ...){
         }
         i = 0;
     }
-    va_end(ap);
-     
+    va_end(ap);*/
+    int n;
+	va_list args;
+	va_start(args, fmt);
+	n=vfscanf(stdin, fmt, args);
+	va_end(args);
+	return n;
 }
