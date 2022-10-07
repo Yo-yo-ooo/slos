@@ -37,8 +37,15 @@
 #define OPEN_MAX	20
 #define EOF			(-1)
 
-#define _IOERR	040
-#define	_IOEOF	020
+#define	_IOREAD 01
+#define	_IOWRT 02
+#define	_IONBF 04
+#define	_IOMYBUF 010
+#define	_IOEOF 020
+#define	_IOERR 040
+#define	_IOSTRG 0100
+#define	_IOLBF 0200
+#define	_IORW 0400
 
 typedef struct flag_field{
 	unsigned is_read	: 1;
@@ -92,7 +99,9 @@ long lseek(int fd, long offset, int origin);
 
 fread(char *ptr, unsigned size, unsigned count, FILE *iop);
 fwrite(char *ptr, unsigned size, unsigned count, FILE *iop);
+FILE *freopen(char *file, char *mode, FILE *iop);
 char *fgets(char *s, int n, FILE *iop);
+int ungetc(int c, FILE *iop);
 int fgetc(FILE *fp);
 int fputs(char *s, FILE *iop);
 int fputc(int c, FILE *fp);

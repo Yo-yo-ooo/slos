@@ -1,5 +1,6 @@
 #include <inc/stdio.h>
 #include <inc/lib.h>
+#include "lib/inline.h"
 
 #define LOCALFMT 100
 
@@ -41,6 +42,7 @@ void scanf(char *fmt, ...){
             dval = va_arg(ap, double *);
             scanf(localfmt, dval);
             break;
+        case 'c':
         case 's':
             sval = va_arg(ap, char *);
             scanf(localfmt, sval);
@@ -53,4 +55,5 @@ void scanf(char *fmt, ...){
         i = 0;
     }
     va_end(ap);
+     
 }
