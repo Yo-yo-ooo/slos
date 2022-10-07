@@ -100,7 +100,7 @@ long lseek(int fd, long offset, int origin);
 
 fread(char *ptr, unsigned size, unsigned count, FILE *iop);
 fwrite(char *ptr, unsigned size, unsigned count, FILE *iop);
-int vfprintf(FILE *f, const char *s, va_list args);
+int vfprintf_f(FILE *f, const char *s, va_list args);
 FILE *freopen(char *file, char *mode, FILE *iop);
 char *fgets(char *s, int n, FILE *iop);
 int ungetc(int c, FILE *iop);
