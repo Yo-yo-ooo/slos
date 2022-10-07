@@ -250,6 +250,9 @@ char *getenv(register char *name);
 void runcmd(char* s);
 void system(char* s);
 
+//scanf.c
+void *fscanf(FILE *f, const char *fmt, ...);
+
 // dir
 
 #define		S_IFMT	0170000		/* type of file */

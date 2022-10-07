@@ -4,7 +4,7 @@
 
 #define LOCALFMT 100
 
-void scanf(const char *fmt, ...){
+void *scanf(const char *fmt, ...){
  /*   va_list ap;
     char *p, *sval;
     char localfmt[LOCALFMT];
@@ -59,6 +59,36 @@ void scanf(const char *fmt, ...){
 	va_list args;
 	va_start(args, fmt);
 	n = vfscanf(stdin, fmt, args);
+	va_end(args);
+	return n;
+}
+
+void *sscanf(const char *s, const char *fmt, ...){
+	int n;
+	va_list args;
+	FILE _strbuf;
+
+	_strbuf.flag = _IOREAD|_IOSTRG;
+	_strbuf.ptr = _strbuf.base = (unsigned char *) s;
+	_strbuf.cnt = 0;
+	while (*s++)
+		_strbuf.cnt++;
+#define f &_strbuf
+#define sclose(x)
+	//FILE *f=sopenr(s);
+	va_start(args, fmt);
+	n = vfscanf(f, fmt, args);
+	va_end(args);
+	sclose(f);
+	return n;
+#undef f
+}
+
+void *fscanf(FILE *f, const char *fmt, ...){
+	int n;
+	va_list args;
+	va_start(args, fmt);
+	n=vfscanf(f, fmt, args);
 	va_end(args);
 	return n;
 }
