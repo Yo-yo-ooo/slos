@@ -1,5 +1,8 @@
 #include <inc/lib.h>
 
+
+char *
+_dtoa(double darg, int mode, int ndigits, int *decpt, int *sign, char **rve);
 /*
  * Leading flags
  */

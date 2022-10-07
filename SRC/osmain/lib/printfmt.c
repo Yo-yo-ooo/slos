@@ -7,6 +7,7 @@
 #include <inc/string.h>
 #include <inc/stdarg.h>
 #include <inc/error.h>
+#include <inc/lib.h>
 
 /*
  * Space or zero padding and a field width are supported for the numeric
@@ -306,4 +307,6 @@ snprintf(char *buf, int n, const char *fmt, ...)
 	return rc;
 }
 
-
+int vprintf(const char *fmt, va_list args){
+	return vfprintf_f(stdout, fmt, args);
+}
