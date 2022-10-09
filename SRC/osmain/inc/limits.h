@@ -1,3 +1,6 @@
+#ifndef _LIMITS_H
+#define _LIMITS_H
+
 #define CHAR_BIT 8
 #define SCHAR_MIN -128
 #define SCHAR_MAX 127
@@ -20,3 +23,5 @@
 #define LONG_MAX 2147483647
 #define ULONG_MIN 0
 #define ULONG_MAX 4294967295
+
+#endif
