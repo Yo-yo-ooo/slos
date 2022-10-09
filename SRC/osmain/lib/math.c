@@ -639,3 +639,16 @@ int fact(int n)
         return s;
     }
 }
+
+long long sigma(int i,int n,long long x,int mode){
+   if(mode == 1){
+        for(i;i < n;i++){
+            x++;
+        }
+        return x;
+    }else if(mode == 2){
+        return (long long)pow((double)x,(double)i);
+    }else{
+        return 0;
+    }
+}

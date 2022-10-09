@@ -31,5 +31,6 @@ float intpower(float a, int n);
 float ln(float x);
 int fact(int n);
 double fmod(double x, double y);
+long long sigma(int i,int n,long long x,int mode);
 
 #endif
