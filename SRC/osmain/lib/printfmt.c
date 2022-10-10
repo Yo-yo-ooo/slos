@@ -48,7 +48,7 @@ printnum(void (*putch)(int, void*), void *putdat,
 {
 	// first recursively print all preceding (more significant) digits
 	if (num >= base) {
-		printnum(putch, putdat, num / base, base, width - 1, padc);
+		printnum(putch, putdat, (uint32_t)num / (uint32_t)base, base, width - 1, padc);
 	} else {
 		// print any needed pad characters before first digit
 		while (--width > 0)
