@@ -37,6 +37,7 @@ USERAPPS :=		$(USERAPPS) \
 			$(OBJDIR)/user/cls \
 			$(OBJDIR)/user/hello \
 			$(OBJDIR)/user/cp \
+			$(OBJDIR)/user/han \
 			$(OBJDIR)/user/httpd \
 			$(OBJDIR)/user/faultio \
 

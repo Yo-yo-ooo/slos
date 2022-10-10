@@ -261,9 +261,9 @@ FILE *fopen(char *name, char *mode){
 	if(fp >= __iob + OPEN_MAX)
 		return NULL;
 	
-	if(*mode == 'w')
+	if(*mode == 'w'){
 		fd = creat(name, 3);
-	else if(*mode == 'a'){
+	}else if(*mode == 'a'){
 		if((fd = open(name, (O_WRONLY|0))) == -1)
 			fd = creat(name, 3);
 		return EOF;
