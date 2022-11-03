@@ -29,6 +29,7 @@
         "string.h": "c",
         "ctype.h": "c",
         "errno.h": "c",
-        "c.h": "c"
+        "c.h": "c",
+        "iostream": "cpp"
     }
 }

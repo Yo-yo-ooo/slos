@@ -2,6 +2,7 @@
 #define IOSTREAM
 
 #include <inc/cpp/iosfwd>
+#include <inc/malloc.h>
 
 namespace std{
 
@@ -11,5 +12,8 @@ extern ostream cerr;
 extern ostream clog;
     
 }
+
+void* operator new(size_t Size) {return malloc(Size);}
+void* operator new[](size_t Size) {return malloc(Size);}
 
 #endif
