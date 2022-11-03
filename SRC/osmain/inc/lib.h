@@ -48,6 +48,10 @@
 #define	_IORW 0400
 #define _IO_CHMASK 0xff
 
+#define SEEK_CUR    1
+#define SEEK_END    2
+#define SEEK_SET    0
+
 typedef struct flag_field{
 	unsigned is_read	: 1;
 	unsigned is_write   : 1;
@@ -92,7 +96,8 @@ int _flushbuf(int x, FILE *fp);
 int fflush(FILE *fp);
 FILE *fopen(char *name, char *mode);
 int  fclose(FILE *fp);
-long lseek(int fd, long offset, int origin);
+long lseek(int fd,long off,int whence);
+int fseek(FILE *fp,long offset, int origin);
 
 #define getc(p)		(--(p)->cnt >= 0 \
 			? (unsigned char) *(p)->ptr++ : _fillbuf(p))

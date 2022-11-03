@@ -269,23 +269,47 @@ seek(int fdnum, off_t offset)
 	return 0;
 }
 
-long lseek(int fd, long offset, int origin){
-	struct Fd *fdd;
-	long pos;
-	fdd->fd_offset = offset;
-	if(origin == 0){
-		pos = seek((int)offset,0);
-	}else if (origin == 1)
-	{
-		int tmp = NULL;
-		tmp += (int)offset;
-		pos = seek(tmp,0);
-	}else if (origin == 2)
-	{
-		pos = fdd->fd_dev_id + offset;
-	}
-	
-	return (long)fdd->fd_offset;
+#define DEV_SIZE    (4)
+
+long lseek(int fd,long off,int whence){
+    long NewPos = 0;
+    int offset = (int)off;
+    switch(whence){
+        case SEEK_SET:    //SEEK_SET代表以文件头为偏移起始值
+            NewPos = (long)offset;
+        	break;
+        case SEEK_CUP:    //SEEK_CUP代表以当前位置为偏移起始值
+            NewPos = (long)fd + (long)offset;
+        	break;
+        case SEEK_END:    //SEEK_END代表以文件结尾为偏移起始值
+            NewPos = DEV_SIZE + (long)offset;
+        	break;
+        default:
+            return -1;
+    }
+    if(NewPos < 0)
+        return -1;
+    fd = NewPos;
+    return NewPos;
+}
+
+int fseek(FILE *fp,long offset, int origin){
+    unsigned nc;
+    long rc = 0;
+
+    if(fp->flag & _READ){
+        if(origin == 1)
+            offset -= fp->cnt;
+        rc = lseek(fp->fd, offset, origin);
+        fp->cnt = 0;
+    }else if (fp->flag & _WRITE){
+        if((nc = fp->ptr - fp->base) > 0)
+            if(write(fp->fd,fp->base,nc) != nc)
+                rc = -1;
+        if(rc != -1)
+            rc = lseek(fp->fd, offset,origin);
+    }
+    return (rc == -1) ? -1 : 0;
 }
 
 int
