@@ -278,7 +278,7 @@ long lseek(int fd,long off,int whence){
         case SEEK_SET:    //SEEK_SET代表以文件头为偏移起始值
             NewPos = (long)offset;
         	break;
-        case SEEK_CUP:    //SEEK_CUP代表以当前位置为偏移起始值
+        case SEEK_CUR:    //SEEK_CUP代表以当前位置为偏移起始值
             NewPos = (long)fd + (long)offset;
         	break;
         case SEEK_END:    //SEEK_END代表以文件结尾为偏移起始值
