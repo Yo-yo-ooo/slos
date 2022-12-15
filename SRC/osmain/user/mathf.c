@@ -86,7 +86,7 @@ void mathfnc(char []);
 //extern sp;
 
 //逆波兰计算器
-void	umain(int argc, char **argv)
+void umain(int argc, char **argv)
 {
 	int type;
 	double op2;
