@@ -98,7 +98,7 @@ umain(int argc, char **argv)
 	//double tmp;
 	char s[MAXOP];
 
-    printf("This is the inverse Polish calculator%s,\nPress 'q' to quit.\n",SYS_VERSION);
+    printf("This is the inverse Polish calculator(%s),\nPress 'q' to quit.\n",SYS_VERSION);
 
 	while((type = getop(s)) != EOF)
 	{
