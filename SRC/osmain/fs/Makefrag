@@ -35,6 +35,9 @@ USERAPPS :=		$(USERAPPS) \
 			$(OBJDIR)/user/time \
 			$(OBJDIR)/user/clear \
 			$(OBJDIR)/user/calc \
+			$(OBJDIR)/user/mathf \
+			$(OBJDIR)/user/testbss \
+			$(OBJDIR)/user/testpiperace \
 			$(OBJDIR)/user/cls \
 			$(OBJDIR)/user/hello \
 			$(OBJDIR)/user/cp \

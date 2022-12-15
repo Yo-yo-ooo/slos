@@ -30,6 +30,8 @@
         "ctype.h": "c",
         "errno.h": "c",
         "c.h": "c",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "stdlib.h": "c",
+        "d_stdlib.h": "c"
     }
 }
