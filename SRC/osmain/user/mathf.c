@@ -1,7 +1,10 @@
+/*
 #include <inc/stdio.h>
 #include <inc/stdlib.h>			//为了使用库函数atof
 #include <inc/math.h>			//使用sin, exp, pow等数学函数
 #include <inc/string.h>			//使用strcmp, strlen等字符串函数
+*/
+#include <inc/lib.h>
 
 //extern NUMBER;
 #define		NUMBER		'0'
@@ -95,7 +98,7 @@ umain(int argc, char **argv)
 	//double tmp;
 	char s[MAXOP];
 
-    printf("This is the inverse Polish calculator(V0.75c),\nPress 'q' to quit.\n");
+    printf("This is the inverse Polish calculator%s,\nPress 'q' to quit.\n",SYS_VERSION);
 
 	while((type = getop(s)) != EOF)
 	{

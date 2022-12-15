@@ -32,6 +32,10 @@
 #include <inc/stdint.h>
 #include <inc/d_stdlib.h>
 
+//System Version
+
+#define SYS_VERSION "0.75c"
+
 //FILE
 
 #define OPEN_MAX	20
