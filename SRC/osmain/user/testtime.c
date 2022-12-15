@@ -31,5 +31,6 @@ umain(int argc, char **argv)
 		sleep(1);
 	}
 	cprintf("\n");
-	breakpoint();
+	//breakpoint();
+	exit();
 }

@@ -31,6 +31,7 @@ USERAPPS :=		$(USERAPPS) \
 			$(OBJDIR)/user/testpipe \
 			$(OBJDIR)/user/testpteshare \
 			$(OBJDIR)/user/testshell \
+			$(OBJDIR)/user/testtime \
 			$(OBJDIR)/user/time \
 			$(OBJDIR)/user/clear \
 			$(OBJDIR)/user/calc \
