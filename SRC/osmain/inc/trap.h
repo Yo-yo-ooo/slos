@@ -1,6 +1,10 @@
 #ifndef JOS_INC_TRAP_H
 #define JOS_INC_TRAP_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // Trap numbers
 // These are processor defined:
 #define T_DIVIDE     0		// divide error
@@ -87,5 +91,9 @@ struct UTrapframe {
 } __attribute__((packed));
 
 #endif /* !__ASSEMBLER__ */
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* !JOS_INC_TRAP_H */

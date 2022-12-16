@@ -2,6 +2,9 @@
     "makefile.extensionOutputFolder": "./.vscode",
     "C_Cpp.errorSquiggles": "Disabled",
     "files.associations": {
+        "Makefrag": "makefile",
+        "*.S": "asm-intel-x86-generic",
+        "script": "bat",
         "stdint.h": "c",
         "limits.h": "c",
         "math.h": "c",
@@ -32,6 +35,15 @@
         "c.h": "c",
         "iostream": "cpp",
         "stdlib.h": "c",
-        "d_stdlib.h": "c"
+        "d_stdlib.h": "c",
+        "float.h": "c",
+        "ns.h": "c",
+        "sockets.h": "c",
+        "malloc.h": "c",
+        "args.h": "c",
+        "trap.h": "c",
+        "memlayout.h": "c",
+        "env.h": "c",
+        "error.h": "c"
     }
 }

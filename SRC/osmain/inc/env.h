@@ -7,6 +7,10 @@
 #include <inc/trap.h>
 #include <inc/memlayout.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef int32_t envid_t;
 
 // An environment ID 'envid_t' has three parts:
@@ -68,5 +72,9 @@ struct Env {
 	envid_t env_ipc_from;		// envid of the sender
 	int env_ipc_perm;		// Perm of page mapping received
 };
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // !JOS_INC_ENV_H

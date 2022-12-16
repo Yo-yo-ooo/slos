@@ -3,6 +3,10 @@
 
 #include <inc/types.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef	long long time_t;		/* <time> type */
 typedef time_t __time64_t;
 typedef unsigned short u_short;
@@ -40,5 +44,8 @@ struct	stat
 size_t mktime(struct tm tm_now);
 void gmtime(struct tm *tm_time, size_t timestamp);
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif

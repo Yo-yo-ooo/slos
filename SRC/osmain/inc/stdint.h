@@ -1,6 +1,10 @@
 #ifndef _STDINT_H
 #define _STDINT_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef signed char        int8_t;
 typedef short              int16_t;
 typedef int                int32_t;
@@ -49,5 +53,9 @@ typedef unsigned long long uintmax_t;
 
 #define INTMAX_C(x)  INT64_C(x)
 #define UINTMAX_C(x) UINT64_C(x)
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

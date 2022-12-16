@@ -7,6 +7,10 @@
 #include <inc/mmu.h>
 #include <lwip/sockets.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct jif_pkt {
 	int jp_len;
 	char jp_data[0];
@@ -102,5 +106,9 @@ union Nsipc {
 	// Ensure Nsipc is one page
 	char _pad[PGSIZE];
 };
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // !JOS_INC_NS_H

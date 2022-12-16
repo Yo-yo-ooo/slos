@@ -6,6 +6,10 @@
 #include <inc/mmu.h>
 #endif /* not __ASSEMBLER__ */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /*
  * This file contains definitions for memory management in our OS,
  * which are relevant to both the kernel and user-mode software.
@@ -188,4 +192,9 @@ struct PageInfo {
 };
 
 #endif /* !__ASSEMBLER__ */
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif /* !JOS_INC_MEMLAYOUT_H */

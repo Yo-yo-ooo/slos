@@ -8,6 +8,10 @@
 #include <inc/types.h>
 #include <inc/fs.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef	long long time_t;		/* <time> type */
 typedef time_t __time64_t;
 typedef unsigned short u_short;
@@ -76,5 +80,9 @@ extern struct Dev devfile;
 extern struct Dev devsock;
 extern struct Dev devcons;
 extern struct Dev devpipe;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif	// not JOS_INC_FD_H

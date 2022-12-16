@@ -1,6 +1,10 @@
 #ifndef _LIMITS_H
 #define _LIMITS_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define CHAR_BIT 8
 #define SCHAR_MIN -128
 #define SCHAR_MAX 127
@@ -42,5 +46,9 @@
 #define _I64_MIN    (-9223372036854775807i64 - 1)
 #define _I64_MAX      9223372036854775807i64
 #define _UI64_MAX     0xffffffffffffffffui64
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

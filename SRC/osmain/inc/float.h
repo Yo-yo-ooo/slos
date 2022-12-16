@@ -1,6 +1,10 @@
 #ifndef _FLOAT_H
 #define _FLOAT_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define FLT_ROUNDS	1
 #define FLT_RADIX	2
 
@@ -128,6 +132,8 @@
 #define _FPCLASS_PN    0x0100  // positive normal
 #define _FPCLASS_PINF  0x0200  // positive infinity
 
-
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* __FLOAT */

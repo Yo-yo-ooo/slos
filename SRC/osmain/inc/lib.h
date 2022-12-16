@@ -31,6 +31,7 @@
 #include <inc/ctype.h>
 #include <inc/stdint.h>
 #include <inc/d_stdlib.h>
+#include <inc/errno.h>
 
 #ifdef __cplusplus
 extern "C" {

@@ -1,6 +1,10 @@
 #ifndef _MATH_H
 #define _MATH_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define MAXFLOAT	((float)3.40282346638528860e+38)
 #define HUGE	MAXFLOAT
 
@@ -32,5 +36,9 @@ float ln(float x);
 int fact(int n);
 double fmod(double x, double y);
 long long sigma(int i,int n,long long x,int mode);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

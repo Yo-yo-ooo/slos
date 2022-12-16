@@ -1,6 +1,10 @@
 #ifndef JOS_INC_SYSCALL_H
 #define JOS_INC_SYSCALL_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* system call numbers */
 enum {
 	SYS_cputs = 0,
@@ -22,5 +26,9 @@ enum {
 	SYS_pkt_recv,
 	NSYSCALLS
 };
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* !JOS_INC_SYSCALL_H */
