@@ -31,5 +31,6 @@ void* bsearch (const void* key, const void* base,size_t num, size_t size,int (*c
 div_t div(int num, int denom);
 ldiv_t ldiv(long num, long denom);
 char *ftoa(double number,int ndigit,char *buf);
+char *ultoa(unsigned long value, char *string, int radix);
 
 #endif
