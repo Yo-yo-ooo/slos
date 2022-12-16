@@ -362,3 +362,28 @@ ldiv_t ldiv(long num, long denom){
 
 	return (r);
 }
+
+char *ftoa(double number,int ndigit,char *buf)
+{
+    long int_part;
+	double float_part;
+	char str_int[32];
+	char str_float[32];
+	memset(str_int,0,32);
+	memset(str_float,0,32);
+	int_part = (long)number;
+	float_part = number - int_part;
+	// 整数部分处理
+	itoa(int_part,str_int,10);
+	// 小数部分处理
+	if(ndigit>0)
+	{
+		float_part =fabs(pow(10,ndigit)*float_part);
+		itoa((long)float_part,str_float,10);
+	}
+	int i = strlen(str_int);
+	str_int[i] = '.';
+	strcat(str_int,str_float);
+	strcpy(buf,str_int);
+	return buf;
+}
