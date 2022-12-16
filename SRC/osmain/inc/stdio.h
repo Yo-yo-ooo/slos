@@ -3,6 +3,10 @@
 
 #include <inc/stdarg.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifndef NULL
 #define NULL	((void *) 0)
 #endif /* !NULL */
@@ -34,5 +38,9 @@ char*	readline(const char *prompt);
 //lib/scanf.c
 void *scanf(const char *fmt, ...);
 void *sscanf(const char *s, const char *fmt, ...);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* !JOS_INC_STDIO_H */

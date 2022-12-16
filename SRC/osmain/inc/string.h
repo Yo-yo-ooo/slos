@@ -3,6 +3,10 @@
 
 #include <inc/ctypes.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 int	strlen(const char *s);
 int	strnlen(const char *s, size_t size);
 char *	strcpy(char *dst, const char *src);
@@ -23,5 +27,9 @@ int	memcmp(const void *s1, const void *s2, size_t len);
 void *	memfind(const void *s, int c, size_t len);
 
 long	strtol(const char *s, char **endptr, int base);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* not JOS_INC_STRING_H */

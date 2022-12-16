@@ -3,6 +3,9 @@
 
 #include <inc/lib.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 /*
 * This File is for Skyline System stdlib Library
 * ----------------------------------------------
@@ -32,5 +35,9 @@ div_t div(int num, int denom);
 ldiv_t ldiv(long num, long denom);
 char *ftoa(double number,int ndigit,char *buf);
 char *ultoa(unsigned long value, char *string, int radix);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

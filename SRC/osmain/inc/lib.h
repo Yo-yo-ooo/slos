@@ -32,6 +32,9 @@
 #include <inc/stdint.h>
 #include <inc/d_stdlib.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 //System Version
 
 #define SYS_VERSION "0.75c"
@@ -304,5 +307,9 @@ void *fscanf(FILE *f, const char *fmt, ...);
 #define S_IWUSR 	0x0001      /* open for writing only */
 #define S_IXUSR 	0x0002		
 #define S_IRWXR 	0x0003
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif	// !JOS_INC_LIB_H
