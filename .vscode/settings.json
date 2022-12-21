@@ -44,6 +44,7 @@
         "trap.h": "c",
         "memlayout.h": "c",
         "env.h": "c",
-        "error.h": "c"
+        "error.h": "c",
+        "kclock.h": "c"
     }
 }

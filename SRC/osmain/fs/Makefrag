@@ -44,15 +44,13 @@ USERAPPS :=		$(USERAPPS) \
 			$(OBJDIR)/user/han \
 			$(OBJDIR)/user/httpd \
 			$(OBJDIR)/user/faultio \
+			$(OBJDIR)/user/mkdir 
 
 FSIMGTXTFILES :=	$(FSIMGTXTFILES) \
 			fs/lorem \
 			fs/script \
 			fs/testshell.key \
 			fs/testshell.sh \
-			fs/font/font.bin \
-			fs/font/font1.bin \
-			fs/font/HZK16
 
 WINOBJ := 		$(OBJDIR)/window/window
 CCOBJ := 		$(OBJDIR)/scc/scc

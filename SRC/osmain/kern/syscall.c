@@ -14,6 +14,7 @@
 #include <kern/time.h>
 #include <kern/e1000.h>
 #include <inc/time.h>
+#include <kern/kclock.h>
 
 #define debug 0
 
@@ -399,12 +400,6 @@ sys_pkt_recv(void *addr, size_t *len)
 #define BCD_TO_BIN(val) ((((val) >> 4) * 10) + ((val)&15))
 #define TIMEZONE 8
 #define	IO_RTC		0x070		/* RTC port */
-unsigned
-mc146818_read(unsigned reg)
-{
-	outb(IO_RTC, reg);
-	return inb(IO_RTC+1);
-}
 static int sys_gettime(struct tm *tm)
 {
     unsigned datas, datam, datah;
