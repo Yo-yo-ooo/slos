@@ -99,14 +99,14 @@ openfile_lookup(envid_t envid, uint32_t fileid, struct OpenFile **po)
 // Open req->req_path in mode req->req_omode, storing the Fd page and
 // permissions to return to the calling environment in *pg_store and
 // *perm_store respectively.
-int
-serve_open(envid_t envid, struct Fsreq_open *req,
-	   void **pg_store, int *perm_store)
+int serve_open(envid_t envid, struct Fsreq_open *req,
+			   void **pg_store, int *perm_store)
 {
 	char path[MAXPATHLEN];
 	struct File *f;
 	int fileid;
 	int r;
+	int type;
 	struct OpenFile *o;
 
 	if (debug)
@@ -114,28 +114,47 @@ serve_open(envid_t envid, struct Fsreq_open *req,
 
 	// Copy in the path, making sure it's null-terminated
 	memmove(path, req->req_path, MAXPATHLEN);
-	path[MAXPATHLEN-1] = 0;
+	path[MAXPATHLEN - 1] = 0;
 
 	// Find an open file ID
-	if ((r = openfile_alloc(&o)) < 0) {
+	if ((r = openfile_alloc(&o)) < 0)
+	{
 		if (debug)
 			cprintf("openfile_alloc failed: %e", r);
 		return r;
 	}
 	fileid = r;
 
-	// Open the file
-	if (req->req_omode & O_CREAT) {
-		if ((r = file_create(path, &f)) < 0) {
+	// create file
+	if (req->req_omode & O_CREAT)
+	{
+		if ((r = file_create(path, &f)) < 0)
+		{
 			if (!(req->req_omode & O_EXCL) && r == -E_FILE_EXISTS)
 				goto try_open;
 			if (debug)
 				cprintf("file_create failed: %e", r);
 			return r;
 		}
-	} else {
-try_open:
-		if ((r = file_open(path, &f)) < 0) {
+	}
+	// create dir
+	else if (req->req_omode & O_MKDIR)
+	{
+		if ((r = dir_create(path, &f)) < 0)
+		{
+			if (!(req->req_omode & O_EXCL) && r == -E_FILE_EXISTS)
+				goto try_open;
+			if (debug)
+				cprintf("file_create failed: %e", r);
+			return r;
+		}
+	}
+	// Open the file
+	else
+	{
+	try_open:
+		if ((r = file_open(path, &f)) < 0)
+		{
 			if (debug)
 				cprintf("file_open failed: %e", r);
 			return r;
@@ -143,14 +162,17 @@ try_open:
 	}
 
 	// Truncate
-	if (req->req_omode & O_TRUNC) {
-		if ((r = file_set_size(f, 0)) < 0) {
+	if (req->req_omode & O_TRUNC)
+	{
+		if ((r = file_set_size(f, 0)) < 0)
+		{
 			if (debug)
 				cprintf("file_set_size failed: %e", r);
 			return r;
 		}
 	}
-	if ((r = file_open(path, &f)) < 0) {
+	if ((r = file_open(path, &f)) < 0)
+	{
 		if (debug)
 			cprintf("file_open failed: %e", r);
 		return r;
@@ -166,12 +188,12 @@ try_open:
 	o->o_mode = req->req_omode;
 
 	if (debug)
-		cprintf("sending success, page %08x\n", (uintptr_t) o->o_fd);
+		cprintf("sending success, page %08x\n", (uintptr_t)o->o_fd);
 
 	// Share the FD page with the caller by setting *pg_store,
 	// store its permission in *perm_store
 	*pg_store = o->o_fd;
-	*perm_store = PTE_P|PTE_U|PTE_W|PTE_SHARE;
+	*perm_store = PTE_P | PTE_U | PTE_W | PTE_SHARE;
 
 	return 0;
 }
