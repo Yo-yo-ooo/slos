@@ -26,18 +26,10 @@ USERAPPS :=		$(USERAPPS) \
 			$(OBJDIR)/user/primes \
 			$(OBJDIR)/user/primespipe \
 			$(OBJDIR)/user/sh \
-			$(OBJDIR)/user/testfdsharing \
-			$(OBJDIR)/user/testkbd \
-			$(OBJDIR)/user/testpipe \
-			$(OBJDIR)/user/testpteshare \
-			$(OBJDIR)/user/testshell \
-			$(OBJDIR)/user/testtime \
 			$(OBJDIR)/user/time \
 			$(OBJDIR)/user/clear \
 			$(OBJDIR)/user/calc \
 			$(OBJDIR)/user/mathf \
-			$(OBJDIR)/user/testbss \
-			$(OBJDIR)/user/testpiperace \
 			$(OBJDIR)/user/cls \
 			$(OBJDIR)/user/hello \
 			$(OBJDIR)/user/cp \
