@@ -398,7 +398,7 @@ char *ultoa(unsigned long value, char *string, int radix)
 
 	if (radix > 36 || radix <= 1)
 	{
-		__set_errno(EDOM);
+		//__set_errno(EDOM);
 		return 0;
 	}
 

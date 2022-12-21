@@ -31,7 +31,6 @@
 #include <inc/ctype.h>
 #include <inc/stdint.h>
 #include <inc/d_stdlib.h>
-#include <inc/errno.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -183,6 +182,8 @@ int	sys_ipc_recv(void *rcv_pg);
 unsigned int sys_time_msec(void);
 int sys_pkt_send(void *addr, size_t len);
 int sys_pkt_recv(void *addr, size_t *len);
+int sys_gettime(struct tm *tm);
+int sys_env_set_workpath(envid_t envid, const char *path);
 
 // This must be inlined.  Exercise for reader: why?
 static inline envid_t __attribute__((always_inline))
@@ -271,6 +272,11 @@ void system(char* s);
 
 //scanf.c
 void *fscanf(FILE *f, const char *fmt, ...);
+
+//mkdir.c
+int chdir(const char *path);
+char *getcwd(char *buffer, int maxlen);
+int mkdir(const char *dirname);
 
 // dir
 

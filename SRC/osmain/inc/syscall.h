@@ -24,6 +24,8 @@ enum {
 	SYS_time_msec,
 	SYS_pkt_send,
 	SYS_pkt_recv,
+	SYS_gettime,
+	SYS_env_set_workpath,
 	NSYSCALLS
 };
 

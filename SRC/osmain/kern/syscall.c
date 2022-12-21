@@ -13,7 +13,7 @@
 #include <kern/sched.h>
 #include <kern/time.h>
 #include <kern/e1000.h>
-
+#include <inc/time.h>
 
 #define debug 0
 
@@ -396,7 +396,37 @@ sys_pkt_recv(void *addr, size_t *len)
 {
 	return e1000_receive(addr, len);
 }
+#define BCD_TO_BIN(val) ((((val) >> 4) * 10) + ((val)&15))
+#define TIMEZONE 8
+#define	IO_RTC		0x070		/* RTC port */
+unsigned
+mc146818_read(unsigned reg)
+{
+	outb(IO_RTC, reg);
+	return inb(IO_RTC+1);
+}
+static int sys_gettime(struct tm *tm)
+{
+    unsigned datas, datam, datah;
+    int i;
+    tm->tm_sec = BCD_TO_BIN(mc146818_read(0));
+    tm->tm_min = BCD_TO_BIN(mc146818_read(2));
+    tm->tm_hour = BCD_TO_BIN(mc146818_read(4)) + TIMEZONE;
+    tm->tm_wday = BCD_TO_BIN(mc146818_read(6));
+    tm->tm_mday = BCD_TO_BIN(mc146818_read(7));
+    tm->tm_mon = BCD_TO_BIN(mc146818_read(8));
+    tm->tm_year = BCD_TO_BIN(mc146818_read(9));
+    return 0;
+}
 
+static int sys_env_set_workpath(envid_t envid, const char *path){
+	struct Env *e;
+	int ret = envid2env(envid, &e, 1);
+	if (ret != 0)
+		return ret;
+	strcpy((char *)e->workpath, path);
+	return 0;
+}
 // Dispatches to the correct kernel function, passing the arguments.
 int32_t
 syscall(uint32_t syscallno, uint32_t a1, uint32_t a2, uint32_t a3, uint32_t a4, uint32_t a5)
@@ -443,6 +473,10 @@ syscall(uint32_t syscallno, uint32_t a1, uint32_t a2, uint32_t a3, uint32_t a4, 
 			return sys_pkt_send((void *)a1, (size_t)a2);
 		case SYS_pkt_recv:
 			return sys_pkt_recv((void *)a1, (size_t *)a2);
+		case SYS_gettime:
+			return sys_gettime((struct tm*)a1);
+		case SYS_env_set_workpath:
+			return sys_env_set_workpath((envid_t)a1, (const char *)a2);
 		default:
 			return -E_INVAL;
 	}

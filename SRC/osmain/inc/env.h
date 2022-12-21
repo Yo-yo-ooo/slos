@@ -13,6 +13,7 @@ extern "C" {
 
 typedef int32_t envid_t;
 
+#define MAXPATH 200
 // An environment ID 'envid_t' has three parts:
 //
 // +1+---------------21-----------------+--------10--------+
@@ -71,6 +72,7 @@ struct Env {
 	uint32_t env_ipc_value;		// Data value sent to us
 	envid_t env_ipc_from;		// envid of the sender
 	int env_ipc_perm;		// Perm of page mapping received
+	char workpath[MAXPATH];
 };
 
 #ifdef __cplusplus

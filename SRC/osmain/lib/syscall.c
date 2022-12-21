@@ -134,3 +134,12 @@ sys_pkt_recv(void *addr, size_t *len)
 {
 	return syscall(SYS_pkt_recv, 1, (uint32_t)addr, (uint32_t)len, 0, 0, 0);
 }
+int 
+sys_gettime(struct tm *tm)
+{
+	return syscall(SYS_gettime, 1, (uint32_t)tm,0,0,0,0);
+}
+int sys_env_set_workpath(envid_t envid, const char *path)
+{
+	return syscall(SYS_env_set_workpath, 0, (uint32_t)envid, (uint32_t)path, 0, 0, 0);
+}
