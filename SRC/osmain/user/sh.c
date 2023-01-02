@@ -59,7 +59,7 @@ void umain(int argc, char **argv)
         printf("\n");
         sys_gettime(&time);
         getcwd(path, MAXPATH);
-        printf("# msh in %s ",path);
+        printf("# system shell in %s ",path);
         printf("[%t]\n",&time);
         buf = readline("$ ");
         if (buf == NULL)
