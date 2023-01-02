@@ -35,6 +35,11 @@ div_t div(int num, int denom);
 ldiv_t ldiv(long num, long denom);
 char *ftoa(double number,int ndigit,char *buf);
 char *ultoa(unsigned long value, char *string, int radix);
+unsigned __builtin_popcount(unsigned u);
+int __builtin_ctzl(unsigned long x);
+int __builtin_popcountl(unsigned long x);
+int __builtin_parityl(unsigned long x);
+
 
 #ifdef __cplusplus
 }
