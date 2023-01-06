@@ -22,17 +22,22 @@
 int32_t
 ipc_recv(envid_t *from_env_store, void *pg, int *perm_store)
 {
-	// LAB 4: Your code here.
-	if (!pg) pg = (void *)-1;
-	int state = sys_ipc_recv(pg);
-	if (state < 0) {
-		if (from_env_store) *from_env_store = 0;
-		if (perm_store) *perm_store = 0;
-		return state;
+	int ret;
+	// if pg = NULL then set pg to UTOP and try_sent won't send a page
+	if (pg == NULL)
+		pg = (void *)UTOP;
+	if ((ret = sys_ipc_recv(pg)) != 0)
+	{
+		if (from_env_store)
+			*from_env_store = 0;
+		if (perm_store)
+			*perm_store = 0;
+		return ret;
 	}
-
-	if (from_env_store) *from_env_store = thisenv->env_ipc_from;
-	if (perm_store) *perm_store = thisenv->env_ipc_perm;
+	if (perm_store)
+		*perm_store = thisenv->env_ipc_perm;
+	if (from_env_store)
+		*from_env_store = thisenv->env_ipc_from;
 	return thisenv->env_ipc_value;
 }
 
@@ -44,23 +49,17 @@ ipc_recv(envid_t *from_env_store, void *pg, int *perm_store)
 //   Use sys_yield() to be CPU-friendly.
 //   If 'pg' is null, pass sys_ipc_try_send a value that it will understand
 //   as meaning "no page".  (Zero is not the right value.)
-void
-ipc_send(envid_t to_env, uint32_t val, void *pg, int perm)
+void ipc_send(envid_t to_env, uint32_t val, void *pg, int perm)
 {
-	// LAB 4: Your code here.
-	if (!pg) {
-		pg = (void *)-1;
-		perm = 0;
-	}
-
-	int state;
-	while (1) {
-		state = sys_ipc_try_send(to_env, val, pg, perm);
-		if (state == 0) return;
-		if (state != -E_IPC_NOT_RECV) {
-			panic("ipc_send: %e", state);
-		}
-
+	int ret;
+	//   If 'pg' is null, pass sys_ipc_try_send a value that it will understand
+	//   as meaning "no page".
+	if (pg == NULL)
+		pg = (void *)UTOP;
+	while ((ret = sys_ipc_try_send(to_env, val, pg, perm)) != 0)
+	{
+		if (ret != -E_IPC_NOT_RECV)
+			panic("sys_ipc_try_send fail: %e", ret);
 		sys_yield();
 	}
 }

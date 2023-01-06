@@ -45,6 +45,13 @@
         "memlayout.h": "c",
         "env.h": "c",
         "error.h": "c",
-        "kclock.h": "c"
+        "kclock.h": "c",
+        "spinlock.h": "c",
+        "picirq.h": "c",
+        "sched.h": "c",
+        "interface.h": "c",
+        "bitmap.h": "c",
+        "console.h": "c",
+        "canvas.h": "c"
     }
 }

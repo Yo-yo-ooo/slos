@@ -3,10 +3,6 @@
 #ifndef JOS_INC_ERROR_H
 #define JOS_INC_ERROR_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 enum {
 	// Kernel error codes -- keep in sync with list in lib/printfmt.c.
 	E_UNSPECIFIED	= 1,	// Unspecified or unknown problem
@@ -32,9 +28,5 @@ enum {
 
 	MAXERROR
 };
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif	// !JOS_INC_ERROR_H */

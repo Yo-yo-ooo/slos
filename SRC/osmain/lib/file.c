@@ -3,11 +3,8 @@
 #include <inc/lib.h>
 
 #define debug 0
-#define PERMS 0666
 
 union Fsipc fsipcbuf __attribute__((aligned(PGSIZE)));
-
-
 
 // Send an inter-environment request to the file server, and wait for
 // a reply.  The request body should be in fsipcbuf, and parts of the
@@ -38,15 +35,14 @@ static int devfile_stat(struct Fd *fd, struct Stat *stat);
 static int devfile_trunc(struct Fd *fd, off_t newsize);
 
 struct Dev devfile =
-{
-	.dev_id =	'f',
-	.dev_name =	"file",
-	.dev_read =	devfile_read,
-	.dev_close =	devfile_flush,
-	.dev_stat =	devfile_stat,
-	.dev_write =	devfile_write,
-	.dev_trunc =	devfile_trunc
-};
+	{
+		.dev_id = 'f',
+		.dev_name = "file",
+		.dev_read = devfile_read,
+		.dev_close = devfile_flush,
+		.dev_stat = devfile_stat,
+		.dev_write = devfile_write,
+		.dev_trunc = devfile_trunc};
 
 // Open a file (or directory).
 //
@@ -54,8 +50,7 @@ struct Dev devfile =
 // 	The file descriptor index on success
 // 	-E_BAD_PATH if the path is too long (>= MAXPATHLEN)
 // 	< 0 for other errors.
-int
-open(const char *path, int mode)
+int open(const char *path, int mode)
 {
 	// Find an unused file descriptor page using fd_alloc.
 	// Then send a file-open request to the file server.
@@ -83,7 +78,8 @@ open(const char *path, int mode)
 	strcpy(fsipcbuf.open.req_path, path);
 	fsipcbuf.open.req_omode = mode;
 
-	if ((r = fsipc(FSREQ_OPEN, fd)) < 0) {
+	if ((r = fsipc(FSREQ_OPEN, fd)) < 0)
+	{
 		fd_close(fd, 0);
 		return r;
 	}
@@ -130,7 +126,6 @@ devfile_read(struct Fd *fd, void *buf, size_t n)
 	return r;
 }
 
-
 // Write at most 'n' bytes from 'buf' to 'fd' at the current seek position.
 //
 // Returns:
@@ -143,11 +138,16 @@ devfile_write(struct Fd *fd, const void *buf, size_t n)
 	// careful: fsipcbuf.write.req_buf is only so large, but
 	// remember that write is always allowed to write *fewer*
 	// bytes than requested.
-	// LAB 5: Your code here
+	int r;
+
 	fsipcbuf.write.req_fileid = fd->fd_file.id;
 	fsipcbuf.write.req_n = n;
 	memmove(fsipcbuf.write.req_buf, buf, n);
-	return fsipc(FSREQ_WRITE, NULL);
+	if ((r = fsipc(FSREQ_WRITE, NULL)))
+		return r;
+	assert(r <= n);
+	assert(r <= PGSIZE);
+	return r;
 }
 
 static int
@@ -173,122 +173,11 @@ devfile_trunc(struct Fd *fd, off_t newsize)
 	return fsipc(FSREQ_SET_SIZE, NULL);
 }
 
-
 // Synchronize disk with buffer cache
-int
-sync(void)
+int sync(void)
 {
 	// Ask the file server to update the disk
 	// by writing any dirty blocks in the buffer cache.
 
 	return fsipc(FSREQ_SYNC, NULL);
 }
-
-int _fillbuf(FILE *fp){
-	int bufsize;
-
-	if((fp->flag&(_READ|_EOF|_ERR)) != _READ)
-	   return EOF;
-	bufsize = (fp->flag & _UNBUF) ? 1 : BUFSIZ;
-	if(fp->base == NULL)
-		if((fp->base = (char *) malloc(bufsize)) == NULL)
-			return EOF;
-	
-	fp->ptr = fp->base;
-	fp->cnt = read(fp->fd, fp->ptr, bufsize);
-	if(--fp->cnt < 0){
-		if(fp->cnt == -1)
-			fp->flag |= _EOF;
-		else
-			fp->flag |= _ERR;
-		fp->cnt = 0;
-		return EOF;
-	}
-	return (unsigned char) *fp->ptr++;
-}
-
-int _flushbuf(int x, FILE *fp){
-	unsigned nc;
-	int bufsize;
-
-	if (fp < __iob || fp >= __iob + OPEN_MAX)
-	{
-		return EOF;
-	}if((fp->flag & (_WRITE | _ERR)) != _WRITE){
-		return EOF;
-	}
-	bufsize = (fp->flag & _UNBUF) ? 1 : BUFSIZ;
-	if(fp->base == NULL){
-		if((fp->base = (char *) malloc(bufsize)) == NULL){
-			fp->flag |= _ERR;
-			return EOF;
-		}
-	}else{
-		nc = fp->ptr - fp->base;
-		if(write(fp->fd, fp->base, nc) != nc){
-			fp->flag |= _ERR;
-			return EOF;
-		}
-	}
-	fp->ptr = fp->base;
-	*fp->ptr++ = (char) x;
-	fp->cnt = bufsize - 1;
-	return x;
-}
-
-int fflush(FILE *fp){
-	int rc;
-
-	if(fp < __iob || fp >= __iob + OPEN_MAX)
-		return EOF;
-	if(fp->flag & _WRITE)
-		rc = _flushbuf(0, fp);
-	fp->ptr = fp->base;
-	fp->cnt = (fp->flag & _UNBUF) ? 1 : BUFSIZ;
-
-	return rc;
-}
-
-FILE *fopen(char *name, char *mode){
-	int fd;
-	FILE *fp;
-
-	if(*mode != 'r' && *mode != 'w' && *mode != 'a')
-		return NULL;
-	for(fp = __iob; fp < __iob + OPEN_MAX; fp++)
-		if((fp->flag & (_READ | _WRITE)) == 0)
-			break;
-	if(fp >= __iob + OPEN_MAX)
-		return NULL;
-	
-	if(*mode == 'w'){
-		fd = creat(name, 3);
-	}else if(*mode == 'a'){
-		if((fd = open(name, (O_WRONLY|0))) == -1)
-			fd = creat(name, 3);
-		return EOF;
-	}else
-		fd = open(name, (O_RDONLY | 0));
-	if(fd == -1)
-		return NULL;
-	fp->fd = fd;
-	fp->cnt = 0;
-	fp->base = NULL;
-	fp->flag = (*mode == 'r') ? _READ : _WRITE;
-	return fp;
-}
-
-int fclose(FILE *fp){
-	int rc;
-
-	if((rc = fflush(fp)) != EOF){
-		free(fp->base);
-		fp->ptr = NULL;
-		fp->cnt = 0;
-		fp->base = NULL;
-		fp->flag &= ~(_READ | _WRITE);
-	}
-
-	return rc;
-}
-

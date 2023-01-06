@@ -4,7 +4,7 @@
 /*
  * Panic is called on unresolvable fatal errors.
  * It prints "panic: <message>", then causes a breakpoint exception,
- * which causes OS to enter the OS kernel monitor.
+ * which causes JOS to enter the JOS kernel monitor.
  */
 void
 _panic(const char *file, int line, const char *fmt, ...)

@@ -1,10 +1,6 @@
 #ifndef JOS_INC_TRAP_H
 #define JOS_INC_TRAP_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 // Trap numbers
 // These are processor defined:
 #define T_DIVIDE     0		// divide error
@@ -27,6 +23,8 @@ extern "C" {
 #define T_ALIGN     17		// aligment check
 #define T_MCHK      18		// machine check
 #define T_SIMDERR   19		// SIMD floating point error
+#define PRWIPI		20		// IPI report for PRWLock
+#define DEBUGPRW	21		// Debug PRWLock
 
 // These are arbitrarily chosen, but with care not to overlap
 // processor defined exceptions or interrupt vectors.
@@ -91,9 +89,5 @@ struct UTrapframe {
 } __attribute__((packed));
 
 #endif /* !__ASSEMBLER__ */
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* !JOS_INC_TRAP_H */

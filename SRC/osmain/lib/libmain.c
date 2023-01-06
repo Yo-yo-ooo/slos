@@ -3,6 +3,9 @@
 
 #include <inc/lib.h>
 
+#define SCRNX 1024
+#define SCRNY 768
+
 extern void umain(int argc, char **argv);
 
 const volatile struct Env *thisenv;
@@ -12,12 +15,19 @@ void
 libmain(int argc, char **argv)
 {
 	// set thisenv to point at our Env structure in envs[].
-	// LAB 3: Your code here.
-    thisenv = envs + ENVX(sys_getenvid());      //获取Env结构指针
+	thisenv = &envs[ENVX(sys_getenvid())];
 
 	// save the name of the program so that panic() can use it
 	if (argc > 0)
 		binaryname = argv[0];
+	
+	// Could be pass with frambuffer from kernel
+	graph.scrnx = SCRNX;
+	graph.scrny = SCRNY;
+	// graph.framebuffer = (uint8_t *)FRAMEBUF;
+	frame = (struct frame_info *)FRAMEBUF;
+	graph.framebuffer = (uint8_t *)&(frame->framebuffer);
+	framebuffer = (uint8_t *)&(frame->framebuffer);
 
 	// call user main routine
 	umain(argc, argv);

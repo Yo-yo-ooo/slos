@@ -1,22 +1,19 @@
 #include <inc/mmu.h>
 
-#entry
+#define GUI_MODE
 
 # Start the CPU: switch to 32-bit protected mode, jump into C.
 # The BIOS loads this code from the first sector of the hard disk into
 # memory at physical address 0x7c00 and starts executing in real mode
 # with %cs=0 %ip=7c00.
 
-#define CYLS			0x0ff0			
-#define LEDS			0x0ff1
-#define VMODE			0x0ff2			
-#define SCRNX			0x0ff4			
-#define SCRNY			0x0ff6			
-#define VRAM			0x0ff8	
-
 .set PROT_MODE_CSEG, 0x8         # kernel code segment selector
 .set PROT_MODE_DSEG, 0x10        # kernel data segment selector
 .set CR0_PE_ON,      0x1         # protected mode enable flag
+
+.set info_scrnx,      0x0ff0    # 分辨率X
+.set info_scrny,      0x0ff2    # 分辨率Y
+.set info_vram,       0x0ff4    # 图像缓冲区的起始地址
 
 .globl start
 start:
@@ -34,18 +31,6 @@ start:
   #   For backwards compatibility with the earliest PCs, physical
   #   address line 20 is tied low, so that addresses higher than
   #   1MB wrap around to zero by default.  This code undoes this.
-  # using dt int 0x10
-/*
-  movb $0x13,%al
-  movb $0x00,%ah
-  int $0x10
-  # save color mode
-  movb $10,(CYLS)
-  movb $8,(VMODE)
-  movw $320,(SCRNX)
-  movw $200,(SCRNY)
-  movl $0x000a0000,(VRAM)
-*/
 seta20.1:
   inb     $0x64,%al               # Wait for not busy
   testb   $0x2,%al
@@ -60,20 +45,47 @@ seta20.2:
   jnz     seta20.2
 
   movb    $0xdf,%al               # 0xdf -> port 0x60
-  outb    %al,$0x60
+  outb    %al,$0x60               # 0xdf = 11011111
+
+#ifdef GUI_MODE
+  sti
+  call    getvideomode  
+  call    setvideomode  
+  cli
+#endif
 
   # Switch from real to protected mode, using a bootstrap GDT
   # and segment translation that makes virtual addresses 
   # identical to their physical addresses, so that the 
   # effective memory map does not change during the switch.
   lgdt    gdtdesc
-  movl    %cr0, %eax
+  movl    %cr0, %eax              # enable protected mode
   orl     $CR0_PE_ON, %eax
   movl    %eax, %cr0
   
   # Jump to next instruction, but in 32-bit code segment.
   # Switches processor into 32-bit mode.
   ljmp    $PROT_MODE_CSEG, $protcseg
+
+getvideomode:  
+        mov $0x4f01, %ax  # get mode         
+        mov $0x105,  %cx   # mode 0x105
+        mov $0x8000, %di  # mode info block address
+        int $0x10         # VBE int  
+        ret
+
+setvideomode:  
+        movw $0x4f02, %ax   # set mode 
+        movw $0x105,  %bx 
+        movw $0x8000, %di  
+        int $0x10           # VBE int
+        movl 40(%di), %eax  # get memory address  
+        movl %eax, info_vram
+        movw 18(%di), %ax   # get x resolution  
+        movw %ax, info_scrnx
+        movw 20(%di), %ax   # get y resolution  
+        movw %ax, info_scrny
+        ret
 
   .code32                     # Assemble for 32-bit mode
 protcseg:
@@ -96,11 +108,10 @@ spin:
 # Bootstrap GDT
 .p2align 2                                # force 4 byte alignment
 gdt:
-  SEG_NULL				# null seg
-  SEG(STA_X|STA_R, 0x0, 0xffffffff)	# code seg
+  SEG_NULL				                    # null seg
+  SEG(STA_X|STA_R, 0x0, 0xffffffff)	  # code seg
   SEG(STA_W, 0x0, 0xffffffff)	        # data seg
 
 gdtdesc:
   .word   0x17                            # sizeof(gdt) - 1
   .long   gdt                             # address gdt
-

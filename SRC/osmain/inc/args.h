@@ -1,10 +1,6 @@
 #ifndef JOS_INC_ARGS_H
 #define JOS_INC_ARGS_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 struct Argstate;
 
 // JOS command-line parsing functions.
@@ -82,9 +78,5 @@ struct Argstate {
 	const char *curarg;
 	const char *argvalue;
 };
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

@@ -3,18 +3,15 @@
 
 #include <inc/stdarg.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #ifndef NULL
 #define NULL	((void *) 0)
 #endif /* !NULL */
 
-// lib/console.c
+// lib/stdio.c
 void	cputchar(int c);
 int	getchar(void);
 int	iscons(int fd);
+int isscreen(int fd);
 
 // lib/printfmt.c
 void	printfmt(void (*putch)(int, void*), void *putdat, const char *fmt, ...);
@@ -30,17 +27,8 @@ int	vcprintf(const char *fmt, va_list);
 int	printf(const char *fmt, ...);
 int	fprintf(int fd, const char *fmt, ...);
 int	vfprintf(int fd, const char *fmt, va_list);
-int vprintf(const char *fmt, va_list args);
 
 // lib/readline.c
 char*	readline(const char *prompt);
-
-//lib/scanf.c
-void *scanf(const char *fmt, ...);
-void *sscanf(const char *s, const char *fmt, ...);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* !JOS_INC_STDIO_H */

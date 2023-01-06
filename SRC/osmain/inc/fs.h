@@ -6,10 +6,6 @@
 #include <inc/types.h>
 #include <inc/mmu.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 // File nodes (both in-memory and on-disk)
 
 // Bytes per file system block - same as page size
@@ -116,9 +112,5 @@ union Fsipc {
 	// Ensure Fsipc is one page
 	char _pad[PGSIZE];
 };
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* !JOS_INC_FS_H */

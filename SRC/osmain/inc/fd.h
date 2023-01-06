@@ -8,22 +8,13 @@
 #include <inc/types.h>
 #include <inc/fs.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-typedef	long long time_t;		/* <time> type */
-typedef time_t __time64_t;
-typedef unsigned short u_short;
-typedef u_short dev_t;
-typedef u_short ino_t;
-
 struct Fd;
 struct Stat;
 struct Dev;
 
 // Per-device-class file descriptor operations
-struct Dev {
+struct Dev
+{
 	int dev_id;
 	const char *dev_name;
 	ssize_t (*dev_read)(struct Fd *fd, void *buf, size_t len);
@@ -33,56 +24,40 @@ struct Dev {
 	int (*dev_trunc)(struct Fd *fd, off_t length);
 };
 
-struct FdFile {
+struct FdFile
+{
 	int id;
 };
 
-struct FdSock {
-	int sockid;
-};
-
-struct Fd {
+struct Fd
+{
 	int fd_dev_id;
 	off_t fd_offset;
 	int fd_omode;
 	union {
 		// File server files
 		struct FdFile fd_file;
-		// Network sockets
-		struct FdSock fd_sock;
 	};
 };
 
-struct Stat {
+struct Stat
+{
 	char st_name[MAXNAMELEN];
 	off_t st_size;
 	int st_isdir;
-	ino_t	st_ino;
-	unsigned short st_mode;
-	short	st_nlink;
-	short	st_uid;
-	short	st_gid;
-	dev_t	st_rdev;
-	time_t	st_atime;
-	time_t	st_mtime;
-	time_t	st_ctime;
 	struct Dev *st_dev;
 };
 
-char*	fd2data(struct Fd *fd);
-int	fd2num(struct Fd *fd);
-int	fd_alloc(struct Fd **fd_store);
-int	fd_close(struct Fd *fd, bool must_exist);
-int	fd_lookup(int fdnum, struct Fd **fd_store);
-int	dev_lookup(int devid, struct Dev **dev_store);
+char *fd2data(struct Fd *fd);
+int fd2num(struct Fd *fd);
+int fd_alloc(struct Fd **fd_store);
+int fd_close(struct Fd *fd, bool must_exist);
+int fd_lookup(int fdnum, struct Fd **fd_store);
+int dev_lookup(int devid, struct Dev **dev_store);
 
 extern struct Dev devfile;
-extern struct Dev devsock;
 extern struct Dev devcons;
 extern struct Dev devpipe;
+extern struct Dev devscreen;
 
-#ifdef __cplusplus
-}
-#endif
-
-#endif	// not JOS_INC_FD_H
+#endif // not JOS_INC_FD_H

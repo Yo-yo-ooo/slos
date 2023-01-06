@@ -1,10 +1,6 @@
 #ifndef JOS_INC_TYPES_H
 #define JOS_INC_TYPES_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #ifndef NULL
 #define NULL ((void*) 0)
 #endif
@@ -75,9 +71,5 @@ typedef int32_t off_t;
 
 // Return the offset of 'member' relative to the beginning of a struct type
 #define offsetof(type, member)  ((size_t) (&((type*)0)->member))
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* !JOS_INC_TYPES_H */

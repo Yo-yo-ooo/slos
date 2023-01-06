@@ -30,26 +30,25 @@ KERN_SRCFILES :=	kern/entry.S \
 			kern/kdebug.c \
 			lib/printfmt.c \
 			lib/readline.c \
-			lib/string.c
+			lib/string.c \
+			lib/canvas.c
 
-# Source files for LAB4
 KERN_SRCFILES +=	kern/mpentry.S \
 			kern/mpconfig.c \
 			kern/lapic.c \
-			kern/spinlock.c
-
-# Source files for LAB6
-KERN_SRCFILES +=	kern/e100.c \
-			kern/e1000.c \
-			kern/time.c \
-			kern/pci.c \
+			kern/spinlock.c	\
+			kern/rwlock.c	\
+			kern/prwlock.c	\
+			kern/graph.c	\
+			kern/time.c
 
 # Only build files if they exist.
 KERN_SRCFILES := $(wildcard $(KERN_SRCFILES))
 
 # Binary program images to embed within the kernel.
 # Binary files for LAB3
-KERN_BINFILES :=	user/hello \
+
+# KERN_BINFILES :=	user/hello \
 			user/buggyhello \
 			user/buggyhello2 \
 			user/evilhello \
@@ -61,11 +60,11 @@ KERN_BINFILES :=	user/hello \
 			user/faultread \
 			user/faultreadkernel \
 			user/faultwrite \
-			user/time \
 			user/faultwritekernel
 
+
 # Binary files for LAB4
-KERN_BINFILES +=	user/idle \
+#KERN_BINFILES +=	user/idle \
 			user/yield \
 			user/dumbfork \
 			user/stresssched \
@@ -83,32 +82,30 @@ KERN_BINFILES +=	user/idle \
 			user/pingpong \
 			user/pingpongs \
 			user/primes
-# Binary files for LAB5
-KERN_BINFILES +=	user/faultio\
-	      		user/spawnfaultio\
-	      		user/testfile \
-			user/spawnhello \
-			user/icode \
-			fs/fs
-
-# Binary files for LAB6
-KERN_BINFILES +=	user/testtime \
-			user/httpd \
-			user/echosrv \
-			user/echotest \
-			net/testoutput \
-			net/testinput \
-			net/ns
 
 # Binary files for LAB5
-KERN_BINFILES +=	user/testpteshare \
-			user/testfdsharing \
-			user/testpipe \
-			user/testpiperace \
-			user/testpiperace2 \
-			user/primespipe \
-			user/testkbd \
-			user/testshell
+# KERN_BINFILES +=	user/faultio\
+	      			user/spawnfaultio\
+	      			user/testfile \
+					user/spawnhello \
+					user/icode \
+					fs/fs
+
+# Binary files for LAB5
+# KERN_BINFILES +=	user/testpteshare \
+					user/testfdsharing \
+					user/testpipe \
+					user/testpiperace \
+					user/testpiperace2 \
+					user/primespipe \
+					user/testkbd \
+					user/testshell	\
+					user/sh 
+
+# My Own Binary files
+KERN_BINFILES +=	user/msh		\
+					user/sh 		\
+					fs/fs
 
 KERN_OBJFILES := $(patsubst %.c, $(OBJDIR)/%.o, $(KERN_SRCFILES))
 KERN_OBJFILES := $(patsubst %.S, $(OBJDIR)/%.o, $(KERN_OBJFILES))

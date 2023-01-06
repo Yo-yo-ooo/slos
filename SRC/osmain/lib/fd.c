@@ -1,32 +1,30 @@
 #include <inc/lib.h>
 
-#define debug		0
+#define debug 0
 
 // Maximum number of file descriptors a program may hold open concurrently
-#define MAXFD		32
+#define MAXFD 32
 // Bottom of file descriptor area
-#define FDTABLE		0xD0000000
+#define FDTABLE 0xD0000000
 // Bottom of file data area.  We reserve one data page for each FD,
 // which devices can use if they choose.
-#define FILEDATA	(FDTABLE + MAXFD*PGSIZE)
+#define FILEDATA (FDTABLE + MAXFD * PGSIZE)
 
 // Return the 'struct Fd*' for file descriptor index i
-#define INDEX2FD(i)	((struct Fd*) (FDTABLE + (i)*PGSIZE))
+#define INDEX2FD(i) ((struct Fd *)(FDTABLE + (i)*PGSIZE))
 // Return the file data page for file descriptor index i
-#define INDEX2DATA(i)	((char*) (FILEDATA + (i)*PGSIZE))
+#define INDEX2DATA(i) ((char *)(FILEDATA + (i)*PGSIZE))
 
-#define PERMS 0666
 // --------------------------------------------------------------
 // File descriptor manipulators
 // --------------------------------------------------------------
 
-int
-fd2num(struct Fd *fd)
+int fd2num(struct Fd *fd)
 {
-	return ((uintptr_t) fd - FDTABLE) / PGSIZE;
+	return ((uintptr_t)fd - FDTABLE) / PGSIZE;
 }
 
-char*
+char *
 fd2data(struct Fd *fd)
 {
 	return INDEX2DATA(fd2num(fd));
@@ -47,15 +45,16 @@ fd2data(struct Fd *fd)
 // Returns 0 on success, < 0 on error.  Errors are:
 //	-E_MAX_FD: no more file descriptors
 // On error, *fd_store is set to 0.
-int
-fd_alloc(struct Fd **fd_store)
+int fd_alloc(struct Fd **fd_store)
 {
 	int i;
 	struct Fd *fd;
 
-	for (i = 0; i < MAXFD; i++) {
+	for (i = 0; i < MAXFD; i++)
+	{
 		fd = INDEX2FD(i);
-		if ((uvpd[PDX(fd)] & PTE_P) == 0 || (uvpt[PGNUM(fd)] & PTE_P) == 0) {
+		if ((uvpd[PDX(fd)] & PTE_P) == 0 || (uvpt[PGNUM(fd)] & PTE_P) == 0)
+		{
 			*fd_store = fd;
 			return 0;
 		}
@@ -70,18 +69,19 @@ fd_alloc(struct Fd **fd_store)
 // Returns 0 on success (the page is in range and mapped), < 0 on error.
 // Errors are:
 //	-E_INVAL: fdnum was either not in range or not mapped.
-int
-fd_lookup(int fdnum, struct Fd **fd_store)
+int fd_lookup(int fdnum, struct Fd **fd_store)
 {
 	struct Fd *fd;
 
-	if (fdnum < 0 || fdnum >= MAXFD) {
+	if (fdnum < 0 || fdnum >= MAXFD)
+	{
 		if (debug)
 			cprintf("[%08x] bad fd %d\n", thisenv->env_id, fdnum);
 		return -E_INVAL;
 	}
 	fd = INDEX2FD(fdnum);
-	if (!(uvpd[PDX(fd)] & PTE_P) || !(uvpt[PGNUM(fd)] & PTE_P)) {
+	if (!(uvpd[PDX(fd)] & PTE_P) || !(uvpt[PGNUM(fd)] & PTE_P))
+	{
 		if (debug)
 			cprintf("[%08x] closed fd %d\n", thisenv->env_id, fdnum);
 		return -E_INVAL;
@@ -97,16 +97,15 @@ fd_lookup(int fdnum, struct Fd **fd_store)
 // If 'must_exist' is 1, then fd_close returns -E_INVAL when passed a
 // closed or nonexistent file descriptor.
 // Returns 0 on success, < 0 on error.
-int
-fd_close(struct Fd *fd, bool must_exist)
+int fd_close(struct Fd *fd, bool must_exist)
 {
 	struct Fd *fd2;
 	struct Dev *dev;
 	int r;
-	if ((r = fd_lookup(fd2num(fd), &fd2)) < 0
-	    || fd != fd2)
+	if ((r = fd_lookup(fd2num(fd), &fd2)) < 0 || fd != fd2)
 		return (must_exist ? r : 0);
-	if ((r = dev_lookup(fd->fd_dev_id, &dev)) >= 0) {
+	if ((r = dev_lookup(fd->fd_dev_id, &dev)) >= 0)
+	{
 		if (dev->dev_close)
 			r = (*dev->dev_close)(fd);
 		else
@@ -114,30 +113,28 @@ fd_close(struct Fd *fd, bool must_exist)
 	}
 	// Make sure fd is unmapped.  Might be a no-op if
 	// (*dev->dev_close)(fd) already unmapped it.
-	(void) sys_page_unmap(0, fd);
+	(void)sys_page_unmap(0, fd);
 	return r;
 }
-
 
 // --------------------------------------------------------------
 // File functions
 // --------------------------------------------------------------
 
 static struct Dev *devtab[] =
-{
-	&devfile,
-	&devsock,
-	&devpipe,
-	&devcons,
-	0
-};
+	{
+		&devfile,
+		&devpipe,
+		&devcons,
+		&devscreen,
+		0};
 
-int
-dev_lookup(int dev_id, struct Dev **dev)
+int dev_lookup(int dev_id, struct Dev **dev)
 {
 	int i;
 	for (i = 0; devtab[i]; i++)
-		if (devtab[i]->dev_id == dev_id) {
+		if (devtab[i]->dev_id == dev_id)
+		{
 			*dev = devtab[i];
 			return 0;
 		}
@@ -146,8 +143,7 @@ dev_lookup(int dev_id, struct Dev **dev)
 	return -E_INVAL;
 }
 
-int
-close(int fdnum)
+int close(int fdnum)
 {
 	struct Fd *fd;
 	int r;
@@ -158,8 +154,7 @@ close(int fdnum)
 		return fd_close(fd, 1);
 }
 
-void
-close_all(void)
+void close_all(void)
 {
 	int i;
 	for (i = 0; i < MAXFD; i++)
@@ -171,8 +166,7 @@ close_all(void)
 // file and the file offset of the other.
 // Closes any previously open file descriptor at 'newfdnum'.
 // This is implemented using virtual memory tricks (of course!).
-int
-dup(int oldfdnum, int newfdnum)
+int dup(int oldfdnum, int newfdnum)
 {
 	int r;
 	char *ova, *nva;
@@ -208,10 +202,10 @@ read(int fdnum, void *buf, size_t n)
 	struct Dev *dev;
 	struct Fd *fd;
 
-	if ((r = fd_lookup(fdnum, &fd)) < 0
-	    || (r = dev_lookup(fd->fd_dev_id, &dev)) < 0)
+	if ((r = fd_lookup(fdnum, &fd)) < 0 || (r = dev_lookup(fd->fd_dev_id, &dev)) < 0)
 		return r;
-	if ((fd->fd_omode & O_ACCMODE) == O_WRONLY) {
+	if ((fd->fd_omode & O_ACCMODE) == O_WRONLY)
+	{
 		cprintf("[%08x] read %d -- bad mode\n", thisenv->env_id, fdnum);
 		return -E_INVAL;
 	}
@@ -225,8 +219,9 @@ readn(int fdnum, void *buf, size_t n)
 {
 	int m, tot;
 
-	for (tot = 0; tot < n; tot += m) {
-		m = read(fdnum, (char*)buf + tot, n - tot);
+	for (tot = 0; tot < n; tot += m)
+	{
+		m = read(fdnum, (char *)buf + tot, n - tot);
 		if (m < 0)
 			return m;
 		if (m == 0)
@@ -242,23 +237,22 @@ write(int fdnum, const void *buf, size_t n)
 	struct Dev *dev;
 	struct Fd *fd;
 
-	if ((r = fd_lookup(fdnum, &fd)) < 0
-	    || (r = dev_lookup(fd->fd_dev_id, &dev)) < 0)
+	if ((r = fd_lookup(fdnum, &fd)) < 0 || (r = dev_lookup(fd->fd_dev_id, &dev)) < 0)
 		return r;
-	if ((fd->fd_omode & O_ACCMODE) == O_RDONLY) {
+	if ((fd->fd_omode & O_ACCMODE) == O_RDONLY)
+	{
 		cprintf("[%08x] write %d -- bad mode\n", thisenv->env_id, fdnum);
 		return -E_INVAL;
 	}
 	if (debug)
 		cprintf("write %d %p %d via dev %s\n",
-			fdnum, buf, n, dev->dev_name);
+				fdnum, buf, n, dev->dev_name);
 	if (!dev->dev_write)
 		return -E_NOT_SUPP;
 	return (*dev->dev_write)(fd, buf, n);
 }
 
-int
-seek(int fdnum, off_t offset)
+int seek(int fdnum, off_t offset)
 {
 	int r;
 	struct Fd *fd;
@@ -269,61 +263,17 @@ seek(int fdnum, off_t offset)
 	return 0;
 }
 
-#define DEV_SIZE    (4)
-
-long lseek(int fd,long off,int whence){
-    long NewPos = 0;
-    int offset = (int)off;
-    switch(whence){
-        case SEEK_SET:    //SEEK_SET代表以文件头为偏移起始值
-            NewPos = (long)offset;
-        	break;
-        case SEEK_CUR:    //SEEK_CUP代表以当前位置为偏移起始值
-            NewPos = (long)fd + (long)offset;
-        	break;
-        case SEEK_END:    //SEEK_END代表以文件结尾为偏移起始值
-            NewPos = DEV_SIZE + (long)offset;
-        	break;
-        default:
-            return -1;
-    }
-    if(NewPos < 0)
-        return -1;
-    fd = NewPos;
-    return NewPos;
-}
-
-int fseek(FILE *fp,long offset, int origin){
-    unsigned nc;
-    long rc = 0;
-
-    if(fp->flag & _READ){
-        if(origin == 1)
-            offset -= fp->cnt;
-        rc = lseek(fp->fd, offset, origin);
-        fp->cnt = 0;
-    }else if (fp->flag & _WRITE){
-        if((nc = fp->ptr - fp->base) > 0)
-            if(write(fp->fd,fp->base,nc) != nc)
-                rc = -1;
-        if(rc != -1)
-            rc = lseek(fp->fd, offset,origin);
-    }
-    return (rc == -1) ? -1 : 0;
-}
-
-int
-ftruncate(int fdnum, off_t newsize)
+int ftruncate(int fdnum, off_t newsize)
 {
 	int r;
 	struct Dev *dev;
 	struct Fd *fd;
-	if ((r = fd_lookup(fdnum, &fd)) < 0
-	    || (r = dev_lookup(fd->fd_dev_id, &dev)) < 0)
+	if ((r = fd_lookup(fdnum, &fd)) < 0 || (r = dev_lookup(fd->fd_dev_id, &dev)) < 0)
 		return r;
-	if ((fd->fd_omode & O_ACCMODE) == O_RDONLY) {
+	if ((fd->fd_omode & O_ACCMODE) == O_RDONLY)
+	{
 		cprintf("[%08x] ftruncate %d -- bad mode\n",
-			thisenv->env_id, fdnum);
+				thisenv->env_id, fdnum);
 		return -E_INVAL;
 	}
 	if (!dev->dev_trunc)
@@ -331,15 +281,13 @@ ftruncate(int fdnum, off_t newsize)
 	return (*dev->dev_trunc)(fd, newsize);
 }
 
-int
-fstat(int fdnum, struct Stat *stat)
+int fstat(int fdnum, struct Stat *stat)
 {
 	int r;
 	struct Dev *dev;
 	struct Fd *fd;
 
-	if ((r = fd_lookup(fdnum, &fd)) < 0
-	    || (r = dev_lookup(fd->fd_dev_id, &dev)) < 0)
+	if ((r = fd_lookup(fdnum, &fd)) < 0 || (r = dev_lookup(fd->fd_dev_id, &dev)) < 0)
 		return r;
 	if (!dev->dev_stat)
 		return -E_NOT_SUPP;
@@ -350,29 +298,12 @@ fstat(int fdnum, struct Stat *stat)
 	return (*dev->dev_stat)(fd, stat);
 }
 
-int
-stat(const char *path, struct Stat *stat)
+int stat(const char *path, struct Stat *stat)
 {
 	int fd, r;
-
 	if ((fd = open(path, O_RDONLY)) < 0)
 		return fd;
 	r = fstat(fd, stat);
 	close(fd);
 	return r;
-}
-
-int creat(const char *file,int auth){
-	if(auth == 0x0003||auth == PERMS){
-		open(file, (O_CREAT|O_WRONLY|O_TRUNC));   
-	}else if(auth == 0x0002){
-		open(file,O_TRUNC);
-	}else if(auth == 0x0001){
-		open(file,O_WRONLY);
-	}else if (auth == 0x0000){
-		open(file,O_RDONLY);
-	}else{
-		return -1;
-	}
-	
 }

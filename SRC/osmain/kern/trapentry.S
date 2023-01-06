@@ -21,85 +21,118 @@
  *   void NAME();
  * where NAME is the argument passed to TRAPHANDLER.
  */
-#define TRAPHANDLER(name, num)						\
+#define TRAPHANDLER(name, num)									\
+	.text;														\
 	.globl name;		/* define global symbol for 'name' */	\
 	.type name, @function;	/* symbol type is function */		\
-	.align 2;		/* align function definition */		\
-	name:			/* function starts here */		\
-	pushl $(num);							\
-	jmp _alltraps
+	.align 2;		/* align function definition */				\
+	name:			/* function starts here */					\
+	pushl $(num);												\
+	jmp _alltraps;												\
+	.data;														\
+	.long name;
 
 /* Use TRAPHANDLER_NOEC for traps where the CPU doesn't push an error code.
  * It pushes a 0 in place of the error code, so the trap frame has the same
  * format in either case.
  */
-#define TRAPHANDLER_NOEC(name, num)					\
-	.globl name;							\
-	.type name, @function;						\
-	.align 2;							\
-	name:								\
-	pushl $0;							\
-	pushl $(num);							\
-	jmp _alltraps
+#define TRAPHANDLER_NOEC(name, num)								\
+	.text;														\
+	.globl name;												\
+	.type name, @function;										\
+	.align 2;													\
+	name:														\
+	pushl $0;													\
+	pushl $(num);												\
+	jmp _alltraps;												\
+	.data;														\
+	.long name;
 
-.text
+#define SYSCALLHANDLER(name, num)								\
+	.text;														\
+	.globl name;													\
+	.type name, @function;										\
+	.align 2;													\
+	name:														\
+	pushl $(num);												\
+	jmp _alltraps;												\
+	.data;														\
+	.long name;
 
+
+.data
+.globl traphandlers
+traphandlers:
 /*
  * Lab 3: Your code here for generating entry points for the different traps.
  */
-TRAPHANDLER_NOEC(divide_error_handler, T_DIVIDE)
-TRAPHANDLER_NOEC(debug_exception_handler, T_DEBUG)
-TRAPHANDLER_NOEC(non_maskable_interrupt_handler, T_NMI)
-TRAPHANDLER_NOEC(breakpoint_handler, T_BRKPT)
-TRAPHANDLER_NOEC(overflow_handler, T_OFLOW)
-TRAPHANDLER_NOEC(bounds_check_handler, T_BOUND)
-TRAPHANDLER_NOEC(invalid_opcode_handler, T_ILLOP)
-TRAPHANDLER_NOEC(device_not_available_handler, T_DEVICE)
-TRAPHANDLER(double_fault_handler, T_DBLFLT)
-TRAPHANDLER(invalid_tss_handler, T_TSS)
-TRAPHANDLER(segment_not_present_handler, T_SEGNP)
-TRAPHANDLER(stack_exception_handler, T_STACK)
-TRAPHANDLER(general_protection_fault_handler, T_GPFLT)
-TRAPHANDLER(pagefault_handler, T_PGFLT)
-TRAPHANDLER_NOEC(floating_point_error_handler, T_FPERR)
-TRAPHANDLER(alignment_check_handler, T_ALIGN)
-TRAPHANDLER_NOEC(machine_check_handler, T_MCHK)
-TRAPHANDLER_NOEC(simd_floating_point_error_handler, T_SIMDERR)
-TRAPHANDLER_NOEC(system_call, T_SYSCALL)
+TRAPHANDLER_NOEC(traphandler0, 0)
+TRAPHANDLER_NOEC(traphandler1, 1)
+TRAPHANDLER_NOEC(traphandler2, 2)
+TRAPHANDLER_NOEC(traphandler3, 3)
+TRAPHANDLER_NOEC(traphandler4, 4)
+TRAPHANDLER_NOEC(traphandler5, 5)
+TRAPHANDLER_NOEC(traphandler6, 6)
+TRAPHANDLER_NOEC(traphandler7, 7)
+TRAPHANDLER(traphandler8, 8)
+TRAPHANDLER(traphandler9, 9)
+TRAPHANDLER(traphandler10, 10)
+TRAPHANDLER(traphandler11, 11)
+TRAPHANDLER(traphandler12, 12)
+TRAPHANDLER(traphandler13, 13)
+TRAPHANDLER(traphandler14, 14)
+TRAPHANDLER(traphandler15, 15)
+TRAPHANDLER_NOEC(traphandler16, 16)
+TRAPHANDLER_NOEC(traphandler17, 17)
+TRAPHANDLER_NOEC(traphandler18, 18)
+TRAPHANDLER_NOEC(traphandler19, 19)
+TRAPHANDLER_NOEC(traphandler20, 20)
+TRAPHANDLER_NOEC(traphandler21, 21)
+TRAPHANDLER_NOEC(traphandler22, 22)
+TRAPHANDLER_NOEC(traphandler23, 23)
+TRAPHANDLER_NOEC(traphandler24, 24)
+TRAPHANDLER_NOEC(traphandler25, 25)
+TRAPHANDLER_NOEC(traphandler26, 26)
+TRAPHANDLER_NOEC(traphandler27, 27)
+TRAPHANDLER_NOEC(traphandler28, 28)
+TRAPHANDLER_NOEC(traphandler29, 29)
+TRAPHANDLER_NOEC(traphandler30, 30)
+TRAPHANDLER_NOEC(traphandler31, 31)
+TRAPHANDLER_NOEC(traphandler32, 32)
+TRAPHANDLER_NOEC(traphandler33, 33)
+TRAPHANDLER_NOEC(traphandler34, 34)
+TRAPHANDLER_NOEC(traphandler35, 35)
+TRAPHANDLER_NOEC(traphandler36, 36)
+TRAPHANDLER_NOEC(traphandler37, 37)
+TRAPHANDLER_NOEC(traphandler38, 38)
+TRAPHANDLER_NOEC(traphandler39, 39)
+TRAPHANDLER_NOEC(traphandler40, 40)
+TRAPHANDLER_NOEC(traphandler41, 41)
+TRAPHANDLER_NOEC(traphandler42, 42)
+TRAPHANDLER_NOEC(traphandler43, 43)
+TRAPHANDLER_NOEC(traphandler44, 44)
+TRAPHANDLER_NOEC(traphandler45, 45)
+TRAPHANDLER_NOEC(traphandler46, 46)
+TRAPHANDLER_NOEC(traphandler47, 47)
+TRAPHANDLER_NOEC(traphandler48, 48)
 
-TRAPHANDLER_NOEC(irq_0_handler,  IRQ_OFFSET + 0);
-TRAPHANDLER_NOEC(irq_1_handler,  IRQ_OFFSET + 1);
-TRAPHANDLER_NOEC(irq_2_handler,  IRQ_OFFSET + 2);
-TRAPHANDLER_NOEC(irq_3_handler,  IRQ_OFFSET + 3);
-TRAPHANDLER_NOEC(irq_4_handler,  IRQ_OFFSET + 4);
-TRAPHANDLER_NOEC(irq_5_handler,  IRQ_OFFSET + 5);
-TRAPHANDLER_NOEC(irq_6_handler,  IRQ_OFFSET + 6);
-TRAPHANDLER_NOEC(irq_7_handler,  IRQ_OFFSET + 7);
-TRAPHANDLER_NOEC(irq_8_handler,  IRQ_OFFSET + 8);
-TRAPHANDLER_NOEC(irq_9_handler,  IRQ_OFFSET + 9);
-TRAPHANDLER_NOEC(irq_10_handler, IRQ_OFFSET + 10);
-TRAPHANDLER_NOEC(irq_11_handler, IRQ_OFFSET + 11);
-TRAPHANDLER_NOEC(irq_12_handler, IRQ_OFFSET + 12);
-TRAPHANDLER_NOEC(irq_13_handler, IRQ_OFFSET + 13);
-TRAPHANDLER_NOEC(irq_14_handler, IRQ_OFFSET + 14);
-TRAPHANDLER_NOEC(irq_15_handler, IRQ_OFFSET + 15);
 
 /*
- * Lab 3: Your code here for _alltraps
+ * _alltraps:
+ * push values to make the stack look like a struct Trapframe
+ * load GD_KD into %ds and %es
+ * pushl %esp to pass a pointer to the Trapframe as an argument to trap()
+ * call trap (can trap ever return?) nope
  */
 _alltraps:
-# push ds and es and general registers
-push %ds
-push %es
-pushal
-
-# load ds and es with GD_KD, for kernel stack locates in data
-mov $GD_KD, %ax
-mov %ax, %ds
-mov %ax, %es
-
-# pass tf as an argument
-pushl %esp
-
-# call trap and no need to return
-call trap
+	pushw $0
+  	pushw %ds
+  	pushw $0
+  	pushw %es
+	/* %eax->%ecx->%edx->%ebx->%esp->%ebp->%esi->%edi */
+  	pushal
+  	movw $GD_KD,%ax
+	movw %ax,%ds
+	movw %ax,%es
+  	pushl %esp
+  	call trap

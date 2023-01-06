@@ -1,9 +1,7 @@
 #ifndef JOS_INC_SYSCALL_H
 #define JOS_INC_SYSCALL_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include <inc/types.h>
 
 /* system call numbers */
 enum {
@@ -21,16 +19,13 @@ enum {
 	SYS_yield,
 	SYS_ipc_try_send,
 	SYS_ipc_recv,
-	SYS_time_msec,
-	SYS_pkt_send,
-	SYS_pkt_recv,
-	SYS_gettime,
+	SYS_getcwd,
 	SYS_env_set_workpath,
+	SYS_gettime,
+	SYS_updatescreen,
+	SYS_setpalette,
+	SYS_getinfo,
 	NSYSCALLS
 };
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* !JOS_INC_SYSCALL_H */

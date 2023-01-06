@@ -3,86 +3,13 @@
 #define BUFSIZ 1024 /* Find the buffer overrun bug! */
 int debug = 0;
 
+// gettoken(s, 0) prepares gettoken for subsequent calls and returns 0.
+// gettoken(0, token) parses a shell token from the previously set string,
+// null-terminates that token, stores the token pointer in '*token',
+// and returns a token ID (0, '<', '>', '|', or 'w').
+// Subsequent calls to 'gettoken(0, token)' will return subsequent
+// tokens from the string.
 int gettoken(char *s, char **token);
-int builtin_cmd(char *cmdline);
-void runcmd(char *s);
-void usage(void);
-int do_cd(char *cmdline);
-
-void umain(int argc, char **argv)
-{
-    int r, interactive, echocmds;
-    struct Argstate args;
-    struct tm time;
-    char path[MAXPATH];
-    char *buf;
-
-    echocmds = 0;
-    argstart(&argc, argv, &args);
-    while ((r = argnext(&args)) >= 0)
-        switch (r)
-        {
-        case 'd':
-            debug++;
-            break;
-        case 'x':
-            echocmds = 1;
-            break;
-        default:
-            usage();
-        }
-
-    if (argc > 2)
-        usage();
-    if (argc == 2)
-    {
-        close(0);
-        if ((r = open(argv[1], O_RDONLY)) < 0)
-            panic("open %s: %e", argv[1], r);
-        assert(r == 0);
-    }
-
-    // Spin for a bit to let the console quiet
-    for (int i = 0; i < 15; ++i)
-        sys_yield();
-
-    close(0);
-    if ((r = opencons()) < 0)
-        panic("opencons: %e", r);
-    if (r != 0)
-        panic("first opencons used fd %d", r);
-    if ((r = dup(0, 1)) < 0)
-        panic("dup: %e", r);
-
-    while (1)
-    {
-        printf("\n");
-        sys_gettime(&time);
-        getcwd(path, MAXPATH);
-        printf("# system shell in %s ",path);
-        printf("[%t]\n",&time);
-        buf = readline("$ ");
-        if (buf == NULL)
-            exit();
-        if (buf[0] == '#')
-            continue;
-        if (echocmds)
-            printf("# %s\n", buf);
-        if (builtin_cmd(buf))
-            continue;
-        if ((r = fork()) < 0)
-            panic("fork: %e", r);
-        if (debug)
-            cprintf("FORK: %d\n", r);
-        if (r == 0)
-        {
-            runcmd(buf);
-            exit();
-        }
-        else
-            wait(r);
-    }
-}
 
 // Parse a shell command from string 's' and execute it.
 // Do not return until the shell command is finished.
@@ -93,7 +20,6 @@ void runcmd(char *s)
 {
     char *argv[MAXARGS], *t, argv0buf[BUFSIZ];
     int argc, c, i, r, p[2], fd, pipe_child;
-    char *name;
 
     pipe_child = 0;
     gettoken(s, 0);
@@ -129,12 +55,9 @@ again:
             // If not, dup 'fd' onto file descriptor 0,
             // then close the original 'fd'.
 
-            if (t[0] != '/')
-                getcwd(argv0buf, MAXPATH);
-            strcat(argv0buf, t);
-            if ((fd = open(argv0buf, O_RDONLY)) < 0)
+            if ((fd = open(t, O_RDONLY)) < 0)
             {
-                cprintf("Error open %s fail: %e", argv0buf, fd);
+                cprintf("Error open %s fail: %e", t, fd);
                 exit();
             }
             if (fd != 0)
@@ -151,12 +74,9 @@ again:
                 cprintf("syntax error: > not followed by word\n");
                 exit();
             }
-            if (t[0] != '/')
-                getcwd(argv0buf, MAXPATH);
-            strcat(argv0buf, t);
-            if ((fd = open(argv0buf, O_WRONLY | O_CREAT | O_TRUNC)) < 0)
+            if ((fd = open(t, O_WRONLY | O_CREAT | O_TRUNC)) < 0)
             {
-                cprintf("open %s for write: %e", argv0buf, fd);
+                cprintf("open %s for write: %e", t, fd);
                 exit();
             }
             if (fd != 1)
@@ -222,16 +142,14 @@ runit:
         return;
     }
 
-    name = argv[0];
-
     // Clean up command line.
     // Read all commands from the filesystem: add an initial '/' to
     // the command name.
     // This essentially acts like 'PATH=/'.
     if (argv[0][0] != '/')
     {
-        getcwd(argv0buf, BUFSIZ);
-        strcat(argv0buf, argv[0]);
+        argv0buf[0] = '/';
+        strcpy(argv0buf + 1, argv[0]);
         argv[0] = argv0buf;
     }
     argv[argc] = 0;
@@ -248,9 +166,7 @@ runit:
     // Spawn the command!
     if ((r = spawn(argv[0], (const char **)argv)) < 0)
     {
-        snprintf(argv0buf, BUFSIZ, "/bin/%s", name);
-        if ((r = spawn(argv0buf, (const char **)argv)) < 0)
-            cprintf("spawn %s: %e\n", argv[0], r);
+        cprintf("spawn %s: %e\n", argv[0], r);
     }
 
     // In the parent, close all file descriptors and wait for the
@@ -343,12 +259,6 @@ int _gettoken(char *s, char **p1, char **p2)
     return 'w';
 }
 
-// gettoken(s, 0) prepares gettoken for subsequent calls and returns 0.
-// gettoken(0, token) parses a shell token from the previously set string,
-// null-terminates that token, stores the token pointer in '*token',
-// and returns a token ID (0, '<', '>', '|', or 'w').
-// Subsequent calls to 'gettoken(0, token)' will return subsequent
-// tokens from the string.
 int gettoken(char *s, char **p1)
 {
     static int c, nc;
@@ -371,40 +281,78 @@ void usage(void)
     exit();
 }
 
-int builtin_cmd(char *cmdline)
+void umain(int argc, char **argv)
 {
-    int ret;
-    int i;
-    char cmd[20];
-    for (i = 0; cmdline[i] != ' ' && cmdline[i] != '\0'; i++)
-        cmd[i] = cmdline[i];
-    cmd[i] = '\0';
-    if (!strcmp(cmd, "quit") || !strcmp(cmd, "exit"))
-        exit();
-    if (!strcmp(cmd, "cd"))
-    {
-        ret = do_cd(cmdline);
-        return 1;
-    }
-    return 0;
-}
+    int r, interactive, echocmds;
+    struct Argstate args;
+    char *buf;
 
-int do_cd(char *cmdline)
-{
-    char pathbuf[BUFSIZ];
-    int r;
-    pathbuf[0] = '\0';
-    cmdline += 2;
-    while (*cmdline == ' ')
-        cmdline++;
-    if (*cmdline == '\0')
-        return 0;
-    if (*cmdline != '/')
+    echocmds = 0;
+    argstart(&argc, argv, &args);
+    while ((r = argnext(&args)) >= 0)
+        switch (r)
+        {
+        case 'd':
+            debug++;
+            break;
+        case 'x':
+            echocmds = 1;
+            break;
+        default:
+            usage();
+        }
+
+    if (argc > 2)
+        usage();
+    if (argc == 2)
     {
-        getcwd(pathbuf, BUFSIZ);
+        close(0);
+        if ((r = open(argv[1], O_RDONLY)) < 0)
+            panic("open %s: %e", argv[1], r);
+        assert(r == 0);
     }
-    strcat(pathbuf, cmdline);
-    if ((r = chdir(pathbuf)) < 0)
-        printf("cd error : %e\n", r);
-    return 0;
+
+    // Spin for a bit to let the console quiet
+    for (int i = 0; i < 15; ++i)
+        sys_yield();
+
+    close(0);
+    if ((r = opencons()) < 0)
+        panic("opencons: %e", r);
+    if (r != 0)
+        panic("first opencons used fd %d", r);
+    if ((r = dup(0, 1)) < 0)
+        panic("dup: %e", r);
+
+    while (1)
+    {
+        buf = readline("$ ");
+        if (buf == NULL)
+        {
+            if (debug)
+                cprintf("EXITING\n");
+            exit(); // end of file
+        }
+        if (strcmp(buf, "exit") == 0)
+            exit();
+        if (debug)
+            cprintf("LINE: %s\n", buf);
+        if (buf[0] == '#')
+            continue;
+        if (echocmds)
+            printf("# %s\n", buf);
+        if (debug)
+            cprintf("BEFORE FORK\n");
+        if ((r = fork()) < 0)
+            panic("fork: %e", r);
+        if (debug)
+            cprintf("FORK: %d\n", r);
+        if (r == 0)
+        {
+            runcmd(buf);
+            exit();
+        }
+        else
+            wait(r);
+    }
 }
