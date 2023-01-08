@@ -9,6 +9,7 @@ void umain(int argc, char **argv)
     if (argc != 2)
     {
         bprintf("usage: touch filename\n");
+        PAUSE
         return;
     }
     filename = argv[1];
@@ -18,4 +19,5 @@ void umain(int argc, char **argv)
     if ((r = open(pathbuf, O_CREAT)) < 0)
         bprintf("%s error : %e\n", argv[0], r);
     close(r);
+    PAUSE
 }

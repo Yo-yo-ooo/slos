@@ -6,19 +6,18 @@ umain(int argc, char **argv)
 	struct tm time;
     struct sysinfo info;
 	sys_gettime(&time);
-    bprintf("____________________________________________\n");
-    bprintf("/\\                                           \\\n");
-    bprintf("\\_| He11o_Liu's MOS version 0.1              |\n");
-    bprintf("  | A HOEEMADE MicroOS based on MIT6.828 JOS |\n");
-    bprintf("  | Github: https://github.com/He11oLiu/MOS  |\n");
-    bprintf("  | Blog  : http://blog.csdn.net/he11o_liu   |\n");
-    bprintf("  | Blog  : http://www.cnblogs.com/he11o-liu |\n");
-    bprintf("  |   _______________________________________|_\n");
-    bprintf("   \\_/_________________________________________/\n");
-    bprintf("\n");
+    bprintf(" __ _          _ _            __           _                 \n");
+    bprintf("/ _\ | ___   _| (_)_ __   ___/ _\_   _ ___| |_ ___ _ __ ___  \n");
+    bprintf("\ \| |/ / | | | | | '_ \ / _ \ \| | | / __| __/ _ \ '_ ` _ \ \n");
+    bprintf("_\ \   <| |_| | | | | | |  __/\ \ |_| \__ \ ||  __/ | | | | |\n");
+    bprintf("\__/_|\_\ __, |_|_|_| |_|\___\__/\__, |___/\__\___|_| |_| |_|\n");
+    bprintf("         |___/                   |___/                       \n");
+    bprintf("System Version: %s\n", "0.75c");
+    bprintf("System Name: %s\n", SYS_NAME);
     bprintf("System time : [%t]\n",&time);
     sys_getinfo(&info);
     bprintf("CPU number  : %d CPUs online\n", info.ncpu);
     bprintf("Boot CPU    : %d CPU is boot CPU\n", info.bootcpu);
     bprintf("Memory size : Physical memory %uK\n", info.totalmem);
+    PAUSE
 }

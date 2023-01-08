@@ -34,7 +34,6 @@ void graph_init()
     cprintf("Before");
     init_framebuffer();
     init_palette();
-    draw_screen(0x03);
     cprintf("frame at %#x frambuffer at %#x\n", frame, framebuffer);
     update_screen();
 }

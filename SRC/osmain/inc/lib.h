@@ -29,6 +29,8 @@
 #include <inc/sysinfo.h>
 #include <inc/bprintf.h>
 
+#define SYS_NAME "Skyline Opreating System"
+
 #define USED(x) (void)(x)
 
 // main user program
@@ -119,5 +121,7 @@ static struct graph_info graph;
 #define KEY_RIGHT 0xe5
 #define KEY_ENTER 0xa
 #define KEY_ESC 0x1b
+
+#define PAUSE readline("Press any key to continue...");
 
 #endif // !JOS_INC_LIB_H
