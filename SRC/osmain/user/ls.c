@@ -16,7 +16,6 @@ void ls(const char *path, const char *prefix)
 		lsdir(path, prefix);
 	else
 		lsprint(0, st.st_isdir, st.st_size, path);
-	PAUSE
 }
 
 void lsdir(const char *path, const char *prefix)
@@ -60,7 +59,6 @@ void lsprint(const char *prefix, bool isdir, off_t size, const char *name)
 void usage(void)
 {
 	bprintf("usage: ls [-dFl] [file...]\n");
-	PAUSE
 	exit();
 }
 

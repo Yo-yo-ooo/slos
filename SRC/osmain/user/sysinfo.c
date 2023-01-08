@@ -19,5 +19,4 @@ umain(int argc, char **argv)
     bprintf("CPU number  : %d CPUs online\n", info.ncpu);
     bprintf("Boot CPU    : %d CPU is boot CPU\n", info.bootcpu);
     bprintf("Memory size : Physical memory %uK\n", info.totalmem);
-    PAUSE
 }

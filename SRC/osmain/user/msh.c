@@ -1,5 +1,8 @@
 #include <inc/lib.h>
 
+#define IFCOMMAND(cmd,str) if (!strcmp(cmd, str))
+#define IFORCOMMAND(cmd,str,str2) if (!strcmp(cmd, str) || !strcmp(cmd,str2))
+
 #define BUFSIZ 1024 /* Find the buffer overrun bug! */
 int debug = 0;
 
@@ -255,6 +258,7 @@ runit:
 
     // In the parent, close all file descriptors and wait for the
     // spawned command to exit.
+    PAUSE
     close_all();
     if (r >= 0)
     {
@@ -381,9 +385,13 @@ int builtin_cmd(char *cmdline)
     cmd[i] = '\0';
     if (!strcmp(cmd, "quit") || !strcmp(cmd, "exit"))
         exit();
-    if (!strcmp(cmd, "cd"))
+    IFCOMMAND(cmd,"cd")
     {
         ret = do_cd(cmdline);
+        return 1;
+    }
+    IFORCOMMAND(cmd,"PAUSE","pause"){
+        PAUSE
         return 1;
     }
     return 0;
