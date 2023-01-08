@@ -14,7 +14,7 @@ readline(const char *prompt)
 		cprintf("%s", prompt);
 #else
 	if (prompt != NULL)
-		printf("%s", prompt);
+		bprintf("%s", prompt);
 #endif
 
 	i = 0;
@@ -30,7 +30,7 @@ readline(const char *prompt)
 #if JOS_KERNEL
 				cprintf("read error: %e\n", c);
 #else
-				printf("read error: %e\n", c);
+				bprintf("read error: %e\n", c);
 #endif
 			return NULL;
 		}
@@ -40,7 +40,7 @@ readline(const char *prompt)
 #if JOS_KERNEL
 				cputchar('\b');
 #else
-				printf("\b");
+				bprintf("\b");
 #endif
 			i--;
 		}
@@ -50,7 +50,7 @@ readline(const char *prompt)
 #if JOS_KERNEL
 				cputchar(c);
 #else
-				printf("%c", c);
+				bprintf("%c", c);
 #endif
 
 			buf[i++] = c;
@@ -61,7 +61,7 @@ readline(const char *prompt)
 #if JOS_KERNEL
 				cputchar('\n');
 #else
-				printf("\n");
+				bprintf("\n");
 #endif
 			buf[i] = 0;
 			return buf;

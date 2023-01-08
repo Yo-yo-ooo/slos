@@ -4,7 +4,7 @@ void umain(int argc, char **argv)
 {
     char path[200];
     if(argc > 1)
-        printf("%s : too many arguments\n",argv[0]);
+        bprintf("%s : too many arguments\n",argv[0]);
     else
-        printf("%s\n",getcwd(path,200));
+        bprintf("%s\n",getcwd(path,200));
 }

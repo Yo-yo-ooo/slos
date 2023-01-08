@@ -11,7 +11,7 @@ void umain(int argc, char **argv)
 {
     int r;
     if ((r = init_palette("/bin/sysinfo.plt", frame)) < 0)
-        printf("Open palette fail %e\n", r);
+        bprintf("Open palette fail %e\n", r);
     interface_init(graph.scrnx, graph.scrny, graph.framebuffer, &interface);
     interface.titletype = TITLE_TYPE_TXT;
     strcpy(interface.title, "System information");
@@ -21,7 +21,7 @@ void umain(int argc, char **argv)
     interface.content_color = BACKGROUND;
     draw_interface(&interface);
     if ((r = draw_bitmap("/bin/sysinfo.bmp", 100, 160, &interface)) < 0)
-        printf("Open clock back fail %e\n", r);
+        bprintf("Open clock back fail %e\n", r);
     display_info();
     sys_updatescreen();
     input_handler();

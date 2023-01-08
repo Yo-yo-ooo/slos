@@ -6,9 +6,9 @@ void umain(int argc, char **argv)
 
     if (argc != 2)
     {
-        printf("usage: mkdir directory\n");
+        bprintf("usage: mkdir directory\n");
         return;
     }
     if((r = mkdir(argv[1])) < 0)
-        printf("%s error : %e\n",argv[0],r);
+        bprintf("%s error : %e\n",argv[0],r);
 }

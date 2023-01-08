@@ -2,9 +2,9 @@
 
 void umain(int argc, char **argv)
 {
-	printf("hello world\n");
+	bprintf("hello world\n");
 	char *buf = readline("Input:");
-	printf("%s",buf);
+	bprintf("%s",buf);
 	getchar();
 }
 

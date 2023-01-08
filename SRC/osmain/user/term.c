@@ -49,7 +49,7 @@ void umain(int argc, char **argv)
         close(1);
         dup(writefd, 1);
         msh(argc, argv);
-        printf("msh exit\n");
+        bprintf("msh exit\n");
         exit();
     }
     else
@@ -65,7 +65,7 @@ void umain(int argc, char **argv)
     while(1)
     {
         r = getchar();
-        printf("%c", r);
+        bprintf("%c", r);
         if(e->env_status == ENV_FREE)
             break;
     }
@@ -110,24 +110,24 @@ void msh(int argc, char **argv)
 
     while (1)
     {
-        printf("\n");
+        bprintf("\n");
         sys_gettime(&time);
         getcwd(path, MAXPATH);
-        printf("# msh in %s ", path);
-        printf("[%t]\n", &time);
+        bprintf("# msh in %s ", path);
+        bprintf("[%t]\n", &time);
         buf = readline("$ ");
         if (buf == NULL)
             exit();
         if (buf[0] == '#')
             continue;
         if (echocmds)
-            printf("# %s\n", buf);
+            bprintf("# %s\n", buf);
         if (builtin_cmd(buf))
             continue;
         if ((r = fork()) < 0)
             panic("fork: %e", r);
         if (debug)
-            printf("FORK: %d\n", r);
+            bprintf("FORK: %d\n", r);
         if (r == 0)
         {
             runcmd(buf);
@@ -162,7 +162,7 @@ again:
         case 'w': // Add an argument
             if (argc == MAXARGS)
             {
-                printf("too many arguments\n");
+                bprintf("too many arguments\n");
                 exit();
             }
             argv[argc++] = t;
@@ -172,7 +172,7 @@ again:
             // Grab the filename from the argument list
             if (gettoken(0, &t) != 'w')
             {
-                printf("syntax error: < not followed by word\n");
+                bprintf("syntax error: < not followed by word\n");
                 exit();
             }
             // Open 't' for reading as file descriptor 0
@@ -188,7 +188,7 @@ again:
             strcat(argv0buf, t);
             if ((fd = open(argv0buf, O_RDONLY)) < 0)
             {
-                printf("Error open %s fail: %e", argv0buf, fd);
+                bprintf("Error open %s fail: %e", argv0buf, fd);
                 exit();
             }
             if (fd != 0)
@@ -202,7 +202,7 @@ again:
             // Grab the filename from the argument list
             if (gettoken(0, &t) != 'w')
             {
-                printf("syntax error: > not followed by word\n");
+                bprintf("syntax error: > not followed by word\n");
                 exit();
             }
             if (t[0] != '/')
@@ -210,7 +210,7 @@ again:
             strcat(argv0buf, t);
             if ((fd = open(argv0buf, O_WRONLY | O_CREAT | O_TRUNC)) < 0)
             {
-                printf("open %s for write: %e", argv0buf, fd);
+                bprintf("open %s for write: %e", argv0buf, fd);
                 exit();
             }
             if (fd != 1)
@@ -223,14 +223,14 @@ again:
         case '|': // Pipe
             if ((r = pipe(p)) < 0)
             {
-                printf("pipe: %e", r);
+                bprintf("pipe: %e", r);
                 exit();
             }
             if (debug)
-                printf("PIPE: %d %d\n", p[0], p[1]);
+                bprintf("PIPE: %d %d\n", p[0], p[1]);
             if ((r = fork()) < 0)
             {
-                printf("fork: %e", r);
+                bprintf("fork: %e", r);
                 exit();
             }
             if (r == 0)
@@ -272,7 +272,7 @@ runit:
     if (argc == 0)
     {
         if (debug)
-            printf("EMPTY COMMAND\n");
+            bprintf("EMPTY COMMAND\n");
         return;
     }
 
@@ -293,10 +293,10 @@ runit:
     // Print the command.
     if (debug)
     {
-        printf("[%08x] SPAWN:", thisenv->env_id);
+        bprintf("[%08x] SPAWN:", thisenv->env_id);
         for (i = 0; argv[i]; i++)
-            printf(" %s", argv[i]);
-        printf("\n");
+            bprintf(" %s", argv[i]);
+        bprintf("\n");
     }
 
     // Spawn the command!
@@ -304,7 +304,7 @@ runit:
     {
         snprintf(argv0buf, BUFSIZ, "/bin/%s", name);
         if ((r = spawn(argv0buf, (const char **)argv)) < 0)
-            printf("spawn %s: %e\n", argv[0], r);
+            bprintf("spawn %s: %e\n", argv[0], r);
     }
 
     // In the parent, close all file descriptors and wait for the
@@ -313,10 +313,10 @@ runit:
     if (r >= 0)
     {
         if (debug)
-            printf("[%08x] WAIT %s %08x\n", thisenv->env_id, argv[0], r);
+            bprintf("[%08x] WAIT %s %08x\n", thisenv->env_id, argv[0], r);
         wait(r);
         if (debug)
-            printf("[%08x] wait finished\n", thisenv->env_id);
+            bprintf("[%08x] wait finished\n", thisenv->env_id);
     }
 
     // If we were the left-hand part of a pipe,
@@ -324,10 +324,10 @@ runit:
     if (pipe_child)
     {
         if (debug)
-            printf("[%08x] WAIT pipe_child %08x\n", thisenv->env_id, pipe_child);
+            bprintf("[%08x] WAIT pipe_child %08x\n", thisenv->env_id, pipe_child);
         wait(pipe_child);
         if (debug)
-            printf("[%08x] wait finished\n", thisenv->env_id);
+            bprintf("[%08x] wait finished\n", thisenv->env_id);
     }
 
     // Done!
@@ -355,12 +355,12 @@ int _gettoken(char *s, char **p1, char **p2)
     if (s == 0)
     {
         if (debug > 1)
-            printf("GETTOKEN NULL\n");
+            bprintf("GETTOKEN NULL\n");
         return 0;
     }
 
     if (debug > 1)
-        printf("GETTOKEN: %s\n", s);
+        bprintf("GETTOKEN: %s\n", s);
 
     *p1 = 0;
     *p2 = 0;
@@ -370,7 +370,7 @@ int _gettoken(char *s, char **p1, char **p2)
     if (*s == 0)
     {
         if (debug > 1)
-            printf("EOL\n");
+            bprintf("EOL\n");
         return 0;
     }
     if (strchr(SYMBOLS, *s))
@@ -380,7 +380,7 @@ int _gettoken(char *s, char **p1, char **p2)
         *s++ = 0;
         *p2 = s;
         if (debug > 1)
-            printf("TOK %c\n", t);
+            bprintf("TOK %c\n", t);
         return t;
     }
     *p1 = s;
@@ -391,7 +391,7 @@ int _gettoken(char *s, char **p1, char **p2)
     {
         t = **p2;
         **p2 = 0;
-        printf("WORD: %s\n", *p1);
+        bprintf("WORD: %s\n", *p1);
         **p2 = t;
     }
     return 'w';
@@ -421,7 +421,7 @@ int gettoken(char *s, char **p1)
 
 void usage(void)
 {
-    printf("usage: sh [-dix] [command-file]\n");
+    bprintf("usage: sh [-dix] [command-file]\n");
     exit();
 }
 
@@ -442,10 +442,10 @@ int builtin_cmd(char *cmdline)
     }
     if (!strcmp(cmd, "help"))
     {
-        printf("Welcome to msh version 0.1!\n");
-        printf("Type commands to execute them.\n");
-        printf("Type 'exit' or 'quit' to exit.\n");
-        printf("Have fun!\n");
+        bprintf("Welcome to msh version 0.1!\n");
+        bprintf("Type commands to execute them.\n");
+        bprintf("Type 'exit' or 'quit' to exit.\n");
+        bprintf("Have fun!\n");
         return 1;
     }
     return 0;
@@ -467,6 +467,6 @@ int do_cd(char *cmdline)
     }
     strcat(pathbuf, cmdline);
     if ((r = chdir(pathbuf)) < 0)
-        printf("cd error : %e\n", r);
+        bprintf("cd error : %e\n", r);
     return 0;
 }

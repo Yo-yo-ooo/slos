@@ -8,7 +8,7 @@ void umain(int argc, char **argv)
     pathbuf[0] = '\0';
     if (argc != 2)
     {
-        printf("usage: touch filename\n");
+        bprintf("usage: touch filename\n");
         return;
     }
     filename = argv[1];
@@ -16,6 +16,6 @@ void umain(int argc, char **argv)
         getcwd(pathbuf, MAXPATH);
     strcat(pathbuf, filename);
     if ((r = open(pathbuf, O_CREAT)) < 0)
-        printf("%s error : %e\n", argv[0], r);
+        bprintf("%s error : %e\n", argv[0], r);
     close(r);
 }

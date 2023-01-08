@@ -39,26 +39,26 @@ void lsprint(const char *prefix, bool isdir, off_t size, const char *name)
 	const char *sep;
 	// print prefix
 	if (flag['l'])
-		printf("%c %11d ", isdir ? 'd' : '-', size);
+		bprintf("%c %11d ", isdir ? 'd' : '-', size);
 	if (prefix)
 	{
 		if (prefix[0] && prefix[strlen(prefix) - 1] != '/')
 			sep = "/";
 		else
 			sep = "";
-		printf("%s%s", prefix, sep);
+		bprintf("%s%s", prefix, sep);
 	}
 	// print name
-	printf("%s", name);
+	bprintf("%s", name);
 	if (flag['F'] && isdir)
-		printf("/");
+		bprintf("/");
 	// print end
-	printf("\n");
+	bprintf("\n");
 }
 
 void usage(void)
 {
-	printf("usage: ls [-dFl] [file...]\n");
+	bprintf("usage: ls [-dFl] [file...]\n");
 	exit();
 }
 

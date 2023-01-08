@@ -73,5 +73,5 @@ void bputchar(char c)
     }
     screen.screen_col = SCREEN_COL;
     screen.screen_row = SCREEN_ROW;
-    draw_screen(100, 80, &screen, 0x00, 0xff, 1);
+    draw_screen(100, 80, &screen, 0xff, 0x00, 1);
 }

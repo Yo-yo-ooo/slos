@@ -18,7 +18,7 @@ void umain(int argc, char **argv)
     struct tm time;
     int r;
     if ((r = init_palette("/bin/clock.plt", frame)) < 0)
-        printf("Open palette fail %e\n", r);
+        bprintf("Open palette fail %e\n", r);
     interface_init(graph.scrnx, graph.scrny, graph.framebuffer, &interface);
     interface.titletype = TITLE_TYPE_TXT;
     strcpy(interface.title, "Calendar");
@@ -28,7 +28,7 @@ void umain(int argc, char **argv)
     interface.content_color = BACKGROUND;
     draw_interface(&interface);
     if ((r = draw_bitmap("/bin/clock.bmp", 100, 300, &interface)) < 0)
-        printf("Open clock back fail %e\n", r);
+        bprintf("Open clock back fail %e\n", r);
     sys_gettime(&time);
     display_time(&time);
     sys_updatescreen();

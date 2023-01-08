@@ -340,7 +340,7 @@ void umain(int argc, char **argv)
         if (buf[0] == '#')
             continue;
         if (echocmds)
-            printf("# %s\n", buf);
+            bprintf("# %s\n", buf);
         if (debug)
             cprintf("BEFORE FORK\n");
         if ((r = fork()) < 0)

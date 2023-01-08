@@ -32,7 +32,7 @@ void umain(int argc, char **argv)
 			strcat(pathbuf, filename);
 			f = open(pathbuf, O_RDONLY);
 			if (f < 0)
-				printf("can't open %s: %e\n", argv[i], f);
+				bprintf("can't open %s: %e\n", argv[i], f);
 			else
 			{
 				cat(f, argv[i]);

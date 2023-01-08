@@ -56,18 +56,18 @@ void umain(int argc, char **argv)
 
     while (1)
     {
-        printf("\n");
+        bprintf("\n");
         sys_gettime(&time);
         getcwd(path, MAXPATH);
-        printf("# system in %s ",path);
-        printf("[%t]\n",&time);
+        bprintf("# system in %s ",path);
+        bprintf("[%t]\n",&time);
         buf = readline("$ ");
         if (buf == NULL)
             exit();
         if (buf[0] == '#')
             continue;
         if (echocmds)
-            printf("# %s\n", buf);
+            bprintf("# %s\n", buf);
         if (builtin_cmd(buf))
             continue;
         if ((r = fork()) < 0)
@@ -405,6 +405,6 @@ int do_cd(char *cmdline)
     }
     strcat(pathbuf, cmdline);
     if ((r = chdir(pathbuf)) < 0)
-        printf("cd error : %e\n", r);
+        bprintf("cd error : %e\n", r);
     return 0;
 }

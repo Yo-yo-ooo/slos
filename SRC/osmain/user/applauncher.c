@@ -48,7 +48,7 @@ void input_handler()
     while (1)
     {
         ch = ch & 0xFF;
-        // printf("%#x\n", ch);
+        // bprintf("%#x\n", ch);
         switch (ch)
         {
         case KEY_UP:
@@ -115,14 +115,14 @@ void launch_app()
     char *argv[2];
     argv[0] = app_bin;
     argv[1] = 0;
-    printf("[launcher] Launching %s\n",app_bin);
+    bprintf("[launcher] Launching %s\n",app_bin);
     if ((r = spawn(app_bin, (const char **)argv)) < 0)
     {
-        printf("App %s not found!\n",app_bin);
+        bprintf("App %s not found!\n",app_bin);
         return;
     }
     wait(r);
-    printf("[launcher] %s normally exit\n",app_bin);
+    bprintf("[launcher] %s normally exit\n",app_bin);
     init_palette(LAUNCHER_PALETTE, frame);
     refresh_interface();
 }
