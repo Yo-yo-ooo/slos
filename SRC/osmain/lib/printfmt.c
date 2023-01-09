@@ -200,6 +200,12 @@ vprintfmt(void (*putch)(int, void*), void *putdat, const char *fmt, va_list ap)
 		
 		case 't':
 			time = va_arg(ap,struct tm *);
+			printnum(putch, putdat, time->tm_year, 10, 2, '0');
+			putch('/',putdat);
+			printnum(putch, putdat, time->tm_mon, 10, 2, '0');
+			putch('/',putdat);
+			printnum(putch, putdat, time->tm_mday, 10, 2,'0');
+			putch('|',putdat);
 			printnum(putch, putdat, time->tm_hour, 10, 2, '0');
 			putch(':',putdat);
 			printnum(putch, putdat, time->tm_min, 10, 2, '0');
