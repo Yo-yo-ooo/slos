@@ -46,7 +46,7 @@ extern "C" {
 #endif
 
 /* members are in network byte order */
-struct sockaddr_in   //用于表示ipv4地址的结构体
+struct sockaddr_in{   //用于表示ipv4地址的结构体
   u8_t sin_len;
   u8_t sin_family;  //地址簇
   u16_t sin_port;  //端口号两个字节 

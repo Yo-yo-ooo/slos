@@ -22,6 +22,7 @@
 #include <inc/args.h>
 #include <inc/malloc.h>
 #include <inc/ns.h>
+#include <kern/timee.h>
 
 #define USED(x)		(void)(x)
 
@@ -62,6 +63,7 @@ int	sys_ipc_recv(void *rcv_pg);
 unsigned int sys_time_msec(void);
 int	sys_packet_try_send(void *data_va, int len);
 int	sys_packet_recv(void *addr);
+int sys_gettime(struct tm *tm);
 
 
 // This must be inlined.  Exercise for reader: why?

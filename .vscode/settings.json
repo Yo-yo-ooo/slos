@@ -52,6 +52,7 @@
         "interface.h": "c",
         "bitmap.h": "c",
         "console.h": "c",
-        "canvas.h": "c"
+        "canvas.h": "c",
+        "timee.h": "c"
     }
 }

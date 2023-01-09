@@ -33,6 +33,7 @@ USERAPPS :=		$(USERAPPS) \
 			$(OBJDIR)/user/testshell \
 			$(OBJDIR)/user/hello \
 			$(OBJDIR)/user/faultio \
+			$(OBJDIR)/user/time \
 
 FSIMGTXTFILES :=	$(FSIMGTXTFILES) \
 			fs/lorem \

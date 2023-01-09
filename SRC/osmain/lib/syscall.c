@@ -133,3 +133,7 @@ int sys_packet_recv(void *dstva)
 {
 	return syscall(SYS_packet_recv, 0, (uint32_t)dstva, 0, 0, 0, 0);
 }
+
+int sys_gettime(struct tm *tm){
+	return syscall(SYS_gettime, 0, (uint32_t)tm, 0,0,0,0); // return System time
+}
