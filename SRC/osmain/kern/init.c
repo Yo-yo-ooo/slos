@@ -3,8 +3,10 @@
 #include <inc/stdio.h>
 #include <inc/string.h>
 #include <inc/assert.h>
+
 #include <kern/monitor.h>
 #include <kern/console.h>
+
 #include <kern/pmap.h>
 #include <kern/kclock.h>
 #include <kern/env.h>
@@ -13,114 +15,113 @@
 #include <kern/picirq.h>
 #include <kern/cpu.h>
 #include <kern/spinlock.h>
-#include <kern/rwlock.h>
-#include <kern/prwlock.h>
-#include <kern/graph.h>
-
-#define GUI_MODE
+#include <kern/time.h>
+#include <kern/pci.h>
 
 static void boot_aps(void);
-static void get_boot_info(void);
 
-struct boot_info
+
+
+// Test the stack backtrace function (lab 1 only)
+void
+test_backtrace(int x)
 {
-	short scrnx, scrny;
-	uint8_t *vram;
-};
+	cprintf("entering test_backtrace %d\n", x);
+	if (x > 0)
+		test_backtrace(x-1);
+	else
+		mon_backtrace(0, 0, 0);
+	cprintf("leaving test_backtrace %d\n", x);
+}
 
-#ifdef TESTRW
-// test reader-writer lock
-dumbrwlock lock1;
-dumbrwlock lock2;
-#endif
 
-void i386_init()
+void
+i386_init(void)
 {
-	extern char edata[], end[];
-
-	// Before doing anything else, complete the ELF loading process.
-	// Clear the uninitialized global data (BSS) section of our program.
-	// This ensures that all static/global variables start out zero.
-	memset(edata, 0, end - edata);
-
 	// Initialize the console.
 	// Can't call cprintf until after we do this!
 	cons_init();
 
+	cprintf("6828 decimal is %o octal!\n", 6828);
+
+
 	// Lab 2 memory management initialization functions
 	mem_init();
 
-	// get information from boot_info
 
-#ifdef GUI_MODE
-	// must be used after mem_init()
-	get_boot_info();
-	// init graph
-	graph_init();
-#endif
-
-	// user environment initialization functions
+	// Lab 3 user environment initialization functions
 	env_init();
 	trap_init();
 
-	// multiprocessor initialization functions
+	// Lab 4 multiprocessor initialization functions
+	// 从BIOS区域找到MP配置表，找到将要映射到MMIO地址的物理地址lapicaddr、
+	// 将要启动的bootcpu、cpu总数，设置好cpu[x].cpu_id
 	mp_init();
+	// 找到LAPIC单元的MMIO地址(虚拟地址)lapic，设置好。。。
 	lapic_init();
 
-	// multitasking initialization functions
+	// Lab 4 multitasking initialization functions
 	pic_init();
 
+
+	// Lab 6 hardware initialization functions
+	time_init();
+	pci_init();
+
+
+	//cprintf("curcpu:%d\n",cpunum());
+
 	// Acquire the big kernel lock before waking up APs
+	// Your code here:
 	lock_kernel();
-
-#ifdef TESTRW
-	// test reader-writer lock
-	rw_initlock(&lock1);
-	rw_initlock(&lock2);
-
-	dumb_wrlock(&lock1);
-	cprintf("[rw] CPU %d gain writer lock1\n", cpunum());
-	dumb_rdlock(&lock2);
-	cprintf("[rw] CPU %d gain reader lock2\n", cpunum());
-
-#endif
-
 	// Starting non-boot CPUs
 	boot_aps();
-
-#ifdef TESTRW
-	cprintf("[rw] CPU %d going to release writer lock1\n", cpunum());
-	dumb_wrunlock(&lock1);
-	cprintf("[rw] CPU %d going to release reader lock2\n", cpunum());
-	dumb_rdunlock(&lock2);
-#endif
 
 	// Start fs.
 	ENV_CREATE(fs_fs, ENV_TYPE_FS);
 
+#if !defined(TEST_NO_NS)
+	// Start ns.
+	ENV_CREATE(net_ns, ENV_TYPE_NS);
+#endif
+
+#if defined(TEST)
+	// Don't touch -- used by grading script!
+	ENV_CREATE(TEST, ENV_TYPE_USER);
+#else
 	// Touch all you want.
-	ENV_CREATE(user_msh, ENV_TYPE_USER);
+
+	ENV_CREATE(user_icode, ENV_TYPE_USER);
+
+	//ENV_CREATE(user_primes, ENV_TYPE_USER);
+	
+	/*ENV_CREATE(user_yield, ENV_TYPE_USER);
+	ENV_CREATE(user_yield, ENV_TYPE_USER);
+	ENV_CREATE(user_yield, ENV_TYPE_USER);*/
+	
+	//ENV_CREATE(user_dumbfork, ENV_TYPE_USER);
+
+#endif // TEST*
 
 	// Should not be necessary - drains keyboard because interrupt has given up.
 	kbd_intr();
 
-#ifdef TESTPRW
-	unlock_kernel();
-	prw_initlock(&lock1);
-	prw_wrlock(&lock1);
-	prw_wrunlock(&lock1);
-	prw_rdlock(&lock1);
-	cprintf("====%d Gain Reader Lock====\n", cpunum());
-	lapic_ipi_dest(3, DEBUGPRW);
-	for (int i = 0; i < 10000; i++)
-		asm volatile("pause");
-	prw_rdunlock(&lock1);
-	cprintf("====%d release Reader Lock====\n", cpunum());
-	lock_kernel();
-#endif
-
 	// Schedule and run the first user environment!
 	sched_yield();
+	//cprintf("hello world!\n");
+	
+	// We only have one user environment for now, so just run it.
+	env_run(&envs[0]);
+
+	// Test the stack backtrace function (lab 1 only)
+	test_backtrace(5);
+
+
+	// Drop into the kernel monitor.
+	while (1)
+		monitor(NULL);
+
+
 }
 
 // While boot_aps is booting a given CPU, it communicates the per-core
@@ -136,60 +137,58 @@ boot_aps(void)
 	void *code;
 	struct CpuInfo *c;
 
+	//cprintf("mpentry_start:%08x, mpentry_end:%08x\n",mpentry_start, mpentry_end);
+	//结果是mpentry_start:f0105144, mpentry_end:f01051be
+	
 	// Write entry code to unused memory at MPENTRY_PADDR
-	code = KADDR(MPENTRY_PADDR);
-	memmove(code, mpentry_start, mpentry_end - mpentry_start);
+	code = KADDR(MPENTRY_PADDR); //memmove的参数得是虚拟地址
+	memmove(code, mpentry_start, mpentry_end - mpentry_start); 
 
 	// Boot each AP one at a time
-	for (c = cpus; c < cpus + ncpu; c++)
-	{
-		if (c == cpus + cpunum()) // We've started already.
+	for (c = cpus; c < cpus + ncpu; c++) {
+		if (c == cpus + cpunum())  // We've started already.
 			continue;
 
-		// Tell mpentry.S what stack to use
-		mpentry_kstack = percpu_kstacks[c - cpus] + KSTKSIZE;
+		// Tell mpentry.S what stack to use 
+		mpentry_kstack = percpu_kstacks[c - cpus] + KSTKSIZE; //因为栈向下增长？
+		//cprintf("percpu_kstacks:%08x\n",percpu_kstacks[c - cpus]);
+		cprintf("mpentry_kstack:%08x\n",mpentry_kstack);
 		// Start the CPU at mpentry_start
-		lapic_startap(c->cpu_id, PADDR(code));
+		lapic_startap(c->cpu_id, PADDR(code));  //STARTUP
 		// Wait for the CPU to finish some basic setup in mp_main()
-		while (c->cpu_status != CPU_STARTED)
+		while(c->cpu_status != CPU_STARTED)
 			;
 	}
 }
 
 // Setup code for APs
-void mp_main(void)
+void
+mp_main(void)
 {
-	// We are in high EIP now, safe to switch to kern_pgdir
+	// We are in high EIP now, safe to switch to kern_pgdir 
 	lcr3(PADDR(kern_pgdir));
-	cprintf("[MP] CPU %d starting\n", cpunum());
+	cprintf("SMP: CPU %d starting\n", cpunum());
 
 	lapic_init();
+	//所有寄存器，包括系统寄存器，都是CPU私有的。
+	//因此，初始化这些寄存器的指令，例如lcr3(), ltr(), lgdt(), lidt(), etc.,都必须在每个CPU上执行一次
 	env_init_percpu();
 	trap_init_percpu();
 	xchg(&thiscpu->cpu_status, CPU_STARTED); // tell boot_aps() we're up
-
-#ifdef TESTRW
-	// reader-writer lock test
-	dumb_rdlock(&lock1);
-	cprintf("[rw] %d l1\n", cpunum());
-	asm volatile("pause");
-	dumb_rdunlock(&lock1);
-	cprintf("[rw] %d unl1\n", cpunum());
-
-	dumb_wrlock(&lock2);
-	cprintf("[rw] %d l2\n", cpunum());
-	asm volatile("pause");
-	cprintf("[rw] %d unl2\n", cpunum());
-	dumb_wrunlock(&lock2);
-#endif
 
 	// Now that we have finished some basic setup, call sched_yield()
 	// to start running processes on this CPU.  But make sure that
 	// only one CPU can enter the scheduler at a time!
 	//
+	// Your code here:
+	
+	
 	lock_kernel();
-	cprintf("[MP] CPU %d sched\n", cpunum());
+	//cprintf("cpu:%d\n", cpunum());
 	sched_yield();
+	
+	// Remove this after you finish Exercise 6
+	//for (;;);
 }
 
 /*
@@ -199,10 +198,11 @@ void mp_main(void)
 const char *panicstr;
 
 /*
- * Panic is called on= unresolvable fatal errors.
+ * Panic is called on unresolvable fatal errors.
  * It prints "panic: mesg", and then enters the kernel monitor.
  */
-void _panic(const char *file, int line, const char *fmt, ...)
+void
+_panic(const char *file, int line, const char *fmt,...)
 {
 	va_list ap;
 
@@ -226,7 +226,8 @@ dead:
 }
 
 /* like panic, but don't */
-void _warn(const char *file, int line, const char *fmt, ...)
+void
+_warn(const char *file, int line, const char *fmt,...)
 {
 	va_list ap;
 
@@ -235,13 +236,4 @@ void _warn(const char *file, int line, const char *fmt, ...)
 	vcprintf(fmt, ap);
 	cprintf("\n");
 	va_end(ap);
-}
-
-static void get_boot_info(void)
-{
-	struct boot_info *info = (struct boot_info *)(KADDR(0x0ff0));
-	// Init Graph info
-	graph.scrnx = info->scrnx;
-	graph.scrny = info->scrny;
-	graph.vram = info->vram;
 }

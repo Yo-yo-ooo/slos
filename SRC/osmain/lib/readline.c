@@ -14,57 +14,31 @@ readline(const char *prompt)
 		cprintf("%s", prompt);
 #else
 	if (prompt != NULL)
-		bprintf("%s", prompt);
+		fprintf(1, "%s", prompt);
 #endif
 
 	i = 0;
-	echoing = 1;
-
-	while (1)
-	{
+	echoing = iscons(0);
+	while (1) {
 		c = getchar();
-
-		if (c < 0)
-		{
+		if (c < 0) {
 			if (c != -E_EOF)
-#if JOS_KERNEL
 				cprintf("read error: %e\n", c);
-#else
-				bprintf("read error: %e\n", c);
-#endif
 			return NULL;
-		}
-		else if ((c == '\b' || c == '\x7f') && i > 0)
-		{
+		} else if ((c == '\b' || c == '\x7f') && i > 0) {
 			if (echoing)
-#if JOS_KERNEL
 				cputchar('\b');
-#else
-				bprintf("\b");
-#endif
 			i--;
-		}
-		else if (c >= ' ' && i < BUFLEN - 1)
-		{
+		} else if (c >= ' ' && i < BUFLEN-1) {
 			if (echoing)
-#if JOS_KERNEL
 				cputchar(c);
-#else
-				bprintf("%c", c);
-#endif
-
 			buf[i++] = c;
-		}
-		else if (c == '\n' || c == '\r')
-		{
+		} else if (c == '\n' || c == '\r') {
 			if (echoing)
-#if JOS_KERNEL
 				cputchar('\n');
-#else
-				bprintf("\n");
-#endif
 			buf[i] = 0;
 			return buf;
 		}
 	}
 }
+

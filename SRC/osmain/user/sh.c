@@ -1,7 +1,8 @@
 #include <inc/lib.h>
 
-#define BUFSIZ 1024 /* Find the buffer overrun bug! */
+#define BUFSIZ 1024		/* Find the buffer overrun bug! */
 int debug = 0;
+
 
 // gettoken(s, 0) prepares gettoken for subsequent calls and returns 0.
 // gettoken(0, token) parses a shell token from the previously set string,
@@ -11,193 +12,177 @@ int debug = 0;
 // tokens from the string.
 int gettoken(char *s, char **token);
 
+
 // Parse a shell command from string 's' and execute it.
 // Do not return until the shell command is finished.
 // runcmd() is called in a forked child,
 // so it's OK to manipulate file descriptor state.
 #define MAXARGS 16
-void runcmd(char *s)
+void
+runcmd(char* s)
 {
-    char *argv[MAXARGS], *t, argv0buf[BUFSIZ];
-    int argc, c, i, r, p[2], fd, pipe_child;
-
-    pipe_child = 0;
-    gettoken(s, 0);
+	char *argv[MAXARGS], *t, argv0buf[BUFSIZ];
+	int argc, c, i, r, p[2], fd, pipe_child;
+	//cprintf("first of s:%s\n",s);
+	pipe_child = 0;
+	gettoken(s, 0);
 
 again:
-    argc = 0;
-    while (1)
-    {
-        switch ((c = gettoken(0, &t)))
-        {
+	argc = 0;
+	while (1) {
+		switch ((c = gettoken(0, &t))) {
 
-        case 'w': // Add an argument
-            if (argc == MAXARGS)
-            {
-                cprintf("too many arguments\n");
-                exit();
-            }
-            argv[argc++] = t;
-            break;
+		case 'w':	// Add an argument
+			if (argc == MAXARGS) {
+				cprintf("too many arguments\n");
+				exit();
+			}
+			argv[argc++] = t;
+			break;
 
-        case '<': // Input redirection
-            // Grab the filename from the argument list
-            if (gettoken(0, &t) != 'w')
-            {
-                cprintf("syntax error: < not followed by word\n");
-                exit();
-            }
-            // Open 't' for reading as file descriptor 0
-            // (which environments use as standard input).
-            // We can't open a file onto a particular descriptor,
-            // so open the file as 'fd',
-            // then check whether 'fd' is 0.
-            // If not, dup 'fd' onto file descriptor 0,
-            // then close the original 'fd'.
+		case '<':	// Input redirection
+			// Grab the filename from the argument list
+			if (gettoken(0, &t) != 'w') {
+				cprintf("syntax error: < not followed by word\n");
+				exit();
+			}
+			// Open 't' for reading as file descriptor 0
+			// (which environments use as standard input).
+			// We can't open a file onto a particular descriptor,
+			// so open the file as 'fd',
+			// then check whether 'fd' is 0.
+			// If not, dup 'fd' onto file descriptor 0,
+			// then close the original 'fd'.
 
-            if ((fd = open(t, O_RDONLY)) < 0)
-            {
-                cprintf("Error open %s fail: %e", t, fd);
-                exit();
-            }
-            if (fd != 0)
-            {
-                dup(fd, 0);
-                close(fd);
-            }
-            break;
+			// LAB 5: Your code here.
+			if ((fd = open(t, O_RDONLY)) < 0) {
+				cprintf("open %s for read: %e", t, fd);
+				exit();
+			}
+			if (fd != 0) {
+				dup(fd, 0); //应该是让文件描述符0也作为fd对应的那个open file的struct Fd页面
+				close(fd);
+			}
+			//panic("< redirection not implemented");
+			break;
 
-        case '>': // Output redirection
-            // Grab the filename from the argument list
-            if (gettoken(0, &t) != 'w')
-            {
-                cprintf("syntax error: > not followed by word\n");
-                exit();
-            }
-            if ((fd = open(t, O_WRONLY | O_CREAT | O_TRUNC)) < 0)
-            {
-                cprintf("open %s for write: %e", t, fd);
-                exit();
-            }
-            if (fd != 1)
-            {
-                dup(fd, 1);
-                close(fd);
-            }
-            break;
+		case '>':	// Output redirection
+			// Grab the filename from the argument list
+			if (gettoken(0, &t) != 'w') {
+				cprintf("syntax error: > not followed by word\n");
+				exit();
+			}
+			if ((fd = open(t, O_WRONLY|O_CREAT|O_TRUNC)) < 0) {
+				cprintf("open %s for write: %e", t, fd);
+				exit();
+			}
+			if (fd != 1) {
+				dup(fd, 1);
+				close(fd);
+			}
+			break;
 
-        case '|': // Pipe
-            if ((r = pipe(p)) < 0)
-            {
-                cprintf("pipe: %e", r);
-                exit();
-            }
-            if (debug)
-                cprintf("PIPE: %d %d\n", p[0], p[1]);
-            if ((r = fork()) < 0)
-            {
-                cprintf("fork: %e", r);
-                exit();
-            }
-            if (r == 0)
-            {
-                if (p[0] != 0)
-                {
-                    dup(p[0], 0);
-                    close(p[0]);
-                }
-                close(p[1]);
-                goto again;
-            }
-            else
-            {
-                pipe_child = r;
-                if (p[1] != 1)
-                {
-                    dup(p[1], 1);
-                    close(p[1]);
-                }
-                close(p[0]);
-                goto runit;
-            }
-            panic("| not implemented");
-            break;
+		case '|':	// Pipe
+			if ((r = pipe(p)) < 0) {
+				cprintf("pipe: %e", r);
+				exit();
+			}
+			if (debug)
+				cprintf("PIPE: %d %d\n", p[0], p[1]);
+			if ((r = fork()) < 0) {
+				cprintf("fork: %e", r);
+				exit();
+			}
+			if (r == 0) {
+				if (p[0] != 0) {
+					dup(p[0], 0);
+					close(p[0]);
+				}
+				close(p[1]);
+				goto again;
+			} else {
+				pipe_child = r;
+				if (p[1] != 1) {
+					dup(p[1], 1);
+					close(p[1]);
+				}
+				close(p[0]);
+				goto runit;
+			}
+			panic("| not implemented");
+			break;
 
-        case 0: // String is complete
-            // Run the current command!
-            goto runit;
+		case 0:		// String is complete
+			// Run the current command!
+			goto runit;
 
-        default:
-            panic("bad return %d from gettoken", c);
-            break;
-        }
-    }
+		default:
+			panic("bad return %d from gettoken", c);
+			break;
+
+		}
+		//cprintf("next of s:%s %d\n",t, argc);
+	}
 
 runit:
-    // Return immediately if command line was empty.
-    if (argc == 0)
-    {
-        if (debug)
-            cprintf("EMPTY COMMAND\n");
-        return;
-    }
+	// Return immediately if command line was empty.
+	if(argc == 0) {
+		if (debug)
+			cprintf("EMPTY COMMAND\n");
+		return;
+	}
 
-    // Clean up command line.
-    // Read all commands from the filesystem: add an initial '/' to
-    // the command name.
-    // This essentially acts like 'PATH=/'.
-    if (argv[0][0] != '/')
-    {
-        argv0buf[0] = '/';
-        strcpy(argv0buf + 1, argv[0]);
-        argv[0] = argv0buf;
-    }
-    argv[argc] = 0;
+	// Clean up command line.
+	// Read all commands from the filesystem: add an initial '/' to
+	// the command name.
+	// This essentially acts like 'PATH=/'.
+	if (argv[0][0] != '/') {
+		argv0buf[0] = '/';
+		strcpy(argv0buf + 1, argv[0]);
+		argv[0] = argv0buf;
+	}
+	argv[argc] = 0;
 
-    // Print the command.
-    if (debug)
-    {
-        cprintf("[%08x] SPAWN:", thisenv->env_id);
-        for (i = 0; argv[i]; i++)
-            cprintf(" %s", argv[i]);
-        cprintf("\n");
-    }
+	// Print the command.
+	if (debug) {
+		cprintf("[%08x] SPAWN:", thisenv->env_id);
+		for (i = 0; argv[i]; i++)
+			cprintf(" %s", argv[i]);
+		cprintf("\n");
+	}
 
-    // Spawn the command!
-    if ((r = spawn(argv[0], (const char **)argv)) < 0)
-    {
-        cprintf("spawn %s: %e\n", argv[0], r);
-    }
+	// Spawn the command!
+	if ((r = spawn(argv[0], (const char**) argv)) < 0)
+		cprintf("spawn %s: %e\n", argv[0], r);
 
-    // In the parent, close all file descriptors and wait for the
-    // spawned command to exit.
-    close_all();
-    if (r >= 0)
-    {
-        if (debug)
-            cprintf("[%08x] WAIT %s %08x\n", thisenv->env_id, argv[0], r);
-        wait(r);
-        if (debug)
-            cprintf("[%08x] wait finished\n", thisenv->env_id);
-    }
+	// In the parent, close all file descriptors and wait for the
+	// spawned command to exit.
+	close_all();
+	if (r >= 0) {
+		if (debug)
+			cprintf("[%08x] WAIT %s %08x\n", thisenv->env_id, argv[0], r);
+		wait(r);
+		if (debug)
+			cprintf("[%08x] wait finished\n", thisenv->env_id);
+	}
 
-    // If we were the left-hand part of a pipe,
-    // wait for the right-hand part to finish.
-    if (pipe_child)
-    {
-        if (debug)
-            cprintf("[%08x] WAIT pipe_child %08x\n", thisenv->env_id, pipe_child);
-        wait(pipe_child);
-        if (debug)
-            cprintf("[%08x] wait finished\n", thisenv->env_id);
-    }
+	// If we were the left-hand part of a pipe,
+	// wait for the right-hand part to finish.
+	if (pipe_child) {
+		if (debug)
+			cprintf("[%08x] WAIT pipe_child %08x\n", thisenv->env_id, pipe_child);
+		wait(pipe_child);
+		if (debug)
+			cprintf("[%08x] wait finished\n", thisenv->env_id);
+	}
 
-    // Done!
-    exit();
+	// Done!
+	exit();
 }
 
-// Get the next token from string s.
-// Set *p1 to the beginning of the token and *p2 just past the token.
+
+// Get the next token(命令) from string s.
+// Set *p1 to the beginning of the token and *p2 just past(跳过) the token.
 // Returns
 //	0 for end-of-string;
 //	< for <;
@@ -210,149 +195,142 @@ runit:
 #define WHITESPACE " \t\r\n"
 #define SYMBOLS "<|>&;()"
 
-int _gettoken(char *s, char **p1, char **p2)
+int
+_gettoken(char *s, char **p1, char **p2)
 {
-    int t;
+	int t;
 
-    if (s == 0)
-    {
-        if (debug > 1)
-            cprintf("GETTOKEN NULL\n");
-        return 0;
-    }
+	if (s == 0) {
+		if (debug > 1)
+			cprintf("GETTOKEN NULL\n");
+		return 0;
+	}
 
-    if (debug > 1)
-        cprintf("GETTOKEN: %s\n", s);
+	if (debug > 1)
+		cprintf("GETTOKEN: %s\n", s);
 
-    *p1 = 0;
-    *p2 = 0;
+	*p1 = 0;
+	*p2 = 0;
 
-    while (strchr(WHITESPACE, *s))
-        *s++ = 0;
-    if (*s == 0)
-    {
-        if (debug > 1)
-            cprintf("EOL\n");
-        return 0;
-    }
-    if (strchr(SYMBOLS, *s))
-    {
-        t = *s;
-        *p1 = s;
-        *s++ = 0;
-        *p2 = s;
-        if (debug > 1)
-            cprintf("TOK %c\n", t);
-        return t;
-    }
-    *p1 = s;
-    while (*s && !strchr(WHITESPACE SYMBOLS, *s))
-        s++;
-    *p2 = s;
-    if (debug > 1)
-    {
-        t = **p2;
-        **p2 = 0;
-        cprintf("WORD: %s\n", *p1);
-        **p2 = t;
-    }
-    return 'w';
+	while (strchr(WHITESPACE, *s))
+		*s++ = 0;
+	if (*s == 0) {
+		if (debug > 1)
+			cprintf("EOL\n");
+		return 0;
+	}
+	if (strchr(SYMBOLS, *s)) {
+		t = *s;
+		*p1 = s;
+		*s++ = 0;
+		*p2 = s;
+		if (debug > 1)
+			cprintf("TOK %c\n", t);
+		return t;
+	}
+	*p1 = s;
+	while (*s && !strchr(WHITESPACE SYMBOLS, *s))
+		s++;
+	*p2 = s;
+	if (debug > 1) {
+		t = **p2;
+		**p2 = 0;
+		cprintf("WORD: %s\n", *p1);
+		**p2 = t;
+	}
+	return 'w';
 }
 
-int gettoken(char *s, char **p1)
+int
+gettoken(char *s, char **p1)
 {
-    static int c, nc;
-    static char *np1, *np2;
+	static int c, nc;
+	static char* np1, *np2; //最秀的就是这几个静态变量
 
-    if (s)
-    {
-        nc = _gettoken(s, &np1, &np2);
-        return 0;
-    }
-    c = nc;
-    *p1 = np1;
-    nc = _gettoken(np2, &np1, &np2);
-    return c;
+	// np1指向s中第一个token的开始，s、np2都指向刚跳过这个token后的开始
+	// token里没有空格，可以是"cat" "num"等字符串，也可以是"<" "|"等符号
+	// gettoken(s,0)主要是为了设置好np1跟np2
+	if (s) {
+		nc = _gettoken(s, &np1, &np2);
+		return 0;
+	}
+	
+	//gettoken(0, &t)就不会进上面了，先把前一个np1给p1，再更新np1跟np2
+	c = nc;
+	*p1 = np1;
+	nc = _gettoken(np2, &np1, &np2);
+	return c;
 }
 
-void usage(void)
+
+void
+usage(void)
 {
-    cprintf("usage: sh [-dix] [command-file]\n");
-    exit();
+	cprintf("usage: sh [-dix] [command-file]\n");
+	exit();
 }
 
-void umain(int argc, char **argv)
+void
+umain(int argc, char **argv)
 {
-    int r, interactive, echocmds;
-    struct Argstate args;
-    char *buf;
+	int r, interactive, echocmds;
+	struct Argstate args;
 
-    echocmds = 0;
-    argstart(&argc, argv, &args);
-    while ((r = argnext(&args)) >= 0)
-        switch (r)
-        {
-        case 'd':
-            debug++;
-            break;
-        case 'x':
-            echocmds = 1;
-            break;
-        default:
-            usage();
-        }
+	interactive = '?';
+	echocmds = 0;
+	argstart(&argc, argv, &args);
+	while ((r = argnext(&args)) >= 0) //每次r应该是argv[1]的首字母,这里直接r=-1?
+		switch (r) {
+		case 'd':
+			debug++;
+			break;
+		case 'i':
+			interactive = 1;
+			break;
+		case 'x':
+			echocmds = 1;
+			break;
+		default:
+			usage();
+		}
 
-    if (argc > 2)
-        usage();
-    if (argc == 2)
-    {
-        close(0);
-        if ((r = open(argv[1], O_RDONLY)) < 0)
-            panic("open %s: %e", argv[1], r);
-        assert(r == 0);
-    }
+	if (argc > 2)
+		usage();
+	if (argc == 2) {
+		close(0);
+		if ((r = open(argv[1], O_RDONLY)) < 0)
+			panic("open %s: %e", argv[1], r);
+		assert(r == 0);
+	}
+	if (interactive == '?')
+		interactive = iscons(0);
 
-    // Spin for a bit to let the console quiet
-    for (int i = 0; i < 15; ++i)
-        sys_yield();
+	while (1) {
+		char *buf;
 
-    close(0);
-    if ((r = opencons()) < 0)
-        panic("opencons: %e", r);
-    if (r != 0)
-        panic("first opencons used fd %d", r);
-    if ((r = dup(0, 1)) < 0)
-        panic("dup: %e", r);
-
-    while (1)
-    {
-        buf = readline("$ ");
-        if (buf == NULL)
-        {
-            if (debug)
-                cprintf("EXITING\n");
-            exit(); // end of file
-        }
-        if (strcmp(buf, "exit") == 0)
-            exit();
-        if (debug)
-            cprintf("LINE: %s\n", buf);
-        if (buf[0] == '#')
-            continue;
-        if (echocmds)
-            bprintf("# %s\n", buf);
-        if (debug)
-            cprintf("BEFORE FORK\n");
-        if ((r = fork()) < 0)
-            panic("fork: %e", r);
-        if (debug)
-            cprintf("FORK: %d\n", r);
-        if (r == 0)
-        {
-            runcmd(buf);
-            exit();
-        }
-        else
-            wait(r);
-    }
+		buf = readline(interactive ? "$ " : NULL);
+		if (buf == NULL) {
+			if (debug)
+				cprintf("EXITING\n");
+			exit();	// end of file
+		}
+		if (debug)
+			cprintf("LINE: %s\n", buf);
+		if (buf[0] == '#')
+			continue;
+		if (echocmds)
+			printf("# %s\n", buf);
+		if (debug)
+			cprintf("BEFORE FORK\n");
+		if ((r = fork()) < 0)
+			panic("fork: %e", r);
+		if (debug)
+			cprintf("FORK: %d\n", r);
+		if (r == 0) {
+			runcmd(buf);
+			exit();
+		} else
+			wait(r);
+	}
 }
+

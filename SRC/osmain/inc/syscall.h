@@ -1,8 +1,6 @@
 #ifndef JOS_INC_SYSCALL_H
 #define JOS_INC_SYSCALL_H
 
-#include <inc/types.h>
-
 /* system call numbers */
 enum {
 	SYS_cputs = 0,
@@ -19,12 +17,9 @@ enum {
 	SYS_yield,
 	SYS_ipc_try_send,
 	SYS_ipc_recv,
-	SYS_getcwd,
-	SYS_env_set_workpath,
-	SYS_gettime,
-	SYS_updatescreen,
-	SYS_setpalette,
-	SYS_getinfo,
+	SYS_time_msec,
+	SYS_packet_try_send,
+	SYS_packet_recv,
 	NSYSCALLS
 };
 

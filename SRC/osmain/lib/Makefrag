@@ -25,20 +25,12 @@ LIB_SRCFILES :=		$(LIB_SRCFILES) \
 			lib/spawn.c
 
 LIB_SRCFILES :=		$(LIB_SRCFILES) \
+			lib/sockets.c \
+			lib/nsipc.c \
+			lib/malloc.c
+LIB_SRCFILES :=		$(LIB_SRCFILES) \
 			lib/pipe.c \
 			lib/wait.c
-
-# my lib
-LIB_SRCFILES :=		$(LIB_SRCFILES) \
-			lib/dir.c \
-			lib/canvas.c \
-			lib/spinlock.c \
-			lib/interface.c \
-			lib/font_ascii.c \
-			lib/font_cn.c	\
-			lib/bitmap.c	\
-			lib/bprintf.c	\
-			lib/screen.c
 
 LIB_OBJFILES := $(patsubst lib/%.c, $(OBJDIR)/lib/%.o, $(LIB_SRCFILES))
 LIB_OBJFILES := $(patsubst lib/%.S, $(OBJDIR)/lib/%.o, $(LIB_OBJFILES))

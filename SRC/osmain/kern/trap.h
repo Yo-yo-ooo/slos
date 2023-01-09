@@ -3,7 +3,7 @@
 #ifndef JOS_KERN_TRAP_H
 #define JOS_KERN_TRAP_H
 #ifndef JOS_KERNEL
-#error "This is a JOS kernel header; user programs should not #include it"
+# error "This is a JOS kernel header; user programs should not #include it"
 #endif
 
 #include <inc/trap.h>
@@ -18,11 +18,6 @@ void trap_init_percpu(void);
 void print_regs(struct PushRegs *regs);
 void print_trapframe(struct Trapframe *tf);
 void page_fault_handler(struct Trapframe *);
-void prw_ipi_report(struct Trapframe *tf);
-void prw_debug(struct Trapframe *tf);
 void backtrace(struct Trapframe *);
-extern long traphandlers[];
-extern void syscallhandler();
-
 
 #endif /* JOS_KERN_TRAP_H */

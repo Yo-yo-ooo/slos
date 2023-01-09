@@ -46,7 +46,7 @@
 #define NPTENTRIES	1024		// page table entries per page table
 
 #define PGSIZE		4096		// bytes mapped by a page
-#define PGSHIFT		12		    // log2(PGSIZE)
+#define PGSHIFT		12		// log2(PGSIZE)
 
 #define PTSIZE		(PGSIZE*NPTENTRIES) // bytes mapped by a page directory entry
 #define PTSHIFT		22		// log2(PTSIZE)
@@ -61,7 +61,7 @@
 #define PTE_PWT		0x008	// Write-Through
 #define PTE_PCD		0x010	// Cache-Disable
 #define PTE_A		0x020	// Accessed
-#define PTE_D		0x040	// Dirty
+#define PTE_D		0x040	// Dirty  这是什么鬼??
 #define PTE_PS		0x080	// Page Size
 #define PTE_G		0x100	// Global
 

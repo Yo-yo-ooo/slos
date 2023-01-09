@@ -11,7 +11,8 @@
 #include <kern/monitor.h>
 #include <kern/kdebug.h>
 #include <kern/trap.h>
-#include <kern/env.h>
+
+#include <kern/e1000.h>
 
 #define CMDBUF_SIZE	80	// enough for one VGA text line
 
@@ -26,8 +27,10 @@ struct Command {
 static struct Command commands[] = {
 	{ "help", "Display this list of commands", mon_help },
 	{ "kerninfo", "Display information about the kernel", mon_kerninfo },
-	{ "backtrace","Display information about the stack",mon_backtrace},
-	{ "continue","Continue the enviroment if break from one",mon_continue}
+
+
+	{ "backtrace","Find all the caller", mon_backtrace },
+
 };
 
 /***** Implementations of basic kernel monitor commands *****/
@@ -62,31 +65,30 @@ int
 mon_backtrace(int argc, char **argv, struct Trapframe *tf)
 {
 	// Your code here.
-	uint32_t ebp = read_ebp(),eip,*args,i;
-	struct Eipdebuginfo info;
+
 	cprintf("Stack backtrace:\n");
-	while(ebp!=0){
-        eip = *((uint32_t *)ebp + 1);
-        cprintf("  ebp %08x  eip %08x  args ", ebp, eip);
-        args = (uint32_t *)ebp + 2;
-		for( i = 0; i < 5; i++ )
-            cprintf("%08x ", args[i]);
-        cprintf("\n");
-		debuginfo_eip(eip,&info);
-		cprintf("         %s:%u: %.*s+%u\n",info.eip_file,info.eip_line,
-				info.eip_fn_namelen,info.eip_fn_name,eip-(uint32_t)info.eip_fn_addr);
-		ebp = *((uint32_t *)ebp);
+	unsigned int ebp, esp, eip;
+	ebp=read_ebp();
+	while(ebp){
+		eip=*((unsigned int*)(ebp+4));
+		esp=ebp+4;
+		struct Eipdebuginfo info;
+		debuginfo_eip(eip, &info);
+		cprintf("  ebp %08x  eip %08x args",ebp,eip);
+		
+		for(int i=0;i<5;i++){
+			esp+=4;
+			cprintf(" %08x", *(unsigned int*)esp);
+		}
+		cprintf("\t%s:%d: %.*s+%d",info.eip_file, info.eip_line, info.eip_fn_namelen, info.eip_fn_name, eip-info.eip_fn_addr);
+		cprintf("\n");
+		ebp=*((unsigned int*)ebp);	
 	}
+
 	return 0;
 }
 
-int
-mon_continue(int argc, char **argv, struct Trapframe *tf)
-{
-	cprintf("continue enviroment...\n");
-	curenv->env_tf.tf_eflags |= (1 << 8);
-	env_run(curenv);
-}
+
 
 /***** Kernel monitor command interpreter *****/
 
@@ -139,7 +141,7 @@ monitor(struct Trapframe *tf)
 
 	cprintf("Welcome to the JOS kernel monitor!\n");
 	cprintf("Type 'help' for a list of commands.\n");
-
+	//transmit_packets("I'm here", 10);
 	if (tf != NULL)
 		print_trapframe(tf);
 
