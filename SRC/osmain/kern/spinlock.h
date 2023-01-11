@@ -42,8 +42,7 @@ unlock_kernel(void)
 	// one CPU at a time and has a long time-slice.  Without the
 	// pause, this CPU is likely to reacquire the lock before
 	// another CPU has even been given a chance to acquire it.
-	//让刚解锁的CPU睡眠一段时间，避免立马再次申请影响其他CPU使用锁
-	asm volatile("pause"); 
+	asm volatile("pause");
 }
 
 #endif

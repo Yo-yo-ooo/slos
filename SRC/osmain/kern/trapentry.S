@@ -25,7 +25,7 @@
 	.globl name;		/* define global symbol for 'name' */	\
 	.type name, @function;	/* symbol type is function */		\
 	.align 2;		/* align function definition */		\
-	name:			/* function starts here ，我傻了把，这么大一个冒号看不见?这里不就是函数内容嘛！！！*/		\
+	name:			/* function starts here */		\
 	pushl $(num);							\
 	jmp _alltraps
 
@@ -46,57 +46,49 @@
 
 /*
  * Lab 3: Your code here for generating entry points for the different traps.
- * interrupt vector 8、10、11、12、13、14 have error code
  */
-TRAPHANDLER_NOEC(divide_handler, T_DIVIDE);
-TRAPHANDLER_NOEC(debug_handler, T_DEBUG);
-TRAPHANDLER_NOEC(nmi_handler, T_NMI);
-TRAPHANDLER_NOEC(brkpt_handler, T_BRKPT);
-TRAPHANDLER_NOEC(oflow_handler, T_OFLOW);
-TRAPHANDLER_NOEC(bound_handler, T_BOUND);
-TRAPHANDLER_NOEC(illop_handler, T_ILLOP);
-TRAPHANDLER_NOEC(device_handler, T_DEVICE);
 
-TRAPHANDLER(dblflt_handler, T_DBLFLT);
-TRAPHANDLER(tss_handler, T_TSS);
-TRAPHANDLER(segnp_handler, T_SEGNP);
-TRAPHANDLER(stack_handler, T_STACK);
-TRAPHANDLER(gpflt_handler, T_GPFLT);
-TRAPHANDLER(pgflt_handler, T_PGFLT);
+TRAPHANDLER_NOEC(handler0, T_DIVIDE)
+TRAPHANDLER_NOEC(handler1, T_DEBUG)
+TRAPHANDLER_NOEC(handler2, T_NMI)
+TRAPHANDLER_NOEC(handler3, T_BRKPT)
+TRAPHANDLER_NOEC(handler4, T_OFLOW)
+TRAPHANDLER_NOEC(handler5, T_BOUND)
+TRAPHANDLER_NOEC(handler6, T_ILLOP)
+TRAPHANDLER_NOEC(handler7, T_DEVICE)
+TRAPHANDLER(handler8, T_DBLFLT)
 
-TRAPHANDLER_NOEC(fperr_handler, T_FPERR);
-TRAPHANDLER_NOEC(align_handler, T_ALIGN);
-TRAPHANDLER_NOEC(mchk_handler, T_MCHK);
-TRAPHANDLER_NOEC(simderr_handler, T_SIMDERR);
-TRAPHANDLER_NOEC(syscall_handler, T_SYSCALL);
+TRAPHANDLER(handler10, T_TSS)
+TRAPHANDLER(handler11, T_SEGNP)
+TRAPHANDLER(handler12, T_STACK)
+TRAPHANDLER(handler13, T_GPFLT)
+TRAPHANDLER(handler14, T_PGFLT)
 
+TRAPHANDLER(handler16, T_FPERR)
+TRAPHANDLER(handler17, T_ALIGN)
+TRAPHANDLER(handler18, T_MCHK)
+TRAPHANDLER(handler19, T_SIMDERR)
 
-TRAPHANDLER_NOEC(irq_error_handler, IRQ_OFFSET+IRQ_ERROR);
-TRAPHANDLER_NOEC(irq_ide_handler, IRQ_OFFSET+IRQ_IDE);
-TRAPHANDLER_NOEC(irq_kbd_handler, IRQ_OFFSET+IRQ_KBD);
-TRAPHANDLER_NOEC(irq_serial_handler, IRQ_OFFSET+IRQ_SERIAL);
-TRAPHANDLER_NOEC(irq_spurious_handler, IRQ_OFFSET+IRQ_SPURIOUS);
-TRAPHANDLER_NOEC(irq_timer_handler, IRQ_OFFSET+IRQ_TIMER);
+TRAPHANDLER_NOEC(handler48, T_SYSCALL)
+
+TRAPHANDLER_NOEC(handler32, IRQ_OFFSET + IRQ_TIMER)
+TRAPHANDLER_NOEC(handler33, IRQ_OFFSET + IRQ_KBD)
+TRAPHANDLER_NOEC(handler34, IRQ_OFFSET + IRQ_SERIAL)
+TRAPHANDLER_NOEC(handler35, IRQ_OFFSET + IRQ_SPURIOUS)
+TRAPHANDLER_NOEC(handler36, IRQ_OFFSET + IRQ_IDE)
+TRAPHANDLER_NOEC(handler37, IRQ_OFFSET + IRQ_ERROR)
 
 /*
  * Lab 3: Your code here for _alltraps
  */
+
+.globl		_start
 _alltraps:
-		# make the stack look like a struct Trapframe
-		pushl	%ds
-		pushl 	%es
-		pushal
-
-		# load GD_KD into %ds and %es
-		# 段寄存器用途见https://zhidao.baidu.com/question/455369927.html
-		movl 	$GD_KD, %eax
-		movl 	%eax, %ds
-		movl 	%eax, %es
-
-		# push %esp as an argument to trap()
-		pushl 	%esp 
-
-		call 	trap
-
-		
-
+	pushl	%ds
+	pushl	%es
+	pushal
+	movw 	$(GD_KD), %ax
+  	movw 	%ax, %ds
+  	movw 	%ax, %es
+	pushl 	%esp
+	call	trap

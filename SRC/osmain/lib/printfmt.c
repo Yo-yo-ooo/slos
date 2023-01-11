@@ -7,7 +7,6 @@
 #include <inc/string.h>
 #include <inc/stdarg.h>
 #include <inc/error.h>
-#include <kern/timee.h>
 
 /*
  * Space or zero padding and a field width are supported for the numeric
@@ -97,7 +96,6 @@ vprintfmt(void (*putch)(int, void*), void *putdat, const char *fmt, va_list ap)
 	unsigned long long num;
 	int base, lflag, width, precision, altflag;
 	char padc;
-	struct tm *time;
 
 	while (1) {
 		while ((ch = *(unsigned char *) fmt++) != '%') {
@@ -197,21 +195,6 @@ vprintfmt(void (*putch)(int, void*), void *putdat, const char *fmt, va_list ap)
 			for (; width > 0; width--)
 				putch(' ', putdat);
 			break;
-		
-		case 't':
-			time = va_arg(ap,struct tm *);
-			printnum(putch, putdat, time->tm_year, 10, 2, '0');
-			putch('/',putdat);
-			printnum(putch, putdat, time->tm_mon, 10, 2, '0');
-			putch('/',putdat);
-			printnum(putch, putdat, time->tm_mday, 10, 2,'0');
-			putch('|',putdat);
-			printnum(putch, putdat, time->tm_hour, 10, 2, '0');
-			putch(':',putdat);
-			printnum(putch, putdat, time->tm_min, 10, 2, '0');
-			putch(':',putdat);
-			printnum(putch, putdat, time->tm_sec, 10, 2, '0');
-			break;
 
 		// (signed) decimal
 		case 'd':
@@ -231,18 +214,13 @@ vprintfmt(void (*putch)(int, void*), void *putdat, const char *fmt, va_list ap)
 
 		// (unsigned) octal
 		case 'o':
-			// Replace this with your code.
-
-			putch('X', putdat);
-			putch('X', putdat);
-			putch('X', putdat);
-			break;
-
-			//putch('0', putdat);
-			num = getuint(&ap, lflag);
+			num = getint(&ap, lflag);
+			if ((long long) num < 0) {
+				putch('-', putdat);
+				num = -(long long) num;
+			}
 			base = 8;
 			goto number;
-
 
 		// pointer
 		case 'p':

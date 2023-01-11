@@ -16,9 +16,9 @@ syscall(int num, int check, uint32_t a1, uint32_t a2, uint32_t a3, uint32_t a4, 
 	// this instruction away just because we don't use the
 	// return value.
 	//
-	// The last clause（子句） tells the assembler that this can
+	// The last clause tells the assembler that this can
 	// potentially change the condition codes and arbitrary
-	// memory locations（任意内存位置）.
+	// memory locations.
 
 	asm volatile("int %1\n"
 		     : "=a" (ret)
@@ -124,16 +124,13 @@ sys_time_msec(void)
 }
 
 int
-sys_packet_try_send(void *data_va, int len)
+sys_net_transmit(void *src, size_t length)
 {
-	return syscall(SYS_packet_try_send, 0, (uint32_t)data_va, len, 0, 0, 0); 
+	return (unsigned int) syscall(SYS_net_transmit, 1, (size_t)src, length, 0, 0, 0);
 }
 
-int sys_packet_recv(void *dstva)
+int
+sys_net_receive(void *dst)
 {
-	return syscall(SYS_packet_recv, 0, (uint32_t)dstva, 0, 0, 0, 0);
-}
-
-int sys_gettime(struct tm *tm){
-	return syscall(SYS_gettime, 0, (uint32_t)tm, 0,0,0,0); // return System time
+	return (unsigned int) syscall(SYS_net_receive, 0, (size_t)dst, 0, 0, 0, 0);
 }

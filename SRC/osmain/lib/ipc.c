@@ -19,32 +19,26 @@
 //   If 'pg' is null, pass sys_ipc_recv a value that it will understand
 //   as meaning "no page".  (Zero is not the right value, since that's
 //   a perfectly valid place to map a page.)
-
-// Receive a value via IPC and return it.
 int32_t
 ipc_recv(envid_t *from_env_store, void *pg, int *perm_store)
 {
 	// LAB 4: Your code here.
-	int r;
-	if(pg!=NULL)
-		r=sys_ipc_recv(pg);
-	else
-		r=sys_ipc_recv((void *)UTOP);
-	if(from_env_store!=NULL)
-		*from_env_store=thisenv->env_ipc_from;
-	if(perm_store!=NULL)
-		*perm_store=thisenv->env_ipc_perm;
-	if(from_env_store!=NULL&&perm_store!=NULL&&r<0){
-		*from_env_store=0;
-		*perm_store=0;
-		return r;
-	}
-	if(r<0)
-		return r;
-	return thisenv->env_ipc_value;
-	panic("ipc_recv not implemented");
-	return 0;
+	//panic("ipc_recv not implemented");
+	int result;
 	
+	if((result = sys_ipc_recv(pg? pg: (void*)UTOP) < 0)) {
+		if(from_env_store)
+			*from_env_store = 0;
+		if(perm_store)
+			*perm_store = 0;
+		return result;
+	}
+	if(from_env_store)
+		*from_env_store = thisenv->env_ipc_from;
+	if(perm_store)
+		*perm_store = thisenv->env_ipc_perm;
+	//cprintf("ipc_recv from %08x to %08x value %d\n",thisenv->env_ipc_from, thisenv->env_id, thisenv->env_ipc_value);
+	return thisenv->env_ipc_value;
 }
 
 // Send 'val' (and 'pg' with 'perm', if 'pg' is nonnull) to 'toenv'.
@@ -59,23 +53,17 @@ void
 ipc_send(envid_t to_env, uint32_t val, void *pg, int perm)
 {
 	// LAB 4: Your code here.
-	int r;
-	while(1){
-		if(pg)
-			r=sys_ipc_try_send(to_env, val, pg, perm);
-		else
-			r=sys_ipc_try_send(to_env, val, (void *)UTOP, perm);
-		if(r!=0){
-			if(r!=-E_IPC_NOT_RECV)
-				panic("ipc send fault:%e",r);
-			else
-				sys_yield();
-		}else
-			return;
-	}
-	panic("ipc_send not implemented");
-	
+	int result;
 
+	do {
+		result = sys_ipc_try_send(to_env, val, pg? pg: (void*)UTOP, perm);
+		if (result != 0) {
+			sys_yield();
+		}
+	} while(result == -E_IPC_NOT_RECV);
+	if (result != 0) {
+		panic("ipc_send failed: %d", result);
+	}
 }
 
 // Find the first environment of the given type.  We'll use this to

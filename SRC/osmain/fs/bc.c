@@ -25,7 +25,7 @@ va_is_dirty(void *va)
 }
 
 // Fault any disk block that is read in to memory by
-// loading it from disk.只说从disk又不说disk哪个扇区
+// loading it from disk.
 static void
 bc_pgfault(struct UTrapframe *utf)
 {
@@ -48,11 +48,14 @@ bc_pgfault(struct UTrapframe *utf)
 	// the disk.
 	//
 	// LAB 5: you code here:
-	addr = (void *)ROUNDDOWN(addr, BLKSIZE);
-	if((r=sys_page_alloc(0, addr, PTE_P | PTE_U | PTE_W))<0) //为什么这里可以用0？
-		panic("in bc_pgfault,out of memory: %e", r);
-	if((r=ide_read(blockno*8, addr, BLKSECTS))<0)
-		panic("in bc_pgfault, ide_read: %e", r);
+	if ((r = sys_page_alloc(0, ROUNDDOWN(addr, PGSIZE), PTE_SYSCALL)) < 0)
+		panic("allocating at %x in page fault handler: %e", addr, r);
+	
+	r = ide_read(blockno * BLKSECTS, ROUNDDOWN(addr, PGSIZE), BLKSECTS);
+	if (r < 0) {
+		panic("bc_pgfault failed");
+	}
+
 	// Clear the dirty bit for the disk block page since we just read the
 	// block from disk
 	if ((r = sys_page_map(0, addr, 0, addr, uvpt[PGNUM(addr)] & PTE_SYSCALL)) < 0)
@@ -63,9 +66,6 @@ bc_pgfault(struct UTrapframe *utf)
 	// in?)
 	if (bitmap && block_is_free(blockno))
 		panic("reading free block %08x\n", blockno);
-
-
-
 }
 
 // Flush the contents of the block containing VA out to disk if
@@ -79,22 +79,20 @@ void
 flush_block(void *addr)
 {
 	uint32_t blockno = ((uint32_t)addr - DISKMAP) / BLKSIZE;
-	int r;
+
 	if (addr < (void*)DISKMAP || addr >= (void*)(DISKMAP + DISKSIZE))
 		panic("flush_block of bad va %08x", addr);
-	
+
 	// LAB 5: Your code here.
-	addr = (void *)ROUNDDOWN(addr, BLKSIZE);
-	if(va_is_mapped(addr) && va_is_dirty(addr)){
-		if((r=ide_write(blockno*8, addr, BLKSECTS))<0)
-			panic("in flush_block, ide_write: %e", r);
-		if((r=sys_page_map(0, addr, 0, addr, uvpt[PGNUM(addr)] & PTE_SYSCALL))<0)
-			panic("in flush_block, sys_page_map: %e", r);
+	if (!va_is_mapped(addr) || !va_is_dirty(addr)) {
+		return;
 	}
-	return;
-	panic("flush_block not implemented");
-
-
+	int r = ide_write(blockno * BLKSECTS, ROUNDDOWN(addr, PGSIZE), BLKSECTS);
+	if (r < 0) {
+		panic("flush_block failed");
+	}
+	if ((r = sys_page_map(0, ROUNDDOWN(addr, PGSIZE), 0, ROUNDDOWN(addr, PGSIZE), uvpt[PGNUM(addr)] & PTE_SYSCALL)) < 0)
+		panic("in flush_block, sys_page_map: %e", r);
 }
 
 // Test that the block cache works, by smashing the superblock and
@@ -160,7 +158,7 @@ bc_init(void)
 {
 	struct Super super;
 	set_pgfault_handler(bc_pgfault);
-	check_bc();//smash the superblock and write it back to see whether it work well
+	check_bc();
 
 	// cache the super block by reading it once
 	memmove(&super, diskaddr(1), sizeof super);

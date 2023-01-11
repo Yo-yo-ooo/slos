@@ -9,12 +9,9 @@ union Fsipc fsipcbuf __attribute__((aligned(PGSIZE)));
 // Send an inter-environment request to the file server, and wait for
 // a reply.  The request body should be in fsipcbuf, and parts of the
 // response may be written back to fsipcbuf.
-
-// type: request code, passed as the simple integer IPC value.  例如FSREQ_OPEN
-// dstva: virtual address at which to receive reply page, 0 if none. 接收回复页面的虚拟地址
-//好像下面那些函数只有open需要dstva返回fd，其他都是设成NULL，一般回复内容通过fsipcbuf就行了
-
-// Returns result from the file server. 返回error or env_ipc_value
+// type: request code, passed as the simple integer IPC value.
+// dstva: virtual address at which to receive reply page, 0 if none.
+// Returns result from the file server.
 static int
 fsipc(unsigned type, void *dstva)
 {
@@ -51,7 +48,7 @@ struct Dev devfile =
 // Open a file (or directory).
 //
 // Returns:
-// 	The file descriptor index on success 文件描述符索引值
+// 	The file descriptor index on success
 // 	-E_BAD_PATH if the path is too long (>= MAXPATHLEN)
 // 	< 0 for other errors.
 int
@@ -72,26 +69,26 @@ open(const char *path, int mode)
 	// file descriptor.
 
 	int r;
-	struct Fd *fd;  //所有打开该文件的进程共享fd页面？
+	struct Fd *fd;
 
 	if (strlen(path) >= MAXPATHLEN)
 		return -E_BAD_PATH;
 
-	if ((r = fd_alloc(&fd)) < 0)// Find an unused file descriptor page using fd_alloc.
+	if ((r = fd_alloc(&fd)) < 0)
 		return r;
 
 	strcpy(fsipcbuf.open.req_path, path);
 	fsipcbuf.open.req_omode = mode;
 
-	if ((r = fsipc(FSREQ_OPEN, fd)) < 0) {// Then send a file-open request to the file server.
+	if ((r = fsipc(FSREQ_OPEN, fd)) < 0) {
 		fd_close(fd, 0);
 		return r;
 	}
 
-	return fd2num(fd); // ((uintptr_t)fd - FDTABLE)/PGSIZE
+	return fd2num(fd);
 }
 
-// Flush(刷新) the file descriptor.  After this the fileid is invalid.
+// Flush the file descriptor.  After this the fileid is invalid.
 //
 // This function is called by fd_close.  fd_close will take care of
 // unmapping the FD page from this environment.  Since the server uses
@@ -106,7 +103,7 @@ devfile_flush(struct Fd *fd)
 	return fsipc(FSREQ_FLUSH, NULL);
 }
 
-// Read at most 'n' bytes from 'fd' at the current position into 'buf'.当前位置！！！
+// Read at most 'n' bytes from 'fd' at the current position into 'buf'.
 //
 // Returns:
 // 	The number of bytes successfully read.
@@ -120,7 +117,7 @@ devfile_read(struct Fd *fd, void *buf, size_t n)
 	// system server.
 	int r;
 
-	fsipcbuf.read.req_fileid = fd->fd_file.id;//这个id就是指的当前位置？不是，只是想读的目标文件
+	fsipcbuf.read.req_fileid = fd->fd_file.id;
 	fsipcbuf.read.req_n = n;
 	if ((r = fsipc(FSREQ_READ, NULL)) < 0)
 		return r;
@@ -145,20 +142,18 @@ devfile_write(struct Fd *fd, const void *buf, size_t n)
 	// bytes than requested.
 	// LAB 5: Your code here
 	int r;
+
+	n = MIN(PGSIZE - (sizeof(int) + sizeof(size_t)), n);
 	fsipcbuf.write.req_fileid = fd->fd_file.id;
-	n = n > sizeof(fsipcbuf.write.req_buf) ? sizeof(fsipcbuf.write.req_buf):n;
 	fsipcbuf.write.req_n = n;
 	memmove(fsipcbuf.write.req_buf, buf, n);
-	r = fsipc(FSREQ_WRITE, NULL); //error or success都在r中
-	assert(r <= n);
-	assert(r <= PGSIZE);
-	return r;
-	panic("devfile_write not implemented");
-
+	if ((r = fsipc(FSREQ_WRITE, NULL)) < 0)
+		return r;
+	return n;
 }
 
 static int
-devfile_stat(struct Fd *fd, struct Stat *st) //stat状态？什么叫stat？
+devfile_stat(struct Fd *fd, struct Stat *st)
 {
 	int r;
 

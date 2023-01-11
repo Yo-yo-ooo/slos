@@ -12,8 +12,6 @@
 #include <kern/kdebug.h>
 #include <kern/trap.h>
 
-#include <kern/e1000.h>
-
 #define CMDBUF_SIZE	80	// enough for one VGA text line
 
 
@@ -27,10 +25,7 @@ struct Command {
 static struct Command commands[] = {
 	{ "help", "Display this list of commands", mon_help },
 	{ "kerninfo", "Display information about the kernel", mon_kerninfo },
-
-
-	{ "backtrace","Find all the caller", mon_backtrace },
-
+	{ "backtrace", "prints a backtrace of the stack", mon_backtrace },
 };
 
 /***** Implementations of basic kernel monitor commands *****/
@@ -64,27 +59,22 @@ mon_kerninfo(int argc, char **argv, struct Trapframe *tf)
 int
 mon_backtrace(int argc, char **argv, struct Trapframe *tf)
 {
-	// Your code here.
-
 	cprintf("Stack backtrace:\n");
-	unsigned int ebp, esp, eip;
-	ebp=read_ebp();
-	while(ebp){
-		eip=*((unsigned int*)(ebp+4));
-		esp=ebp+4;
-		struct Eipdebuginfo info;
-		debuginfo_eip(eip, &info);
-		cprintf("  ebp %08x  eip %08x args",ebp,eip);
-		
-		for(int i=0;i<5;i++){
-			esp+=4;
-			cprintf(" %08x", *(unsigned int*)esp);
-		}
-		cprintf("\t%s:%d: %.*s+%d",info.eip_file, info.eip_line, info.eip_fn_namelen, info.eip_fn_name, eip-info.eip_fn_addr);
+	uint32_t *ebp;
+	int valid;
+	struct Eipdebuginfo ei;
+	ebp = (uint32_t *)read_ebp();
+	while(ebp!=0){
+		cprintf("  ebp %08x",ebp);
+		cprintf(" eip %08x  args",*(ebp+1));
+		valid = debuginfo_eip(*(ebp+1),&ei);
+		for(int i=2;i<7;++i)
+			cprintf(" %08x",*(ebp+i));
 		cprintf("\n");
-		ebp=*((unsigned int*)ebp);	
+		if(valid == 0)
+			cprintf("         %s:%d: %.*s+%d\n",ei.eip_file,ei.eip_line,ei.eip_fn_namelen,ei.eip_fn_name,*(ebp+1) - ei.eip_fn_addr);
+		ebp = (uint32_t *)*ebp;
 	}
-
 	return 0;
 }
 
@@ -139,9 +129,9 @@ monitor(struct Trapframe *tf)
 {
 	char *buf;
 
-	cprintf("Welcome to the System kernel monitor!\n");
+	cprintf("Welcome to the JOS kernel monitor!\n");
 	cprintf("Type 'help' for a list of commands.\n");
-	//transmit_packets("I'm here", 10);
+
 	if (tf != NULL)
 		print_trapframe(tf);
 
