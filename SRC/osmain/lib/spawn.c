@@ -135,6 +135,8 @@ spawn(const char *prog, const char **argv)
 
 	if ((r = sys_env_set_status(child, ENV_RUNNABLE)) < 0)
 		panic("sys_env_set_status: %e", r);
+	if ((r = sys_env_set_workpath(child, getcwd(NULL, -1))) < 0)
+		panic("sys_env_set_workpath: %e", r);
 
 	return child;
 
