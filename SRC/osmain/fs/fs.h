@@ -39,7 +39,7 @@ int	file_set_size(struct File *f, off_t newsize);
 void	file_flush(struct File *f);
 int	file_remove(const char *path);
 void	fs_sync(void);
-
+int dir_create(const char *path, struct File **pf);
 /* int	map_block(uint32_t); */
 bool	block_is_free(uint32_t blockno);
 int	alloc_block(void);

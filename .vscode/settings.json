@@ -53,6 +53,8 @@
         "bitmap.h": "c",
         "console.h": "c",
         "canvas.h": "c",
-        "timee.h": "c"
+        "timee.h": "c",
+        "cpu.h": "c",
+        "pmap.h": "c"
     }
 }

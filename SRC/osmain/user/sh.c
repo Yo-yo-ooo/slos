@@ -3,6 +3,7 @@
 #define BUFSIZ 1024		/* Find the buffer overrun bug! */
 int debug = 0;
 
+#define IFSS(STR,STR2) if(!strcmp(cmd, STR) || !strcmp(cmd,STR2))
 
 // gettoken(s, 0) prepares gettoken for subsequent calls and returns 0.
 // gettoken(0, token) parses a shell token from the previously set string,
@@ -11,7 +12,8 @@ int debug = 0;
 // Subsequent calls to 'gettoken(0, token)' will return subsequent
 // tokens from the string.
 int gettoken(char *s, char **token);
-
+int builtin_cmd(char *cmdline);
+int do_cd(char *cmdline);
 
 // Parse a shell command from string 's' and execute it.
 // Do not return until the shell command is finished.
@@ -23,6 +25,7 @@ runcmd(char* s)
 {
 	char *argv[MAXARGS], *t, argv0buf[BUFSIZ];
 	int argc, c, i, r, p[2], fd, pipe_child;
+	char *name;
 
 	pipe_child = 0;
 	gettoken(s, 0);
@@ -40,46 +43,57 @@ again:
 			argv[argc++] = t;
 			break;
 
-		case '<':	// Input redirection
-			// Grab the filename from the argument list
-			if (gettoken(0, &t) != 'w') {
-				cprintf("syntax error: < not followed by word\n");
-				exit();
-			}
-			// Open 't' for reading as file descriptor 0
-			// (which environments use as standard input).
-			// We can't open a file onto a particular descriptor,
-			// so open the file as 'fd',
-			// then check whether 'fd' is 0.
-			// If not, dup 'fd' onto file descriptor 0,
-			// then close the original 'fd'.
-			if ((fd = open(t, O_RDONLY)) < 0) {
-				cprintf("open %s for read: %e", t, fd);
-				exit();
-			}
+		case '<': // Input redirection
+            // Grab the filename from the argument list
+            if (gettoken(0, &t) != 'w')
+            {
+                cprintf("syntax error: < not followed by word\n");
+                exit();
+            }
+            // Open 't' for reading as file descriptor 0
+            // (which environments use as standard input).
+            // We can't open a file onto a particular descriptor,
+            // so open the file as 'fd',
+            // then check whether 'fd' is 0.
+            // If not, dup 'fd' onto file descriptor 0,
+            // then close the original 'fd'.
 
-			// LAB 5: Your code here.
-			if (fd != 0) {
-				dup(fd, 0);
-				close(fd);
-			}
-			break;
+            if (t[0] != '/')
+                getcwd(argv0buf, MAXPATH);
+            strcat(argv0buf, t);
+            if ((fd = open(argv0buf, O_RDONLY)) < 0)
+            {
+                cprintf("Error open %s fail: %e", argv0buf, fd);
+                exit();
+            }
+            if (fd != 0)
+            {
+                dup(fd, 0);
+                close(fd);
+            }
+            break;
 
-		case '>':	// Output redirection
-			// Grab the filename from the argument list
-			if (gettoken(0, &t) != 'w') {
-				cprintf("syntax error: > not followed by word\n");
-				exit();
-			}
-			if ((fd = open(t, O_WRONLY|O_CREAT|O_TRUNC)) < 0) {
-				cprintf("open %s for write: %e", t, fd);
-				exit();
-			}
-			if (fd != 1) {
-				dup(fd, 1);
-				close(fd);
-			}
-			break;
+        case '>': // Output redirection
+            // Grab the filename from the argument list
+            if (gettoken(0, &t) != 'w')
+            {
+                cprintf("syntax error: > not followed by word\n");
+                exit();
+            }
+            if (t[0] != '/')
+                getcwd(argv0buf, MAXPATH);
+            strcat(argv0buf, t);
+            if ((fd = open(argv0buf, O_WRONLY | O_CREAT | O_TRUNC)) < 0)
+            {
+                cprintf("open %s for write: %e", argv0buf, fd);
+                exit();
+            }
+            if (fd != 1)
+            {
+                dup(fd, 1);
+                close(fd);
+            }
+            break;
 
 		case '|':	// Pipe
 			if ((r = pipe(p)) < 0) {
@@ -129,6 +143,7 @@ runit:
 			cprintf("EMPTY COMMAND\n");
 		return;
 	}
+	name = argv[0];
 
 	// Clean up command line.
 	// Read all commands from the filesystem: add an initial '/' to
@@ -150,9 +165,11 @@ runit:
 	}
 
 	// Spawn the command!
-	if ((r = spawn(argv[0], (const char**) argv)) < 0)
-		cprintf("spawn %s: %e\n", argv[0], r);
-
+	if ((r = spawn(argv[0], (const char**) argv)) < 0){
+		snprintf(argv0buf, BUFSIZ, "/bin/%s", name);
+        if ((r = spawn(argv0buf, (const char **)argv)) < 0)
+            cprintf("spawn %s: %e\n", argv[0], r);
+	}
 	// In the parent, close all file descriptors and wait for the
 	// spawned command to exit.
 	close_all();
@@ -268,6 +285,7 @@ umain(int argc, char **argv)
 {
 	int r, interactive, echocmds;
 	struct Argstate args;
+	char path[MAXPATH];
 
 	interactive = '?';
 	echocmds = 0;
@@ -300,8 +318,9 @@ umain(int argc, char **argv)
 
 	while (1) {
 		char *buf;
-
-		buf = readline(interactive ? "$ " : NULL);
+		getcwd(path, MAXPATH);
+		strcat(path,"$ ");
+		buf = readline(interactive ? path : NULL);
 		if (buf == NULL) {
 			if (debug)
 				cprintf("EXITING\n");
@@ -315,6 +334,8 @@ umain(int argc, char **argv)
 			printf("# %s\n", buf);
 		if (debug)
 			cprintf("BEFORE FORK\n");
+		if (builtin_cmd(buf))
+            continue;
 		if ((r = fork()) < 0)
 			panic("fork: %e", r);
 		if (debug)
@@ -327,3 +348,75 @@ umain(int argc, char **argv)
 	}
 }
 
+int builtin_cmd(char *cmdline)
+{
+    int ret;
+    int i;
+    char cmd[20];
+	struct tm time;
+	struct sysinfo info;
+    for (i = 0; cmdline[i] != ' ' && cmdline[i] != '\0'; i++)
+        cmd[i] = cmdline[i];
+    cmd[i] = '\0';
+    IFSS("quit","QUIT")
+        exit();
+	IFSS("exit","EXIT")
+		exit();
+    IFSS("cd","CD")
+    {
+        ret = do_cd(cmdline);
+        return 1;
+    }
+	IFSS("time","TIME"){
+		sys_gettime(&time);
+		printf("time: %t\n", &time);
+		return 1;
+	}
+	IFSS("sysinfo","SYSINFO"){
+		sys_gettime(&time);
+		sys_getinfo(&info);
+		printf("Operating system based on MIT6.828 JOS\n");
+		printf("+====================SYSINFO====================+\n");
+		printf("System Name: %s								     \n",SYS_NAME);
+		printf("System version: %s								 \n",SYS_VERSION);
+		printf("System time: %t								     \n",&time);
+		printf("+===============Hardware information============+\n");
+		printf("CPU number  : %d CPUs online					 \n", info.ncpu);
+    	printf("Boot CPU    : %d CPU is boot CPU                 \n", info.bootcpu);
+    	printf("Memory size : Physical memory %uK                \n", info.totalmem);
+		printf("+===============================================+\n");
+
+		return 1; 
+	}
+	IFSS("help","HELP"){
+		printf("COMMANDS:\n");
+		printf("1.ls list of files\n");
+		printf("2.cd change directory\n");
+		printf("3.mkdir create directory\n");
+		printf("4.cat print file contents\n");
+		printf("5.sysinfo show system information\n");
+		printf("6.time print time\n");
+		return 1;
+	}
+    return 0;
+}
+
+int do_cd(char *cmdline)
+{
+    char pathbuf[BUFSIZ];
+    int r;
+    pathbuf[0] = '\0';
+    cmdline += 2;
+    while (*cmdline == ' ')
+        cmdline++;
+    if (*cmdline == '\0')
+        return 0;
+    if (*cmdline != '/')
+    {
+        getcwd(pathbuf, BUFSIZ);
+    }
+    strcat(pathbuf, cmdline);
+    if ((r = chdir(pathbuf)) < 0)
+        printf("cd error : %e\n", r);
+    return 0;
+}

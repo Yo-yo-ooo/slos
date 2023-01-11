@@ -133,8 +133,20 @@ serve_open(envid_t envid, struct Fsreq_open *req,
 				cprintf("file_create failed: %e", r);
 			return r;
 		}
-	} else {
-try_open:
+	}// create dir
+	else if (req->req_omode & O_MKDIR)
+	{
+		if ((r = dir_create(path, &f)) < 0)
+		{
+			if (!(req->req_omode & O_EXCL) && r == -E_FILE_EXISTS)
+				goto try_open;
+			if (debug)
+				cprintf("file_create failed: %e", r);
+			return r;
+		}
+	} 
+	else {
+	try_open:
 		if ((r = file_open(path, &f)) < 0) {
 			if (debug)
 				cprintf("file_open failed: %e", r);

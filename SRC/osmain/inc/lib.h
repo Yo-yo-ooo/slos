@@ -22,8 +22,17 @@
 #include <inc/args.h>
 #include <inc/malloc.h>
 #include <inc/ns.h>
+#include <inc/time.h>
+#include <inc/sysinfo.h>
 
+//System Defines
+
+#define SYS_VERSION "0.75c"
+#define SYS_NAME "Skyline System(Opreating System)"
+
+//Other Defines
 #define USED(x)		(void)(x)
+#define MAXPATH 	200
 
 // main user program
 void	umain(int argc, char **argv);
@@ -62,6 +71,9 @@ int	sys_ipc_recv(void *rcv_pg);
 unsigned int sys_time_msec(void);
 int sys_net_transmit(void *src, size_t length);
 int sys_net_receive(void *dst);
+int sys_env_set_workpath(envid_t envid, const char *path);
+int sys_gettime(struct tm *tm);
+int sys_getinfo(struct sysinfo *info);
 
 // This must be inlined.  Exercise for reader: why?
 static inline envid_t __attribute__((always_inline))
@@ -136,6 +148,11 @@ int	opencons(void);
 // pipe.c
 int	pipe(int pipefds[2]);
 int	pipeisclosed(int pipefd);
+
+// dir.c
+int chdir(const char *path);
+char *getcwd(char *buffer, int maxlen);
+int mkdir(const char *dirname);
 
 // wait.c
 void	wait(envid_t env);

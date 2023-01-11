@@ -13,6 +13,10 @@
 #include <kern/sched.h>
 #include <kern/time.h>
 #include <kern/e1000.h>
+#include <kern/kclock.h>
+
+#include <inc/time.h>
+#include <inc/sysinfo.h>
 
 // Print a string to the system console.
 // The string is exactly 'len' characters long.
@@ -59,10 +63,6 @@ sys_env_destroy(envid_t envid)
 
 	if ((r = envid2env(envid, &e, 1)) < 0)
 		return r;
-	if (e == curenv)
-		cprintf("[%08x] exiting gracefully\n", cur_env->env_id);
-	else
-		cprintf("[%08x] destroying %08x\n", cur_env->env_id, e->env_id);
 	env_destroy(e);
 	return 0;
 }
@@ -473,6 +473,41 @@ sys_net_receive(void *dst)
 	return receive_packet(dst);
 }
 
+static int
+sys_env_set_workpath(envid_t envid, const char *path)
+{
+	struct Env *e;
+	int ret = envid2env(envid, &e, 1);
+	if (ret != 0)
+		return ret;
+	strcpy((char *)e->workpath, path);
+	return 0;
+}
+
+static int
+sys_gettime(struct tm *tm)
+{
+	unsigned datas, datam, datah;
+    int i;
+    tm->tm_sec = BCD_TO_BIN(mc146818_read(0));
+    tm->tm_min = BCD_TO_BIN(mc146818_read(2));
+    tm->tm_hour = BCD_TO_BIN(mc146818_read(4)) + TIMEZONE;
+    tm->tm_wday = BCD_TO_BIN(mc146818_read(6));
+    tm->tm_mday = BCD_TO_BIN(mc146818_read(7));
+    tm->tm_mon = BCD_TO_BIN(mc146818_read(8));
+    tm->tm_year = BCD_TO_BIN(mc146818_read(9));
+	return 0;
+}
+
+static int sys_getinfo(struct sysinfo *info)
+{
+	info->ncpu = ncpu;
+	info->bootcpu = bootcpu->cpu_id;
+	info->totalmem = totalmem;
+	return 0;
+}
+
+
 // Dispatches to the correct kernel function, passing the arguments.
 int32_t
 syscall(uint32_t syscallno, uint32_t a1, uint32_t a2, uint32_t a3, uint32_t a4, uint32_t a5)
@@ -521,6 +556,12 @@ syscall(uint32_t syscallno, uint32_t a1, uint32_t a2, uint32_t a3, uint32_t a4, 
 		return sys_net_transmit((void*)a1, (size_t)a2);
 	case SYS_net_receive:
 		return sys_net_receive((void*)a1);
+	case SYS_env_set_workpath:
+		return sys_env_set_workpath((envid_t)a1, (const char *)a2);
+	case SYS_gettime:
+		return sys_gettime((struct tm *)a1);
+	case SYS_getinfo:
+		return sys_getinfo((struct sysinfo *)a1);
 	default:
 		return -E_INVAL;
 	}

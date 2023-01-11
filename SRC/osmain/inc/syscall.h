@@ -20,6 +20,9 @@ enum {
 	SYS_time_msec,
 	SYS_net_transmit,
 	SYS_net_receive,
+	SYS_env_set_workpath,
+	SYS_gettime,
+	SYS_getinfo,
 	NSYSCALLS
 };
 
