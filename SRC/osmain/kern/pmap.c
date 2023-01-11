@@ -162,8 +162,8 @@ mem_init(void)
 	//////////////////////////////////////////////////////////////////////
 	// Make 'envs' point to an array of size 'NENV' of 'struct Env'.
 	// LAB 3: Your code here.
-	envs = (struct Env *)boot_alloc(NENV * sizeof(struct Env));
-	memset(envs, 0, NENV * sizeof(struct Env));
+	envs = (struct Env *)boot_alloc((uint32_t)(NENV * sizeof(struct Env)));
+	memset(envs, 0, (size_t)(NENV * sizeof(struct Env)));
 
 	//在这之上都是用boot_alloc()分配虚拟内存，然后memset初始化对应的物理页
 	//在虚拟空间内的位置都是紧挨在end之后的。因为nextfree是递增的
