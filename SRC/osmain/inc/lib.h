@@ -24,6 +24,7 @@
 #include <inc/ns.h>
 #include <inc/time.h>
 #include <inc/sysinfo.h>
+#include <inc/stdlib.h>
 
 //System Defines
 
@@ -156,6 +157,12 @@ int mkdir(const char *dirname);
 
 // wait.c
 void	wait(envid_t env);
+
+//tarnsformtion.c
+char* uint32_to_str_hex(uint32_t num, int flag, int width);
+char* uint64_to_str_hex(uint64_t num, int flag, int width);
+char* uint32_to_str_oct(uint32_t num, int flag, int width);
+char* int32_to_str_dec(int32_t num, int flag, int width);
 
 /* File open modes */
 #define	O_RDONLY	0x0000		/* open for reading only */
