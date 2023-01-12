@@ -22,17 +22,8 @@ USERAPPS :=		$(USERAPPS) \
 			$(OBJDIR)/user/ls \
 			$(OBJDIR)/user/lsfd \
 			$(OBJDIR)/user/num \
-			$(OBJDIR)/user/forktree \
-			$(OBJDIR)/user/primes \
-			$(OBJDIR)/user/primespipe \
 			$(OBJDIR)/user/sh \
-			$(OBJDIR)/user/testfdsharing \
-			$(OBJDIR)/user/testkbd \
-			$(OBJDIR)/user/testpipe \
-			$(OBJDIR)/user/testpteshare \
-			$(OBJDIR)/user/testshell \
 			$(OBJDIR)/user/hello \
-			$(OBJDIR)/user/faultio \
 			$(OBJDIR)/user/mkdir \
 			$(OBJDIR)/user/touch \
 
