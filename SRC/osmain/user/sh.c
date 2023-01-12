@@ -396,6 +396,8 @@ int builtin_cmd(char *cmdline)
 		printf("4.cat print file contents\n");
 		printf("5.sysinfo show system information\n");
 		printf("6.time print time\n");
+		printf("7.pwd return working directory name\n");
+		printf("8.touch change file access and modification times(we only support create file)\n");
 		printf("tips:if you want to hange the parent directory,you can use 'cd /'\n");
 		return 1;
 	}

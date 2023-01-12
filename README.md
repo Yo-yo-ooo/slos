@@ -29,7 +29,7 @@ make clean && make #清理并制作
 make clean && make qemu #清理并运行
 ```
 
-## Documents
+## 文档
 
 1. [工具链搭建](SRC/osmain/notes/工具链.md)
 2. [lab1 启动PC](SRC/osmain/notes/lab1.md)
