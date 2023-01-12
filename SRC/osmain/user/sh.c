@@ -399,6 +399,17 @@ int builtin_cmd(char *cmdline)
 		printf("tips:if you want to hange the parent directory,you can use 'cd /'\n");
 		return 1;
 	}
+	IFSS("yield","YIELD"){
+		int i;
+
+		cprintf("Hello, I am environment %08x.\n", thisenv->env_id);
+		for (i = 0; i < 5; i++) {
+			sys_yield();
+			cprintf("Back in environment %08x, iteration %d.\n",
+				thisenv->env_id, i);
+		}
+		cprintf("All done in environment %08x.\n", thisenv->env_id);
+	}
     return 0;
 }
 
