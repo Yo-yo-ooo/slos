@@ -1,8 +1,7 @@
 #include <inc/stdlib.h>
 #include <inc/lib.h>
 
-int atoi(char *str)
-{
+int atoi(char *str){
     return strtol(str, NULL, 10);
 }
 
@@ -40,4 +39,168 @@ char *itoa(int value,char *string,int radix)
     }
     *cp='\0';
     return string;
+}
+
+void ltoa(long num, char* str, int radix)
+{
+    int i = 0;
+	  int j = 0;
+    long sum;
+    unsigned long num1 = num;  //如果是负数求补码，必须将他的绝对值放在无符号位中在进行求反码
+    char str1[33] = { 0 };
+    if (num<0) {              //求出负数的补码
+        num = -num;
+        num1 = ~num;
+        num1 += 1;
+    }
+    if (num == 0) {             
+        str1[i] = '0';
+        
+        i++;
+    }
+    while(num1 !=0) {                      //进行进制运算
+        sum = num1 % radix;
+        str1[i] = (sum > 9) ? (sum - 10) + 'a' : sum + '0';
+        num1 = num1 / radix;
+        i++;
+    }
+    i--;
+    
+    for (i; i >= 0; i--) {               //逆序输出 
+        str[i] = str1[j];
+        j++;
+    }
+    
+}
+
+char *ultoa(unsigned long value, char *string, int radix)
+{
+    char tmp[33];
+    char *tp = tmp;
+    long i;
+    unsigned long v = value;
+    char *sp;
+
+    if (radix > 36 || radix <= 1)
+    {
+        //__set_errno(EDOM);
+        return 0;
+    }
+
+
+    while (v || tp == tmp)
+    {
+        i = v % radix;
+        v = v / radix;
+        if (i < 10)
+        *tp++ = i+'0';
+        else
+        *tp++ = i + 'a' - 10;
+    }
+    if (string == 0)
+        string = (char *)malloc((tp-tmp)+1);
+    sp = string;
+
+    while (tp > tmp)
+        *sp++ = *--tp;
+    *sp = 0;
+    return string;
+}
+
+double atof(const char *str)
+{
+	double s=0.0;
+ 
+	double d=10.0;
+	int jishu=0;
+ 
+	bool falg = false;
+ 
+	while(*str==' ')
+	{
+		str++;
+	}
+ 
+	if(*str=='-')//记录数字正负
+	{
+		falg=true;
+		str++;
+	}
+ 
+	if(!(*str>='0'&&*str<='9'))//如果一开始非数字则退出，返回0.0
+		return s;
+ 
+	while(*str>='0'&&*str<='9'&&*str!='.')//计算小数点前整数部分
+	{
+		s=s*10.0+*str-'0';
+		str++;
+	}
+ 
+	if(*str=='.')//以后为小树部分
+		str++;
+ 
+	while(*str>='0'&&*str<='9')//计算小数部分
+	{
+		s=s+(*str-'0')/d;
+		d*=10.0;
+		str++;
+	}
+ 
+	if(*str=='e'||*str=='E')//考虑科学计数法
+	{
+		str++;
+		if(*str=='+')
+		{
+			str++;
+			while(*str>='0'&&*str<='9')
+			{
+				jishu=jishu*10+*str-'0';
+				str++;
+			}
+			while(jishu>0)
+			{
+				s*=10;
+				jishu--;
+			}
+		}
+		if(*str=='-')
+		{
+			str++;
+			while(*str>='0'&&*str<='9')
+			{
+				jishu=jishu*10+*str-'0';
+				str++;
+			}
+			while(jishu>0)
+			{
+				s/=10;
+				jishu--;
+			}
+		}
+	}
+ 
+    return s*(falg?-1.0:1.0);
+}
+
+long atol(const char *nptr)
+{
+    int c;
+    long total = 0;
+    int sign;
+    while(isspace((int)(unsigned char)*nptr))//跳过前面的空格
+        ++nptr;
+    c = (int)(unsigned char)*nptr++;
+    sign = c;
+    if(c == '-' || c == '+')
+        c = (int)(unsigned char) *nptr++;
+
+    while(isdigit(c))
+    {
+        total = 10 * total + c- '0';
+        c = (int)(unsigned char)*nptr++;
+    }
+    if(sign == '-')
+        return -total;
+    else
+        return total;
 }

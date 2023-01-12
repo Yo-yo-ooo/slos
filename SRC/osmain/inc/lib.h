@@ -25,6 +25,7 @@
 #include <inc/time.h>
 #include <inc/sysinfo.h>
 #include <inc/stdlib.h>
+#include <inc/ctype.h>
 
 //System Defines
 
