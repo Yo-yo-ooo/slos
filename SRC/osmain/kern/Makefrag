@@ -57,7 +57,9 @@ KERN_BINFILES += user/icode \
 			fs/fs
 
 # Binary files for LAB6
-KERN_BINFILES +=	net/testoutput \
+KERN_BINFILES +=	user/httpd \
+			user/echosrv \
+			net/testoutput \
 			net/testinput \
 			net/ns
 
