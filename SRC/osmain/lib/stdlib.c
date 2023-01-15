@@ -204,3 +204,25 @@ long atol(const char *nptr)
     else
         return total;
 }
+
+/***************************
+函数名:Bin2BCD
+功能描述:把2进制转BCD值
+参数：2进制值
+返回：BCD值
+***************************/
+u_8 Bin2BCD( u_8 BinCode )
+{
+    return( ( ( (BinCode)/10 ) << 4 ) + ( (BinCode) %10 ));  
+}
+
+/***************************
+函数名:Bcd2Bin
+功能描述:把BCD值转2进制
+参数：BCD值
+返回：2进制值
+***************************/
+u_8 Bcd2Bin(u_8 BcdCode)
+{
+    return(((( BcdCode >> 4 ) & 0x0F ) * 10 ) + ( BcdCode & 0x0F ));  
+}
