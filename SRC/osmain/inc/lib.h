@@ -26,6 +26,7 @@
 #include <inc/sysinfo.h>
 #include <inc/stdlib.h>
 #include <inc/ctype.h>
+#include <inc/math.h>
 
 //System Defines
 

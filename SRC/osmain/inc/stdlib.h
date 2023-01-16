@@ -3,6 +3,8 @@
 
 #include <inc/types.h>
 
+//macros
+
 /*********2个字节为short型变量**********/
 #define BYTE_TO_SHORT( byte ,byte1)       ( (byte<<8)  | byte1 )
 /*********4个字节为int型变量**********/
@@ -32,6 +34,12 @@
                                             (byte)[3] = ((Val))&0xff;\
                                         }while(0)
 
+//structs 
+
+typedef struct div{int quot;int rem;}div_t;
+typedef struct ldiv{ long quot; long rem; }ldiv_t;
+
+//functions
 int atoi(char *str);
 char *itoa(int value,char *string,int radix);
 void ltoa(long num, char* str, int radix);
@@ -40,5 +48,7 @@ double atof(const char *str);
 long atol(const char *nptr);
 u_8 Bin2BCD(u_8 BinCode);
 u_8 Bcd2Bin(u_8 BcdCode);
+div_t div(int num, int denom);
+ldiv_t ldiv(long int num, long int denom);
 
 #endif

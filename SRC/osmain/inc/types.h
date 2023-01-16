@@ -20,6 +20,7 @@ typedef int int32_t;
 typedef unsigned int uint32_t;
 typedef long long int64_t;
 typedef unsigned long long uint64_t;
+typedef long double bint_t;
 typedef uint8_t u_8;
 
 // Pointers and addresses are 32 bits long.
@@ -55,6 +56,8 @@ typedef int32_t off_t;
 	typeof(_b) __b = (_b);					\
 	__a >= __b ? __a : __b;					\
 })
+
+#define Cast_Operation(x,type)  (type)x
 
 // Rounding operations (efficient when n is a power of 2)
 // Round down to the nearest multiple of n
