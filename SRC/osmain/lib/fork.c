@@ -6,6 +6,7 @@
 // PTE_COW marks copy-on-write page table entries.
 // It is one of the bits explicitly allocated to user processes (PTE_AVAIL).
 #define PTE_COW		0x800
+#define FEC_WR      0x2
 
 extern void (*_pgfault_handler)(struct UTrapframe *utf);\
 extern void _pgfault_upcall(void);
@@ -28,14 +29,16 @@ pgfault(struct UTrapframe *utf)
 	//   (see <inc/memlayout.h>).
 
 	// LAB 4: Your code here.
-	if (!(err & 2)) {
+	if (!(err & FEC_WR)) {
 		panic("the faulting access was not write at %x %08x %08x", addr, utf->utf_eip, err);
 	}
 	if (!(uvpt[PGNUM(addr)] & PTE_COW)) {
 		panic("the faulting access was not to a copy-on-write page at %08x %08x", addr, utf->utf_eip);
 	}
+    if ((uvpt[PGNUM(addr)] & (PTE_P | PTE_COW)) != (PTE_P | PTE_COW))
+		panic("Page fault: Page not copy-on-write\n");
 	// cprintf("pg fault %x envid %d\n", addr, sys_getenvid());
-
+    addr = ROUNDDOWN(addr, PGSIZE);
 	// Allocate a new page, map it at a temporary location (PFTEMP),
 	// copy the data from the old page to the new page, then move the new
 	// page to the old page's address.
