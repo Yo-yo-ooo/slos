@@ -358,21 +358,23 @@ int builtin_cmd(char *cmdline)
     for (i = 0; cmdline[i] != ' ' && cmdline[i] != '\0'; i++)
         cmd[i] = cmdline[i];
     cmd[i] = '\0';
-    IFSS("quit","QUIT")
+    if(!strcmp(cmd, "quit") || !strcmp(cmd,"QUIT")){
         exit();
-	IFSS("exit","EXIT")
+	}
+	if(!strcmp(cmd, "exit") || !strcmp(cmd,"EXIT")){
 		exit();
-    IFSS("cd","CD")
+	}
+    if(!strcmp(cmd, "cd") || !strcmp(cmd,"CD"))
     {
         ret = do_cd(cmdline);
         return 1;
     }
-	IFSS("time","TIME"){
+	if(!strcmp(cmd, "time") || !strcmp(cmd,"TIME")){
 		sys_gettime(&time);
 		printf("time: %t\n", &time);
 		return 1;
 	}
-	IFSS("sysinfo","SYSINFO"){
+	if(!strcmp(cmd, "sysinfo") || !strcmp(cmd,"SYSINFO")){
 		sys_gettime(&time);
 		sys_getinfo(&info);
 		printf("Operating system based on MIT6.828 JOS\n");
@@ -388,7 +390,7 @@ int builtin_cmd(char *cmdline)
 
 		return 1; 
 	}
-	IFSS("help","HELP"){
+	if(!strcmp(cmd, "help") || !strcmp(cmd,"HELP")){
 		printf("COMMANDS:\n");
 		printf("1.[ls] list of files\n");
 		printf("2.[cd] change directory\n");
@@ -401,7 +403,7 @@ int builtin_cmd(char *cmdline)
 		printf("tips:if you want to hange the parent directory,you can use 'cd /'\n");
 		return 1;
 	}
-	IFSS("yield","YIELD"){
+	if(!strcmp(cmd, "yield") || !strcmp(cmd,"YIELD")){
 		int i;
 
 		cprintf("Hello, I am environment %08x.\n", thisenv->env_id);
