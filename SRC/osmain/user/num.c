@@ -15,10 +15,21 @@ num(int f, const char *s)
 			printf("%5d ", ++line);
 			bol = 0;
 		}
-		if ((r = write(1, &c, 1)) != 1)
+		if ((r = write(1, &c, 1)) != 1){
 			panic("write error copying %s: %e", s, r);
-		if (c == '\n')
+		}if (c == '\n'){
 			bol = 1;
+		}if (c == 0x1b){
+			char *str = readline("You want [Quit](type q) or [Write and Quit](type wq):");
+			if(!strcmp(str,"q")){
+				break;
+			}else if(!strcmp(str,"wq")){
+				write(f,&c,1);
+			}else{
+				break;
+			}
+			break;
+		}
 	}
 	if (n < 0)
 		panic("error reading %s: %e", s, n);
@@ -35,9 +46,9 @@ umain(int argc, char **argv)
 	else
 		for (i = 1; i < argc; i++) {
 			f = open(argv[i], O_RDONLY);
-			if (f < 0)
+			if (f < 0){
 				panic("can't open %s: %e", argv[i], f);
-			else {
+			}else{
 				num(f, argv[i]);
 				close(f);
 			}
